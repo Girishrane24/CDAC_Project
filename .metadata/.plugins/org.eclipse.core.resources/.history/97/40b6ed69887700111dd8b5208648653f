@@ -1,0 +1,53 @@
+package com.app.SecurityConfig;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration; // Added import
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity; // Optional but recommended
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration // Fix 1: Added this so Spring registers your beans
+@EnableWebSecurity // Optional: Good practice to explicitly enable web security
+public class SecurityConfig {
+	
+	@Bean 
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+		UserDetails admin = User.withUsername("Amita")
+							.password(encoder.encode("123"))
+							.roles("ADMIN","USER")
+							.build();
+		UserDetails user = User.withUsername("Priyanka")
+							.password(encoder.encode("123"))
+							.roles("USER")
+							.build();
+		return new InMemoryUserDetailsManager(admin, user);
+	}
+	
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+		    .authorizeHttpRequests(auth -> auth
+		        .requestMatchers("/auth/welcome").permitAll()
+		        .requestMatchers("/auth/user/**").hasRole("USER")   // Fix 2: Changed to **
+		        .requestMatchers("/auth/admin/**").hasRole("ADMIN") // Fix 2: Changed to **
+		        .anyRequest().authenticated()
+		    )
+		    .formLogin(form -> form
+		        .defaultSuccessUrl("/auth/welcome", true)
+		    )
+		    .httpBasic(withDefaults());
+
+		return http.build();
+	}
+}
