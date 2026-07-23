@@ -21,6 +21,13 @@ public class AppointmentController {
         return appointmentRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Appointment> getAppointmentById(@PathVariable("id") String id) {
+        return appointmentRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public Appointment createAppointment(@RequestBody Appointment appointment) {
         if (appointment.getStatus() == null) {
@@ -30,16 +37,17 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Appointment> updateAppointment(@PathVariable String id, @RequestBody Appointment appointment) {
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable("id") String id, @RequestBody Appointment appointment) {
         if (!appointmentRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        appointment.setId(id);
+        // Fixed: setAppointmentId instead of setId
+        appointment.setAppointmentId(id);
         return ResponseEntity.ok(appointmentRepository.save(appointment));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAppointment(@PathVariable String id) {
+    public ResponseEntity<Void> deleteAppointment(@PathVariable("id") String id) {
         appointmentRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -22,8 +22,9 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> getPatientById(@PathVariable String id) {
-        return patientRepository.findById(patientId)
+    public ResponseEntity<Patient> getPatientById(@PathVariable("id") String id) {
+        // Fixed: changed patientId to id
+        return patientRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -34,8 +35,9 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable String id, @RequestBody Patient patient) {
-        if (!patientRepository.existsById(patientId)) {
+    public ResponseEntity<Patient> updatePatient(@PathVariable("id") String id, @RequestBody Patient patient) {
+        // Fixed: changed patientId to id
+        if (!patientRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         patient.setPatientId(id);
@@ -43,8 +45,9 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePatient(@PathVariable String id) {
-        patientRepository.deleteById(patientId);
+    public ResponseEntity<Void> deletePatient(@PathVariable("id") String id) {
+        // Fixed: changed patientId to id
+        patientRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
