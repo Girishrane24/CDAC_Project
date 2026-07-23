@@ -1,0 +1,46 @@
+package com.hospital.controller;
+
+import com.hospital.model.Appointment;
+import com.hospital.repository.AppointmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/appointments")
+@CrossOrigin(origins = "*")
+public class AppointmentController {
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @GetMapping
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
+
+    @PostMapping
+    public Appointment createAppointment(@RequestBody Appointment appointment) {
+        if (appointment.getStatus() == null) {
+            appointment.setStatus("PENDING");
+        }
+        return appointmentRepository.save(appointment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable String id, @RequestBody Appointment appointment) {
+        if (!appointmentRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        appointment.setId(id);
+        return ResponseEntity.ok(appointmentRepository.save(appointment));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAppointment(@PathVariable String id) {
+        appointmentRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+}

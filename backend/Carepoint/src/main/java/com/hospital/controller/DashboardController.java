@@ -1,30 +1,30 @@
 package com.hospital.controller;
 
-import com.hospital.dto.DashboardDataDTO;
-import com.entity.Appointment;
-import com.hospital.service.DashboardService;
+import com.hospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
+
 @RestController
-@RequestMapping("/api/v1/dashboard")
-@CrossOrigin(origins = "*") // Allows React dev server to communicate with backend without CORS issues
+@RequestMapping("/api/dashboard")
+@CrossOrigin(origins = "*")
 public class DashboardController {
 
-    @Autowired
-    private DashboardService dashboardService;
+    @Autowired private PatientRepository patientRepository;
+    @Autowired private DoctorRepository doctorRepository;
+    @Autowired private AppointmentRepository appointmentRepository;
+    @Autowired private RoomRepository roomRepository;
 
-    // Fetch unified dashboard data
-    @GetMapping
-    public ResponseEntity<DashboardDataDTO> getDashboardData() {
-        return ResponseEntity.ok(dashboardService.getDashboardSummary());
-    }
-
-    // Handles "+ Add Appointment" button submit
-    @PostMapping("/appointments")
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
-        Appointment savedAppointment = dashboardService.addAppointment(appointment);
-        return ResponseEntity.ok(savedAppointment);
+    @GetMapping("/summary")
+    public ResponseEntity<Map<String, Object>> getSummary() {
+        Map<String, Object> summary = new HashMap<>();
+        summary.put("totalPatients", patientRepository.count());
+        summary.put("totalDoctors", doctorRepository.count());
+        summary.put("totalAppointments", appointmentRepository.count());
+        summary.put("pendingAppointments", appointmentRepository.countByStatus("PENDING"));
+        summary.put("recentAppointments", appointmentRepository.findTop10ByOrderByAppointmentDateDesc());
+        return ResponseEntity.ok(summary);
     }
 }
