@@ -13,9 +13,9 @@ public class Inventory {
 	// create field name
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double itemID;
+    private Double itemId;
     
-    @Column(name = "item_name",nullable = false)
+    @Column(name = "itemName",nullable = false)
     private String itemName;
     private String category;
     private Double unitPrice;
