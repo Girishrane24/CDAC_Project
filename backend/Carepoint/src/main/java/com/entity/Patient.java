@@ -1,29 +1,26 @@
 package com.entity;
-import jakarta.persistence.*;
-import lombok.*;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Entity
-@Table(name = "patients")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Document(collection = "patients") // MongoDB collection annotation
 public class Patient {
-	
-	// create field name
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double patientId;
 
-    //@Column(nullable = false)
+    @Id
+    private String patientId; // MongoDB uses String ObjectIds by default
+
     private String name;
     private String dob;
     private String gender;
-    private String bloodgroup;
+    private String bloodGroup; // Fixed camelCase naming (capital 'G')
     private String phone;
     private String email;
     private String address;
     private String allergies;
-    
 }

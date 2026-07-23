@@ -1,57 +1,34 @@
 package com.entity;
 
-import java.util.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.List;
 
-@Table(name = "Admission")
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Document(collection = "admissions") // Correct MongoDB collection annotation
 public class Admission {
 
-	// create field name
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double admissionId;
-    
-    private String admissionDate;
-    private String DischargeDate;
-    private String status;
-    
-    // Foreigin Key RelationShips
-    
-    // 1-to-1 or Many-to-1 Relationship with Room
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name=  "roomId",nullable= false)
-    private Room room;
-    
-    // foreign key reference to Patient
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patientId", nullable=false)
-    private Patient patient;
-    
- // Foreign key reference to Doctor
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    private String admissionId; // String auto-generates MongoDB ObjectIds
 
-    // Foreign key reference to Nurse
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nurse_id")
-    private Nurse nurse;
-    
-    
-    // Inside the Admissio entity class:
-    @ManyToMany
-    @JoinTable(
-    		name = "admission_inventory",
-    		joinColumns = @JoinColumn(name = "admission_id"),
-    		inverseJoinColumns = @JoinColumn(name = "item_id")
-    		)
-    private List<Inventory> inventoryItems;
-    
+    private String admissionDate;
+    private String dischargeDate; // Standard camelCase naming convention
+    private String status;
+
+    // --- MongoDB Relationship Options ---
+
+    // Option A: Store Foreign Key IDs directly (Recommended for high performance)
+    private String roomId;
+    private String patientId;
+    private String doctorId;
+    private String nurseId;
+
+    // For Many-to-Many inventory relationship, store a List of Item IDs:
+    private List<String> inventoryItemIds;
 }

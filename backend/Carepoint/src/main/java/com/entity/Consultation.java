@@ -1,36 +1,28 @@
 package com.entity;
-import jakarta.persistence.*;
-import lombok.*;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "consultation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "consultations") // MongoDB collection annotation
 public class Consultation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long consultationId;
+    private String consultationId; // MongoDB uses String ObjectIds by default
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appointment_id", nullable = false)
-    private Appointment appointment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id", nullable = false)
-    private Patient patient;
+    // Reference IDs instead of JPA relationships (@ManyToOne)
+    private String appointmentId;
+    private String doctorId;
+    private String patientId;
 
     private String diagnosis;
-
-    @Column(columnDefinition = "TEXT")
-    private String notes;
-
-    @Column(name = "consultation_date")
+    private String notes; // MongoDB handles large strings natively without @Column
     private LocalDate consultationDate;
 }

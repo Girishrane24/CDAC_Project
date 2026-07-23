@@ -1,50 +1,28 @@
 package com.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-
-
-@Entity
-@Table(name = "Lab_Test")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Document(collection = "lab_tests") // MongoDB collection annotation
 public class LabTest {
-	
-	// create field name
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double labTestId;
-    
-    
+    private String labTestId; // MongoDB uses String ObjectIds by default
+
     private String testName;
     private String sampleType;
     private String testDate;
-    private String Result;
+    private String result; // Fixed camelCase naming (lowercase 'r')
     private String status;
-    
-    
-    // --- FOREIGN KEY RELATIONSHIPS ---
 
-    // Connection to Lab ("conducted by")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "labid", nullable = false)
-    private Lab lab;
-
-    // Foreign key reference to Appointment
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appointmentid")
-    private Appointment appointment;
-
-    // Foreign key reference to Patient
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patientid", nullable = false)
-    private Patient patient;
-    
-    
-
-	
+    // --- Foreign Key Reference IDs (MongoDB NoSQL Pattern) ---
+    private String labId;
+    private String appointmentId;
+    private String patientId;
 }

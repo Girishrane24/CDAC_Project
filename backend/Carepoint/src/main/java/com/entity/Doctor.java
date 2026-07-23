@@ -1,30 +1,25 @@
 package com.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-
-
-@Entity
-@Table(name = "Doctor")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "doctors") // Correct MongoDB collection annotation
 public class Doctor {
 
-	// create field name
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double doctorId;
-    
-    @Column(nullable = false)
+    private String doctorId; // MongoDB uses String ObjectIds by default
+
     private String name;
     private String specialization;
     private String department;
     private String phone;
     private String email;
     private String qualification;
-    private Double experience;
-	
-
+    private Integer experience; // Changed from Double to Integer (years of experience)
 }

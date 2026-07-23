@@ -1,43 +1,28 @@
 package com.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-
-
-@Entity
-@Table(name = "Medicine")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Document(collection = "medicines") // MongoDB collection annotation
 public class Medicine {
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "medicine_id")
-    private Long medicineId;
 
-    // --- FOREIGN KEY RELATIONSHIP ("for") ---
-    // Many medicines belong to One Prescription
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prescription_id", nullable = false)
-    private Prescription prescription;
+    @Id
+    private String medicineId; // MongoDB uses String ObjectIds by default
 
-    // --- STANDARD COLUMNS ---
-
-    @Column(name = "medicine_name", nullable = false)
     private String medicineName;
-
-    @Column(name = "category")
     private String category;
-
-    @Column(name = "unit_price", precision = 10, scale = 2)
     private BigDecimal unitPrice;
-
-    @Column(name = "expiry_date")
     private LocalDate expiryDate;
+
+    // --- Foreign Key Reference ID (MongoDB NoSQL Pattern) ---
+    private String prescriptionId;
 }

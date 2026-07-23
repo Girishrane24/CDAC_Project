@@ -1,23 +1,21 @@
 package com.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Entity
-@Table(name = "Pharmacy")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "pharmacies") // MongoDB collection annotation
 public class Pharmacy {
 
-	// create field name
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double pharmacyID;
-    
-    @Column(nullable = false)
-    private String pharmacyname;
+    private String pharmacyId; // Standard camelCase and String type for MongoDB ObjectIds
+
+    private String pharmacyName; // Fixed camelCase naming (capital 'N')
     private String location;
     private String phone;
-	
 }

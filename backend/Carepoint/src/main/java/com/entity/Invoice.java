@@ -1,37 +1,27 @@
 package com.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-
-@Entity
-@Table(name = "Invoice")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "invoices") // MongoDB collection annotation
 public class Invoice {
 
-	// create field name
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double invoiceId;
-    
+    private String invoiceId; // MongoDB uses String ObjectIds by default
+
     private String invoiceDate;
-    private String totalAmount;
-    private double discount;
-    private double netAmount;
+    private Double totalAmount; // Changed to Double for financial/currency values
+    private Double discount;
+    private Double netAmount;
     private String paymentStatus;
-    
-    // --- FOREIGN KEY RELATIONSHIPS ---
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appointmentId", nullable = false)
-    private Appointment appointment;
-
-    // Foreign key reference to Appointment
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patientId")
-    private Patient patient;
-    
-	
+    // --- Foreign Key Reference IDs (MongoDB NoSQL Pattern) ---
+    private String appointmentId;
+    private String patientId;
 }

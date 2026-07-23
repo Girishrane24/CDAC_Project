@@ -1,27 +1,24 @@
 package com.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Entity
-@Table(name = "Inventory")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "inventories") // Correct MongoDB collection annotation
 public class Inventory {
-	
-	// create field name
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Double itemId;
-    
-    @Column(name = "itemName",nullable = false)
+    private String itemId; // MongoDB uses String ObjectIds by default
+
     private String itemName;
     private String category;
     private Double unitPrice;
-    private Double quantityinstock;
-    private Double reorderLevel;
+    private Integer quantityInStock; // Changed to Integer & fixed camelCase convention
+    private Integer reorderLevel;    // Changed to Integer (stock count levels are whole numbers)
     private String supplier;
-	
-	
 }
