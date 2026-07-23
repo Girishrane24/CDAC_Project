@@ -1,0 +1,149 @@
+.bed-table-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.bed-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.bed-table-header h2 {
+    color: #1f2937;
+}
+
+.bed-table-header input {
+    width: 280px;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+}
+
+.bed-table-header input:focus {
+    border-color: #2563eb;
+}
+
+.bed-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bed-table thead {
+    background: #2563eb;
+}
+
+.bed-table thead th {
+    color: white;
+    padding: 14px;
+    text-align: center;
+}
+
+.bed-table tbody td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bed-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.available {
+    background: #16a34a;
+}
+
+.occupied {
+    background: #dc2626;
+}
+
+.maintenance {
+    background: #f59e0b;
+    color: #000;
+}
+
+.status-btn,
+.edit-btn,
+.delete-btn {
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    margin: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 13px;
+}
+
+.status-btn {
+    background: #0d6efd;
+}
+
+.status-btn:hover {
+    background: #0b5ed7;
+}
+
+.edit-btn {
+    background: #fd7e14;
+}
+
+.edit-btn:hover {
+    background: #e96b00;
+}
+
+.delete-btn {
+    background: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #bb2d3b;
+}
+
+.no-data {
+    padding: 25px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+@media (max-width:768px){
+
+    .bed-table-header{
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .bed-table-header input{
+        width: 100%;
+    }
+
+    .bed-table{
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .status-btn,
+    .edit-btn,
+    .delete-btn{
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+}

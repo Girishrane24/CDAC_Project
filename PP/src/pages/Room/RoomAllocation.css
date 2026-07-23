@@ -1,0 +1,210 @@
+/* Main Container */
+
+.allocation-container {
+    padding: 30px;
+    background: #f4f7fc;
+    min-height: 100vh;
+}
+
+/* Heading */
+
+.allocation-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+/* Form */
+
+.allocation-form {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 35px;
+}
+
+/* Inputs */
+
+.allocation-form input,
+.allocation-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    transition: .3s;
+    background: #fff;
+}
+
+.allocation-form input:focus,
+.allocation-form select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 4px rgba(37,99,235,.3);
+}
+
+/* Readonly */
+
+.allocation-form input[readonly] {
+    background: #f3f4f6;
+    cursor: not-allowed;
+}
+
+/* Button */
+
+.allocation-form button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: .3s;
+}
+
+.allocation-form button:hover {
+    background: #1d4ed8;
+}
+
+/* Make button full width */
+
+.allocation-form button {
+    grid-column: span 3;
+}
+
+/* Table */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table thead {
+    background: #2563eb;
+}
+
+table thead th {
+    color: white;
+    padding: 15px;
+    font-size: 15px;
+    text-align: center;
+}
+
+table tbody td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Status */
+
+.status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status.allocated {
+    background: #16a34a;
+}
+
+.status.discharged {
+    background: #dc2626;
+}
+
+/* Buttons */
+
+.discharge-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.discharge-btn:hover {
+    background: #b91c1c;
+}
+
+.edit-btn {
+    background: #f59e0b;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: .3s;
+}
+
+.edit-btn:hover {
+    background: #d97706;
+}
+
+/* Empty Data */
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+/* Responsive */
+
+@media (max-width: 992px) {
+
+    .allocation-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .allocation-form button {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .allocation-container {
+        padding: 15px;
+    }
+
+    .allocation-form {
+        grid-template-columns: 1fr;
+    }
+
+    .allocation-form button {
+        grid-column: span 1;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    table thead th,
+    table tbody td {
+        font-size: 14px;
+    }
+}
