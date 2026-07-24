@@ -1,18 +1,25 @@
 import "./Topbar.css";
 
-function Topbar() {
+function Topbar({ openSidebar }) {
 
-    const today = new Date().toLocaleDateString();
+    const today = new Date().toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
 
     return (
+        <header className="topbar">
 
-        <nav className="topbar">
+            <button
+                className="menu-btn"
+                onClick={openSidebar}
+            >
+                ☰
+            </button>
 
-            <div>
-
-                <h4>Hospital Management System</h4>
-
-            </div>
+            <h4>Hospital Management System</h4>
 
             <div className="topbar-right">
 
@@ -26,8 +33,7 @@ function Topbar() {
 
             </div>
 
-        </nav>
-
+        </header>
     );
 }
 

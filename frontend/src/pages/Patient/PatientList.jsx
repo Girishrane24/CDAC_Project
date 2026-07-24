@@ -1,61 +1,23 @@
-import { useEffect, useState } from "react";
-import { api } from "../../services/api";
+import React from "react";
+import PatientTable from "../../components/patient/PatientTable";
+import "./Patient.css";
 
 function PatientList() {
-    const [patients, setPatients] = useState([]);
-    const [loading, setLoading] = useState(true);
+  return (
+    <div className="patient-page">
 
-    useEffect(() => {
-        loadPatients();
-    }, []);
+      <div className="page-header">
+        <h2>Patient Management</h2>
 
-    const loadPatients = () => {
-        api.getPatients()
-            .then((data) => {
-                setPatients(data);
-                setLoading(false);
-            })
-            .catch((err) => console.error(err));
-    };
+        <button className="add-btn">
+          + Add Patient
+        </button>
+      </div>
 
-    const handleDelete = async (id) => {
-        if (window.confirm("Are you sure you want to delete this patient?")) {
-            await api.deletePatient(id);
-            loadPatients(); // Refresh list after deletion
-        }
-    };
+      <PatientTable />
 
-    if (loading) return <div>Loading Patients...</div>;
-
-    return (
-        <div className="patient-list">
-            <h2>Patients Directory</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Gender</th>
-                        <th>Phone</th>
-                        <th>Blood Group</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {patients.map((patient) => (
-                        <tr key={patient.id}>
-                            <td>{patient.name}</td>
-                            <td>{patient.gender}</td>
-                            <td>{patient.phone}</td>
-                            <td>{patient.bloodGroup}</td>
-                            <td>
-                                <button onClick={() => handleDelete(patient.id)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
+    </div>
+  );
 }
 
 export default PatientList;

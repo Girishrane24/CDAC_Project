@@ -1,0 +1,25 @@
+.content-wrapper{
+    margin-left:260px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    transition:.3s;
+}
+
+.main-content{
+    flex:1;
+    padding:25px;
+    background:#f5f7fb;
+}
+
+@media(max-width:768px){
+
+    .content-wrapper{
+        margin-left:0;
+    }
+
+    .main-content{
+        padding:15px;
+    }
+
+}

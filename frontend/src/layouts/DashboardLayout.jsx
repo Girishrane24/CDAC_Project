@@ -1,32 +1,35 @@
+import { useState } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import Topbar from "../components/layout/Topbar";
 import Footer from "../components/layout/Footer";
+import "./DashboardLayout.css";
 
 function DashboardLayout({ children }) {
 
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     return (
-
         <>
-            <Sidebar />
+            <Sidebar
+                isOpen={sidebarOpen}
+                closeSidebar={() => setSidebarOpen(false)}
+            />
 
-            <Topbar />
+            <div className="content-wrapper">
 
-            <main
-                style={{
-                    marginLeft: "260px",
-                    padding: "30px",
-                    minHeight: "calc(100vh - 130px)",
-                    background: "#f5f7fb"
-                }}
-            >
-                {children}
-            </main>
+                <Topbar
+                    openSidebar={() => setSidebarOpen(true)}
+                />
 
-            <div style={{ marginLeft: "260px" }}>
-                <Footer />
+                <main className="main-content">
+                    {children}
+                </main>
+
+                {/* Remove this if you don't want footer */}
+                {/* <Footer /> */}
+
             </div>
         </>
-
     );
 }
 
