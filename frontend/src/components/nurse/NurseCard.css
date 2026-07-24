@@ -1,0 +1,261 @@
+.nurse-card {
+
+    width:320px;
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+    transition:0.3s;
+
+}
+
+
+
+.nurse-card:hover {
+
+    transform:translateY(-5px);
+
+}
+
+
+
+
+.nurse-card-header {
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    border-bottom:1px solid #ddd;
+
+    padding-bottom:15px;
+
+}
+
+
+
+
+
+.nurse-avatar {
+
+
+    height:60px;
+
+    width:60px;
+
+    border-radius:50%;
+
+    background:#3498db;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:30px;
+
+}
+
+
+
+
+
+.nurse-info h3 {
+
+
+    margin:0;
+
+    color:#2c3e50;
+
+}
+
+
+
+
+
+.nurse-info p {
+
+
+    margin-top:5px;
+
+    color:#777;
+
+}
+
+
+
+
+
+.nurse-card-body {
+
+
+    margin-top:20px;
+
+}
+
+
+
+
+
+.info-row {
+
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:15px;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+.info-row span {
+
+
+    color:#555;
+
+}
+
+
+
+
+
+.info-row strong {
+
+
+    color:#2c3e50;
+
+}
+
+
+
+
+
+.available-status {
+
+
+    background:#d4edda;
+
+    color:#155724 !important;
+
+    padding:5px 12px;
+
+    border-radius:15px;
+
+    font-size:12px;
+
+}
+
+
+
+
+
+.assigned-status {
+
+
+    background:#f8d7da;
+
+    color:#721c24 !important;
+
+    padding:5px 12px;
+
+    border-radius:15px;
+
+    font-size:12px;
+
+}
+
+
+
+
+
+.nurse-card-actions {
+
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+
+
+
+
+.view-card-btn {
+
+
+    background:#2ecc71;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 20px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+.edit-card-btn {
+
+
+    background:#f39c12;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 20px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+.view-card-btn:hover {
+
+
+    background:#27ae60;
+
+}
+
+
+
+
+
+.edit-card-btn:hover {
+
+
+    background:#d68910;
+
+}

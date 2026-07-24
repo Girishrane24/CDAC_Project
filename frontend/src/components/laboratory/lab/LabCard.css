@@ -1,0 +1,131 @@
+.lab-card{
+
+    background:#ffffff;
+
+    border-radius:10px;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
+
+    overflow:hidden;
+
+    transition:.3s;
+
+}
+
+.lab-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 8px 18px rgba(0,0,0,.15);
+
+}
+
+.lab-card-header{
+
+    background:#2563eb;
+
+    color:white;
+
+    text-align:center;
+
+    padding:18px;
+
+}
+
+.lab-card-header h3{
+
+    margin:0;
+
+}
+
+.lab-card-body{
+
+    padding:20px;
+
+}
+
+.lab-card-body p{
+
+    margin:12px 0;
+
+    color:#374151;
+
+}
+
+.lab-card-footer{
+
+    display:flex;
+
+    justify-content:space-around;
+
+    padding:15px;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+.view-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 15px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+.view-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.edit-btn{
+
+    background:#f59e0b;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 15px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+.edit-btn:hover{
+
+    background:#d97706;
+
+}
+
+.delete-btn{
+
+    background:#dc2626;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 15px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+.delete-btn:hover{
+
+    background:#b91c1c;
+
+}

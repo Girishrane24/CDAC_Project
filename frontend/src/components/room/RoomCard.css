@@ -1,0 +1,118 @@
+.room-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    transition: .3s;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+}
+
+.room-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.room-card-header h3 {
+    margin: 0;
+    color: #1f2937;
+}
+
+.room-card-header p {
+    margin-top: 5px;
+    color: #6b7280;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.available {
+    background: #16a34a;
+}
+
+.occupied {
+    background: #dc2626;
+}
+
+.maintenance {
+    background: #f59e0b;
+    color: black;
+}
+
+.room-card-body {
+    margin-bottom: 20px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.info span {
+    color: #6b7280;
+}
+
+.info strong {
+    color: #111827;
+}
+
+.room-card-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.room-card-footer button {
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    transition: .3s;
+}
+
+.view-btn {
+    background: #2563eb;
+}
+
+.view-btn:hover {
+    background: #1d4ed8;
+}
+
+.edit-btn {
+    background: #f59e0b;
+}
+
+.edit-btn:hover {
+    background: #d97706;
+}
+
+.delete-btn {
+    background: #dc2626;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
+}
+
+@media (max-width:768px){
+
+    .room-card-footer{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .room-card-footer button{
+        width:100%;
+    }
+
+}

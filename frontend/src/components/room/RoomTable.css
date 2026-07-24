@@ -1,0 +1,116 @@
+.room-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.room-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.room-table thead {
+    background: #0d6efd;
+    color: white;
+}
+
+.room-table th {
+    padding: 14px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.room-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.room-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.available {
+    background: #198754;
+}
+
+.occupied {
+    background: #dc3545;
+}
+
+.maintenance {
+    background: #ffc107;
+    color: #000;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 8px 12px;
+    margin: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 13px;
+}
+
+.view-btn {
+    background: #0d6efd;
+}
+
+.view-btn:hover {
+    background: #0b5ed7;
+}
+
+.edit-btn {
+    background: #fd7e14;
+}
+
+.edit-btn:hover {
+    background: #e96b00;
+}
+
+.delete-btn {
+    background: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #bb2d3b;
+}
+
+.no-data {
+    text-align: center;
+    padding: 25px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+
+    .room-table th,
+    .room-table td {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .view-btn,
+    .edit-btn,
+    .delete-btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
