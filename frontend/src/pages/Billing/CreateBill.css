@@ -1,4 +1,4 @@
-.create-bill-container{
+/* .create-bill-container{
 
     padding:20px;
 
@@ -41,5 +41,223 @@
     text-align:center;
     font-size:20px;
     font-weight:bold;
+
+} */
+
+
+/* ===========================
+   Page Background
+=========================== */
+
+.create-bill-container {
+    padding: 30px;
+    background: #f4f7fc;
+    min-height: 100vh;
+}
+
+/* ===========================
+   Card
+=========================== */
+
+.billing-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    background: #fff;
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.card-header {
+    background: linear-gradient(135deg, #0d6efd, #4f8dfd);
+    color: white;
+    padding: 25px 30px;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.card-header p {
+    margin-top: 5px;
+    margin-bottom: 0;
+    opacity: .9;
+}
+
+/* ===========================
+   Card Body
+=========================== */
+
+.card-body {
+    padding: 30px;
+}
+
+/* ===========================
+   Section Title
+=========================== */
+
+.section-title {
+    color: #0d6efd;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border-left: 5px solid #0d6efd;
+    padding-left: 10px;
+}
+
+/* ===========================
+   Labels
+=========================== */
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+/* ===========================
+   Inputs
+=========================== */
+
+.form-control,
+.form-select {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #d8dce5;
+    transition: all .3s ease;
+    box-shadow: none;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .15);
+}
+
+/* ===========================
+   Validation
+=========================== */
+
+.invalid-feedback {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* ===========================
+   Total Amount Card
+=========================== */
+
+.total-card {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #198754, #28a745);
+    color: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+}
+
+.total-card span {
+    display: block;
+    font-size: 18px;
+}
+
+.total-card h2 {
+    margin-top: 10px;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.btn {
+    min-width: 160px;
+    height: 48px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 992px) {
+
+    .card-body {
+        padding: 25px;
+    }
+
+    .total-card h2 {
+        font-size: 30px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .create-bill-container {
+        padding: 15px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .total-card h2 {
+        font-size: 28px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .card-header {
+        padding: 20px;
+    }
+
+    .card-header h3 {
+        font-size: 22px;
+    }
+
+    .card-header p {
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+
+    .total-card {
+        padding: 20px;
+    }
+
+    .total-card h2 {
+        font-size: 26px;
+    }
 
 }

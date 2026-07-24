@@ -1,10 +1,13 @@
+
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./BillingList.css";
 
 function BillingList() {
 
-    const bills = [
+    const [search, setSearch] = useState("");
 
+    const [bills, setBills] = useState([
         {
             id: "BILL001",
             patient: "Rahul Sharma",
@@ -12,9 +15,8 @@ function BillingList() {
             amount: 3500,
             paymentMode: "Cash",
             status: "Paid",
-            date: "21-Jul-2026"
+            date: "21-Jul-2026",
         },
-
         {
             id: "BILL002",
             patient: "Priya Singh",
@@ -22,9 +24,8 @@ function BillingList() {
             amount: 4200,
             paymentMode: "UPI",
             status: "Pending",
-            date: "22-Jul-2026"
+            date: "22-Jul-2026",
         },
-
         {
             id: "BILL003",
             patient: "Amit Verma",
@@ -32,15 +33,32 @@ function BillingList() {
             amount: 2800,
             paymentMode: "Card",
             status: "Paid",
-            date: "23-Jul-2026"
-        }
+            date: "23-Jul-2026",
+        },
+    ]);
 
-    ];
+    const filteredBills = useMemo(() => {
+        return bills.filter((bill) =>
+            bill.id.toLowerCase().includes(search.toLowerCase()) ||
+            bill.patient.toLowerCase().includes(search.toLowerCase()) ||
+            bill.doctor.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [search, bills]);
+
+    const deleteBill = (id) => {
+
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this bill?"
+        );
+
+        if (!confirmDelete) return;
+
+        setBills(bills.filter((bill) => bill.id !== id));
+    };
 
     const getBadgeColor = (status) => {
 
         switch (status) {
-
             case "Paid":
                 return "success";
 
@@ -56,10 +74,9 @@ function BillingList() {
     };
 
     return (
-
         <div className="billing-container">
 
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="billing-header">
 
                 <h2>Billing Management</h2>
 
@@ -76,113 +93,149 @@ function BillingList() {
 
                 <div className="card-body">
 
-                    <div className="row mb-3">
+                    <div className="row mb-4">
 
-                        <div className="col-md-4">
+                        <div className="col-lg-4 col-md-6">
 
                             <input
-                                type="text"
                                 className="form-control"
-                                placeholder="Search Bill..."
+                                placeholder="Search Bill, Patient or Doctor"
+                                value={search}
+                                onChange={(e) =>
+                                    setSearch(e.target.value)
+                                }
                             />
 
                         </div>
 
                     </div>
 
-                    <div className="table-responsive">
+                    {filteredBills.length === 0 ? (
 
-                        <table className="table table-bordered table-hover align-middle">
+                        <div className="alert alert-warning text-center">
 
-                            <thead className="table-primary">
+                            No Bills Found
 
-                                <tr>
+                        </div>
 
-                                    <th>Bill ID</th>
-                                    <th>Patient</th>
-                                    <th>Doctor</th>
-                                    <th>Amount (₹)</th>
-                                    <th>Payment Mode</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
+                    ) : (
 
-                                </tr>
+                        <div className="table-responsive">
 
-                            </thead>
+                            <table className="table table-hover align-middle">
 
-                            <tbody>
+                                <thead className="table-primary">
 
-                                {bills.map((bill) => (
+                                    <tr>
 
-                                    <tr key={bill.id}>
+                                        <th>Bill ID</th>
 
-                                        <td>{bill.id}</td>
+                                        <th>Patient</th>
 
-                                        <td>{bill.patient}</td>
+                                        <th>Doctor</th>
 
-                                        <td>{bill.doctor}</td>
+                                        <th>Amount</th>
 
-                                        <td>₹ {bill.amount}</td>
+                                        <th>Payment</th>
 
-                                        <td>{bill.paymentMode}</td>
+                                        <th>Status</th>
 
-                                        <td>
+                                        <th>Date</th>
 
-                                            <span
-                                                className={`badge bg-${getBadgeColor(
-                                                    bill.status
-                                                )}`}
-                                            >
-                                                {bill.status}
-                                            </span>
-
-                                        </td>
-
-                                        <td>{bill.date}</td>
-
-                                        <td>
-
-                                            <Link
-                                                to={`/billing/details/${bill.id}`}
-                                                className="btn btn-info btn-sm me-2"
-                                            >
-                                                View
-                                            </Link>
-
-                                            <Link
-                                                to={`/billing/edit/${bill.id}`}
-                                                className="btn btn-warning btn-sm me-2"
-                                            >
-                                                Edit
-                                            </Link>
-
-                                            <button
-                                                className="btn btn-danger btn-sm"
-                                            >
-                                                Delete
-                                            </button>
-
-                                        </td>
+                                        <th>Action</th>
 
                                     </tr>
 
-                                ))}
+                                </thead>
 
-                            </tbody>
+                                <tbody>
 
-                        </table>
+                                    {filteredBills.map((bill) => (
 
-                    </div>
+                                        <tr key={bill.id}>
+
+                                            <td>{bill.id}</td>
+
+                                            <td>{bill.patient}</td>
+
+                                            <td>{bill.doctor}</td>
+
+                                            <td>
+
+                                                ₹{" "}
+                                                {bill.amount.toLocaleString(
+                                                    "en-IN"
+                                                )}
+
+                                            </td>
+
+                                            <td>{bill.paymentMode}</td>
+
+                                            <td>
+
+                                                <span
+                                                    className={`badge bg-${getBadgeColor(
+                                                        bill.status
+                                                    )}`}
+                                                >
+                                                    {bill.status}
+                                                </span>
+
+                                            </td>
+
+                                            <td>{bill.date}</td>
+
+                                            <td>
+
+                                                <div className="action-buttons">
+
+                                                    <Link
+                                                        to={`/billing/details/${bill.id}`}
+                                                        className="btn btn-info btn-sm text-text-center"
+                                                    >
+                                                        View
+                                                    </Link>
+
+                                                    <Link
+                                                        to={`/billing/edit/${bill.id}`}
+                                                        className="btn btn-warning btn-sm"
+                                                    >
+                                                        Edit
+                                                    </Link>
+
+                                                    <button
+                                                        className="btn btn-danger btn-sm"
+                                                        onClick={() =>
+                                                            deleteBill(
+                                                                bill.id
+                                                            )
+                                                        }
+                                                    >
+                                                        Delete
+                                                    </button>
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    )}
 
                 </div>
 
             </div>
 
         </div>
-
     );
-
 }
 
 export default BillingList;
