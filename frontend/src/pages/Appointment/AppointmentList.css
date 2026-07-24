@@ -1,36 +1,91 @@
-.appointment-container {
-    padding: 20px;
+.list-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.appointment-container h2 {
-    font-weight: 700;
-    color: #0d6efd;
+/* Flexbox header to place button on top-right */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.card {
-    border: none;
-    border-radius: 10px;
+.header-bar h2 {
+  margin: 0;
+  color: #333;
 }
 
-.table th,
-.table td {
-    text-align: center;
-    vertical-align: middle;
+/* Styled Book Appointment Button */
+.book-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #f5f7fb;
+.book-btn:hover {
+  background-color: #218838;
 }
 
-.badge {
-    padding: 8px 12px;
-    font-size: 13px;
+.appointment-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.btn-sm {
-    min-width: 70px;
+.appointment-table th, 
+.appointment-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
 }
 
-input.form-control {
-    height: 42px;
+.appointment-table th {
+  background-color: #f4f6f8;
+  color: #333;
+  font-weight: 600;
 }
+
+.no-appointments {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.action-buttons button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+}
+
+.action-buttons button.delete-btn {
+  background-color: #dc3545;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.status-booked { background-color: #e3f2fd; color: #1976d2; }
+.status-completed { background-color: #e8f5e9; color: #388e3c; }
+.status-cancelled { background-color: #ffebee; color: #d32f2f; }

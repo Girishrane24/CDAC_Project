@@ -1,46 +1,52 @@
 package com.hospital.model;
 
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "appointments")
 public class Appointment {
 
     @Id
-    private String appointmentId;
+    private String id;
+    private String title;
+    private String clientName;
+    private String clientEmail;
+    private LocalDateTime appointmentTime;
+    private String status; // e.g., "BOOKED", "COMPLETED", "CANCELLED"
+    private String notes;
 
-    private String appointmentDate;
-    private String appointmentTime;
-    private String reason;
-    private String status; // PENDING, CONFIRMED, COMPLETED, CANCELLED
+    public Appointment() {}
 
-    // Foreign Key Reference IDs
-    private String patientId;
-    private String doctorId;
-    private String nurseId;
-
-    // Explicit Getters and Setters to avoid Lombok compilation issues
-    public String getAppointmentId() {
-        return appointmentId;
+    public Appointment(String title, String clientName, String clientEmail, LocalDateTime appointmentTime, String status, String notes) {
+        this.title = title;
+        this.clientName = clientName;
+        this.clientEmail = clientEmail;
+        this.appointmentTime = appointmentTime;
+        this.status = status;
+        this.notes = notes;
     }
 
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
-    }
+    // Getters and Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-    
-    
+    public String getClientName() { return clientName; }
+    public void setClientName(String clientName) { this.clientName = clientName; }
+
+    public String getClientEmail() { return clientEmail; }
+    public void setClientEmail(String clientEmail) { this.clientEmail = clientEmail; }
+
+    public LocalDateTime getAppointmentTime() { return appointmentTime; }
+    public void setAppointmentTime(LocalDateTime appointmentTime) { this.appointmentTime = appointmentTime; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
