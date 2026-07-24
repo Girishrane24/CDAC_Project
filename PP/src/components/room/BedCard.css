@@ -1,0 +1,117 @@
+.bed-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    transition: .3s;
+}
+
+.bed-card:hover {
+    transform: translateY(-4px);
+}
+
+.bed-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.bed-card-header h3 {
+    margin: 0;
+    color: #1f2937;
+}
+
+.bed-status {
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.available {
+    background: #198754;
+}
+
+.occupied {
+    background: #dc3545;
+}
+
+.maintenance {
+    background: #ffc107;
+    color: black;
+}
+
+.bed-card-body {
+    margin-bottom: 20px;
+}
+
+.bed-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.bed-info label {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.bed-info span {
+    font-weight: 600;
+    color: #111827;
+}
+
+.bed-card-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.bed-card-footer button {
+    flex: 1;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 14px;
+}
+
+.status-btn {
+    background: #0d6efd;
+}
+
+.status-btn:hover {
+    background: #0b5ed7;
+}
+
+.edit-btn {
+    background: #fd7e14;
+}
+
+.edit-btn:hover {
+    background: #e96b00;
+}
+
+.delete-btn {
+    background: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #bb2d3b;
+}
+
+@media (max-width:768px){
+
+    .bed-card-footer{
+        flex-direction: column;
+    }
+
+    .bed-card-footer button{
+        width: 100%;
+    }
+
+}

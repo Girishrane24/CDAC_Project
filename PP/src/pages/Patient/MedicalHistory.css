@@ -1,0 +1,51 @@
+.history-page{
+    padding:30px;
+    background:#f4f7fb;
+    min-height:100vh;
+}
+
+.history-card{
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.history-card h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:#0d6efd;
+}
+
+.history-card table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.history-card th{
+    background:#0d6efd;
+    color:white;
+    padding:15px;
+}
+
+.history-card td{
+    padding:15px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+}
+
+.history-card tr:hover{
+    background:#f8f9fa;
+}
+
+@media(max-width:768px){
+
+.history-card{
+    overflow-x:auto;
+}
+
+table{
+    min-width:700px;
+}
+
+}

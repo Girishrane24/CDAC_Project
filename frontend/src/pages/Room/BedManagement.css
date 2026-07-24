@@ -1,0 +1,138 @@
+.bed-management {
+    padding: 25px;
+    background: #f5f7fa;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header input {
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.bed-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.bed-form input,
+.bed-form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    flex: 1;
+    min-width: 180px;
+}
+
+.bed-form button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.bed-form button:hover {
+    background: #0056b3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+table th {
+    background: #007bff;
+    color: white;
+    padding: 12px;
+}
+
+table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.available {
+    background: #28a745;
+}
+
+.occupied {
+    background: #dc3545;
+}
+
+.maintenance {
+    background: #ffc107;
+    color: black;
+}
+
+.statusBtn {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.deleteBtn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.statusBtn:hover {
+    background: #138496;
+}
+
+.deleteBtn:hover {
+    background: #c82333;
+}
+
+@media (max-width:768px) {
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .header input {
+        width: 100%;
+    }
+
+    .bed-form {
+        flex-direction: column;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
