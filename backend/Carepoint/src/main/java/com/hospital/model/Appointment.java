@@ -1,8 +1,8 @@
 package com.hospital.model;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDateTime;
 
 @Document(collection = "appointments")
@@ -10,43 +10,68 @@ public class Appointment {
 
     @Id
     private String id;
-    private String title;
-    private String clientName;
-    private String clientEmail;
-    private LocalDateTime appointmentTime;
-    private String status; // e.g., "BOOKED", "COMPLETED", "CANCELLED"
+    private String patientId;
+    private String doctorId;
+    private LocalDateTime appointmentDate;
+    private String status; // BOOKED, COMPLETED, CANCELLED
     private String notes;
 
     public Appointment() {}
 
-    public Appointment(String title, String clientName, String clientEmail, LocalDateTime appointmentTime, String status, String notes) {
-        this.title = title;
-        this.clientName = clientName;
-        this.clientEmail = clientEmail;
-        this.appointmentTime = appointmentTime;
+    public Appointment(String patientId, String doctorId, LocalDateTime appointmentDate, String status, String notes) {
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.appointmentDate = appointmentDate;
         this.status = status;
         this.notes = notes;
     }
 
     // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getClientName() { return clientName; }
-    public void setClientName(String clientName) { this.clientName = clientName; }
+    public String getPatientId() {
+        return patientId;
+    }
 
-    public String getClientEmail() { return clientEmail; }
-    public void setClientEmail(String clientEmail) { this.clientEmail = clientEmail; }
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
-    public LocalDateTime getAppointmentTime() { return appointmentTime; }
-    public void setAppointmentTime(LocalDateTime appointmentTime) { this.appointmentTime = appointmentTime; }
+    public String getDoctorId() {
+        return doctorId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
+    }
 
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+    public LocalDateTime getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(LocalDateTime appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
