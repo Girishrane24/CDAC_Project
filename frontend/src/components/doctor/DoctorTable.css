@@ -45,12 +45,13 @@
 .view-btn,
 .edit-btn,
 .delete-btn{
-    border:none;
-    padding:8px 14px;
-    margin-right:8px;
-    border-radius:6px;
-    cursor:pointer;
+  
     color:white;
+    border:none;
+    padding:6px 12px;
+    margin-right:8px;
+    border-radius:4px;
+    cursor:pointer;
 }
 
 .view-btn{

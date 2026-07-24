@@ -1,100 +1,106 @@
 import React from "react";
-import "./PatientForm.css";
+ import "./PatientTable.css";
+//import "../../styles/buttons.css";
+import { useNavigate } from "react-router-dom";
 
 function PatientTable() {
+  const navigate = useNavigate();
 
-    const patients=[
-        {
-            id:1,
-            name:"Rahul Sharma",
-            age:28,
-            gender:"Male",
-            phone:"9876543210",
-            blood:"A+"
-        },
-        {
-            id:2,
-            name:"Priya Patel",
-            age:35,
-            gender:"Female",
-            phone:"9123456789",
-            blood:"O+"
-        },
-        {
-            id:3,
-            name:"Amit Verma",
-            age:42,
-            gender:"Male",
-            phone:"9988776655",
-            blood:"B+"
-        }
-    ];
+  const patients = [
+    {
+      id: 1,
+      name: "Rahul Sharma",
+      age: 28,
+      gender: "Male",
+      phone: "9876543210",
+      blood: "A+",
+    },
+    {
+      id: 2,
+      name: "Priya Patel",
+      age: 35,
+      gender: "Female",
+      phone: "9123456789",
+      blood: "O+",
+    },
+    {
+      id: 3,
+      name: "Amit Verma",
+      age: 42,
+      gender: "Male",
+      phone: "9988776655",
+      blood: "B+",
+    },
+  ];
 
-    return(
+  const handleView = (patient) => {
+    navigate("/patients/details", {
+      state: patient,
+    });
+  };
 
-        <table className="patient-table">
+  const handleEdit = (patient) => {
+    navigate("/patients/edit", {
+      state: patient,
+    });
+  };
+  return (
+    <table className="patient-table">
+      <thead>
+        <tr>
+          <th>ID</th>
 
-            <thead>
+          <th>Name</th>
 
-                <tr>
+          <th>Age</th>
 
-                    <th>ID</th>
+          <th>Gender</th>
 
-                    <th>Name</th>
+          <th>Phone</th>
 
-                    <th>Age</th>
+          <th>Blood Group</th>
 
-                    <th>Gender</th>
+          <th>Action</th>
+        </tr>
+      </thead>
 
-                    <th>Phone</th>
+      <tbody>
+        {patients.map((patient) => (
+          <tr key={patient.id}>
+            <td>{patient.id}</td>
 
-                    <th>Blood Group</th>
+            <td>{patient.name}</td>
 
-                    <th>Action</th>
+            <td>{patient.age}</td>
 
-                </tr>
+            <td>{patient.gender}</td>
 
-            </thead>
+            <td>{patient.phone}</td>
 
-            <tbody>
+            <td>{patient.blood}</td>
 
-                {
+            <td>
+              <button
+                className="view-btn"
+                onClick={() => handleView(patient.id)}
+              >
+                View
+              </button>
 
-                    patients.map((patient)=>(
+              <button
+                className="edit-btn"
+                onClick={() => handleEdit(patient.id)}
+              >
+                Edit
+              </button>
 
-                        <tr key={patient.id}>
-
-                            <td>{patient.id}</td>
-
-                            <td>{patient.name}</td>
-
-                            <td>{patient.age}</td>
-
-                            <td>{patient.gender}</td>
-
-                            <td>{patient.phone}</td>
-
-                            <td>{patient.blood}</td>
-
-                            <td>
-
-                                <button className="view-btn">View</button>
-
-                                <button className="edit-btn">Edit</button>
-
-                            </td>
-
-                        </tr>
-
-                    ))
-
-                }
-
-            </tbody>
-
-        </table>
-
-    );
+              <button className="delete-btn">Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 export default PatientTable;

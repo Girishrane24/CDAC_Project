@@ -1,6 +1,18 @@
+// import { Link } from "react-router-dom";
 import "./DoctorTable.css";
+import { useNavigate } from "react-router-dom";
 
 function DoctorTable({ doctors }) {
+
+  const navigate = useNavigate();
+
+  const handleView = (id) => {
+    navigate(`/doctors/${id}`);
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/doctors/edit/${id}`);
+  };
   return (
     <div className="doctor-table-container">
       <table className="doctor-table">
@@ -45,9 +57,21 @@ function DoctorTable({ doctors }) {
               </td>
 
               <td>
-                <button className="view-btn">View</button>
+             
 
-                <button className="edit-btn">Edit</button>
+                  <button
+                  className="view-btn"
+                  onClick={() => handleView(doctor.id)}
+                >
+                  View
+                </button>
+
+                <button
+                  className="edit-btn"
+                  onClick={() => handleEdit(doctor.id)}
+                >
+                  Edit
+                </button>
 
                 <button className="delete-btn">Delete</button>
               </td>

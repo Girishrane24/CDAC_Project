@@ -45,13 +45,16 @@
 
 .save-btn,
 .cancel-btn {
-    border: none;
-    padding: 12px 28px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 15px;
-    color: white;
+  
     transition: 0.3s;
+
+    
+    color:white;
+    border:none;
+    padding:6px 12px;
+    margin-right:8px;
+    border-radius:4px;
+    cursor:pointer;
 }
 
 .save-btn {

@@ -72,12 +72,16 @@
 }
 
 .room-card-footer button {
-    border: none;
-    padding: 8px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: white;
+  
     transition: .3s;
+
+
+    color:white;
+    border:none;
+    padding:6px 12px;
+    margin-right:8px;
+    border-radius:4px;
+    cursor:pointer;
 }
 
 .view-btn {

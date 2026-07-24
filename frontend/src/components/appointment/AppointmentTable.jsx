@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "./AppointmentTable.css";
 
 function AppointmentTable({ appointments }) {
 

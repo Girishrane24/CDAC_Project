@@ -1,100 +1,47 @@
-import "./DoctorDetails.css";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { doctorService } from '../../services/doctorService';
 
-function DoctorDetails() {
+const DoctorDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const doctor = {
-        id: 101,
-        name: "Dr. Rajesh Sharma",
-        specialization: "Cardiology",
-        qualification: "MBBS, MD",
-        experience: 10,
-        gender: "Male",
-        phone: "9876543210",
-        email: "rajesh@gmail.com",
-        address: "Pune, Maharashtra",
-        consultationFee: 800,
-        status: "Available",
-        image: "https://cdn-icons-png.flaticon.com/512/387/387561.png"
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const response = await doctorService.getById(id);
+        setDoctor(response.data);
+      } catch (error) {
+        console.error('Error fetching doctor details:', error);
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchDoctor();
+  }, [id]);
 
-    return (
+  if (loading) return <div>Loading profile...</div>;
+  if (!doctor) return <div>Doctor not found.</div>;
 
-        <div className="doctor-details-page">
+  return (
+    <div style={{ padding: '25px', maxWidth: '800px', margin: '0 auto', background: '#fff', borderRadius: '8px' }}>
+      <button onClick={() => navigate('/doctors')} style={{ marginBottom: '15px', padding: '6px 12px' }}>
+        ← Back to Directory
+      </button>
 
-            <div className="doctor-profile-card">
+      <h2>Dr. {doctor.name}</h2>
+      <p style={{ color: '#007bff', fontWeight: 'bold' }}>{doctor.specialization}</p>
 
-                <img
-                    src={doctor.image}
-                    alt={doctor.name}
-                />
-
-                <div className="doctor-info">
-
-                    <h2>{doctor.name}</h2>
-
-                    <span className="status">
-                        {doctor.status}
-                    </span>
-
-                    <div className="details-grid">
-
-                        <div>
-                            <strong>Doctor ID</strong>
-                            <p>{doctor.id}</p>
-                        </div>
-
-                        <div>
-                            <strong>Specialization</strong>
-                            <p>{doctor.specialization}</p>
-                        </div>
-
-                        <div>
-                            <strong>Qualification</strong>
-                            <p>{doctor.qualification}</p>
-                        </div>
-
-                        <div>
-                            <strong>Experience</strong>
-                            <p>{doctor.experience} Years</p>
-                        </div>
-
-                        <div>
-                            <strong>Gender</strong>
-                            <p>{doctor.gender}</p>
-                        </div>
-
-                        <div>
-                            <strong>Phone</strong>
-                            <p>{doctor.phone}</p>
-                        </div>
-
-                        <div>
-                            <strong>Email</strong>
-                            <p>{doctor.email}</p>
-                        </div>
-
-                        <div>
-                            <strong>Consultation Fee</strong>
-                            <p>₹ {doctor.consultationFee}</p>
-                        </div>
-
-                        <div className="full-width">
-
-                            <strong>Address</strong>
-
-                            <p>{doctor.address}</p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    );
-}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '20px' }}>
+        <div><strong>Qualification:</strong> {doctor.qualification || 'N/A'}</div>
+        <div><strong>Contact:</strong> {doctor.contactNumber}</div>
+        <div><strong>Email:</strong> {doctor.email || 'N/A'}</div>
+        <div><strong>Available Days:</strong> {doctor.availableDays || 'Mon - Fri'}</div>
+      </div>
+    </div>
+  );
+};
 
 export default DoctorDetails;

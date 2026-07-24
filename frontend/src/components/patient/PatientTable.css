@@ -33,8 +33,20 @@
 
 .edit-btn{
     background:#ffc107;
+    color:white;
     border:none;
     padding:6px 12px;
+    margin-right:8px;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.delete-btn{
+    background:#ba2626;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    margin-right:8px;
     border-radius:4px;
     cursor:pointer;
 }
