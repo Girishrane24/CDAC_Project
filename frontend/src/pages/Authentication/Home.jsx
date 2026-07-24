@@ -127,7 +127,7 @@
 // export default Home;
 
 
-<!-- 
+
 import "./Home.css";
 import bgImage from "../../assets/images/hospital.webp";
 import { Link } from "react-router-dom";

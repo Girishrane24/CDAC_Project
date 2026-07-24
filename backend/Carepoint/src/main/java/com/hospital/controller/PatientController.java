@@ -2,19 +2,23 @@ package com.hospital.controller;
 
 import com.hospital.model.Patient;
 import com.hospital.repository.PatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/patients")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/patients")
+@CrossOrigin(origins = "*") 
 public class PatientController {
 
-    @Autowired
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
+
+    public PatientController(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
+    }
 
     @GetMapping
     public List<Patient> getAllPatients() {
@@ -22,32 +26,35 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> getPatientById(@PathVariable("id") String id) {
-        // Fixed: changed patientId to id
+    public ResponseEntity<Patient> getPatientById(@PathVariable String id) {
         return patientRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Patient createPatient(@RequestBody Patient patient) {
+    @ResponseStatus(HttpStatus.CREATED) // Returns HTTP 201 Created
+    public Patient createPatient(@Valid @RequestBody Patient patient) {
         return patientRepository.save(patient);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable("id") String id, @RequestBody Patient patient) {
-        // Fixed: changed patientId to id
-        if (!patientRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        patient.setPatientId(id);
-        return ResponseEntity.ok(patientRepository.save(patient));
+    public ResponseEntity<Patient> updatePatient(@PathVariable String id, @Valid @RequestBody Patient patientDetails) {
+        return patientRepository.findById(id)
+                .map(existingPatient -> {
+                    // Ensure the existing ID is retained
+                    patientDetails.setId(existingPatient.getId()); 
+                    return ResponseEntity.ok(patientRepository.save(patientDetails));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePatient(@PathVariable("id") String id) {
-        // Fixed: changed patientId to id
-        patientRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletePatient(@PathVariable String id) {
+        if (patientRepository.existsById(id)) {
+            patientRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
