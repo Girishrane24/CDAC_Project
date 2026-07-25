@@ -1,134 +1,215 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { appointmentService } from '../../services/appointmentService';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./BookAppointment.css";
 
-const BookAppointment = () => {
+function BookAppointment() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    patientId: '',
-    doctorId: '',
-    appointmentDate: '',
-    status: 'BOOKED',
-    notes: '',
+
+  const [appointment, setAppointment] = useState({
+    patientName: "",
+    doctorName: "",
+    department: "",
+    appointmentDate: "",
+    appointmentTime: "",
+    reason: "",
+    status: "Pending",
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setAppointment({
+      ...appointment,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await appointmentService.create(formData);
-      alert('Appointment booked successfully!');
-      navigate('/appointments'); // Redirect back to list page
-    } catch (error) {
-      console.error('Error booking appointment:', error);
-      alert('Failed to book appointment. Check backend server connection.');
-    }
+
+    alert("Appointment Booked Successfully!");
+
+    console.log(appointment);
+
+    navigate("/appointments");
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '30px auto', padding: '25px', background: '#fff', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-      <h2 style={{ marginBottom: '20px' }}>Book New Appointment</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={labelStyle}>Patient ID *</label>
-          <input
-            type="text"
-            name="patientId"
-            value={formData.patientId}
-            onChange={handleChange}
-            placeholder="Enter Patient ID (e.g. 64b7f...)"
-            required
-            style={inputStyle}
-          />
+    <div className="appointment-form-container">
+
+      <div className="card shadow">
+
+        <div className="card-header bg-primary text-white">
+
+          <h3>Book Appointment</h3>
+
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={labelStyle}>Doctor ID *</label>
-          <input
-            type="text"
-            name="doctorId"
-            value={formData.doctorId}
-            onChange={handleChange}
-            placeholder="Enter Doctor ID (e.g. 64b8a...)"
-            required
-            style={inputStyle}
-          />
+        <div className="card-body">
+
+          <form onSubmit={handleSubmit}>
+
+            <div className="row">
+
+              <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+                  Patient Name
+                </label>
+
+                <input
+                  type="text"
+                  className="form-control"
+                  name="patientName"
+                  value={appointment.patientName}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+              <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+                  Doctor Name
+                </label>
+
+                <select
+                  className="form-select"
+                  name="doctorName"
+                  value={appointment.doctorName}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Doctor</option>
+                  <option>Dr. Amit Patel</option>
+                  <option>Dr. Sneha Joshi</option>
+                  <option>Dr. Anil Kumar</option>
+                  <option>Dr. Pooja Mehta</option>
+                </select>
+
+              </div>
+
+              <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+                  Department
+                </label>
+
+                <select
+                  className="form-select"
+                  name="department"
+                  value={appointment.department}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Department</option>
+                  <option>Cardiology</option>
+                  <option>Neurology</option>
+                  <option>Orthopedics</option>
+                  <option>Dermatology</option>
+                  <option>Pediatrics</option>
+                </select>
+
+              </div>
+
+              <div className="col-md-3 mb-3">
+
+                <label className="form-label">
+                  Appointment Date
+                </label>
+
+                <input
+                  type="date"
+                  className="form-control"
+                  name="appointmentDate"
+                  value={appointment.appointmentDate}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+              <div className="col-md-3 mb-3">
+
+                <label className="form-label">
+                  Appointment Time
+                </label>
+
+                <input
+                  type="time"
+                  className="form-control"
+                  name="appointmentTime"
+                  value={appointment.appointmentTime}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+              <div className="col-12 mb-3">
+
+                <label className="form-label">
+                  Reason for Visit
+                </label>
+
+                <textarea
+                  className="form-control"
+                  rows="4"
+                  name="reason"
+                  value={appointment.reason}
+                  onChange={handleChange}
+                ></textarea>
+
+              </div>
+
+              <div className="col-md-4 mb-3">
+
+                <label className="form-label">
+                  Status
+                </label>
+
+                <select
+                  className="form-select"
+                  name="status"
+                  value={appointment.status}
+                  onChange={handleChange}
+                >
+                  <option>Pending</option>
+                  <option>Confirmed</option>
+                  <option>Completed</option>
+                  <option>Cancelled</option>
+                </select>
+
+              </div>
+
+            </div>
+
+            <div className="text-end">
+
+              <button
+                type="button"
+                className="btn btn-secondary me-2"
+                onClick={() => navigate("/appointments")}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+              >
+                Book Appointment
+              </button>
+
+            </div>
+
+          </form>
+
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={labelStyle}>Date & Time *</label>
-          <input
-            type="datetime-local"
-            name="appointmentDate"
-            value={formData.appointmentDate}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+      </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={labelStyle}>Status</label>
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            style={inputStyle}
-          >
-            <option value="BOOKED">BOOKED</option>
-            <option value="COMPLETED">COMPLETED</option>
-            <option value="CANCELLED">CANCELLED</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <label style={labelStyle}>Notes / Reason</label>
-          <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            rows="3"
-            placeholder="Additional symptoms or consultation notes"
-            style={inputStyle}
-          ></textarea>
-        </div>
-
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <button 
-            type="button" 
-            onClick={() => navigate('/appointments')} 
-            style={{ padding: '10px 20px', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', background: '#fff' }}
-          >
-            Cancel
-          </button>
-          <button 
-            type="submit" 
-            style={{ padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-          >
-            Confirm Appointment
-          </button>
-        </div>
-      </form>
     </div>
   );
-};
-
-const labelStyle = {
-  display: 'block',
-  marginBottom: '5px',
-  fontWeight: '600'
-};
-
-const inputStyle = {
-  width: '100%',
-  padding: '10px',
-  boxSizing: 'border-box',
-  borderRadius: '4px',
-  border: '1px solid #ccc',
-  fontSize: '14px'
-};
+}
 
 export default BookAppointment;

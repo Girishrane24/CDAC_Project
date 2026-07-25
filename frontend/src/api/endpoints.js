@@ -1,26 +1,21 @@
-
-const BASE_URL = 'http://localhost:8082';
-
 export const ENDPOINTS = {
 
-    LOGIN: `${BASE_URL}/auth/login`,
+    LOGIN: "/auth/login",
 
-    PATIENT: `${BASE_URL}/patients`,
+    PATIENT: "/patients",
 
-    DOCTOR: `${BASE_URL}/doctors`,
+    DOCTOR: "/doctors",
 
-    APPOINTMENT: `${BASE_URL}/appointments`,
+    APPOINTMENT: "/appointments",
 
-    BILLING: `${BASE_URL}/billing`,
+    BILLING: "/billing",
 
-    LAB: `${BASE_URL}/labs`,
+    LAB: "/labs",
 
-    LABTEST: `${BASE_URL}/labtests`,
+    LABTEST: "/labtests",
 
-    NURSE: `${BASE_URL}/nurses`,
+    NURSE: "/nurses",
 
-    ROOM: `${BASE_URL}/rooms`
+    ROOM: "/rooms"
 
 };
-
-export default ENDPOINTS;
