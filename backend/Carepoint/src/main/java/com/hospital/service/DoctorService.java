@@ -36,23 +36,34 @@ public class DoctorService {
         return repository.save(doctor);
     }
 
-    public Optional<Doctor> updateDoctor(String id, Doctor updated) {
-        return repository.findById(id).map(existing -> {
-            if (updated.getName() != null) existing.setName(updated.getName());
-            if (updated.getSpecialization() != null) existing.setSpecialization(updated.getSpecialization());
-            if (updated.getQualification() != null) existing.setQualification(updated.getQualification());
-            if (updated.getContactNumber() != null) existing.setContactNumber(updated.getContactNumber());
-            if (updated.getEmail() != null) existing.setEmail(updated.getEmail());
-            if (updated.getAvailableDays() != null) existing.setAvailableDays(updated.getAvailableDays());
-            return repository.save(existing);
+    public Optional<Doctor> updateDoctor(String id, Doctor updatedDoctor) {
+
+        return repository.findById(id).map(existingDoctor -> {
+
+            existingDoctor.setName(updatedDoctor.getName());
+            existingDoctor.setSpecialization(updatedDoctor.getSpecialization());
+            existingDoctor.setQualification(updatedDoctor.getQualification());
+            existingDoctor.setExperience(updatedDoctor.getExperience());
+            existingDoctor.setGender(updatedDoctor.getGender());
+            existingDoctor.setPhone(updatedDoctor.getPhone());
+            existingDoctor.setEmail(updatedDoctor.getEmail());
+            existingDoctor.setAddress(updatedDoctor.getAddress());
+            existingDoctor.setConsultationFee(updatedDoctor.getConsultationFee());
+            existingDoctor.setStatus(updatedDoctor.getStatus());
+
+            return repository.save(existingDoctor);
         });
     }
 
     public boolean deleteDoctor(String id) {
+
         if (repository.existsById(id)) {
+
             repository.deleteById(id);
+
             return true;
         }
+
         return false;
     }
 }

@@ -1,6 +1,7 @@
 // import { Link } from "react-router-dom";
 import "./DoctorTable.css";
 import { useNavigate } from "react-router-dom";
+import { deleteDoctor } from "../../services/doctorService";
 
 function DoctorTable({ doctors }) {
 
@@ -13,6 +14,18 @@ function DoctorTable({ doctors }) {
   const handleEdit = (id) => {
     navigate(`/doctors/edit/${id}`);
   };
+
+const handleDelete = async (id) => {
+
+    if (!window.confirm("Delete doctor?"))
+        return;
+
+    await deleteDoctor(id);
+
+    window.location.reload();
+
+};
+
   return (
     <div className="doctor-table-container">
       <table className="doctor-table">
@@ -73,7 +86,12 @@ function DoctorTable({ doctors }) {
                   Edit
                 </button>
 
-                <button className="delete-btn">Delete</button>
+         <button
+className="delete-btn"
+onClick={() => handleDelete(doctor.id)}
+>
+Delete
+</button>
               </td>
             </tr>
           ))}

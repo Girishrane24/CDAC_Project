@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../components/patient/PatientForm.css";
 import {addPatient} from "../../services/patientServices";
+import { useNavigate } from "react-router-dom";
 
 function AddPatient() {
   const [patient, setPatient] = useState({
@@ -155,7 +156,7 @@ const handleSubmit = async (e) => {
 
           </div>
 
-          <button className="save-btn">
+          <button className="save-btn"   onClick={() => navigate("/patients")}>
             Save Patient
           </button>
 

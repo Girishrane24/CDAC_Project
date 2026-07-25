@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface DoctorRepository extends MongoRepository<Doctor, String> {
+
     List<Doctor> findBySpecializationContainingIgnoreCase(String specialization);
+
     List<Doctor> findByNameContainingIgnoreCase(String name);
+
 }

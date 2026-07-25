@@ -8,25 +8,44 @@ public class Doctor {
 
     @Id
     private String id;
+
     private String name;
     private String specialization;
     private String qualification;
-    private String contactNumber;
+    private String experience;
+    private String gender;
+    private String phone;
     private String email;
-    private String availableDays;
+    private String address;
+    private Double consultationFee;
+    private String status;
 
-    public Doctor() {}
+    public Doctor() {
+    }
 
-    public Doctor(String name, String specialization, String qualification, String contactNumber, String email, String availableDays) {
+    public Doctor(String name,
+                  String specialization,
+                  String qualification,
+                  String experience,
+                  String gender,
+                  String phone,
+                  String email,
+                  String address,
+                  Double consultationFee,
+                  String status) {
+
         this.name = name;
         this.specialization = specialization;
         this.qualification = qualification;
-        this.contactNumber = contactNumber;
+        this.experience = experience;
+        this.gender = gender;
+        this.phone = phone;
         this.email = email;
-        this.availableDays = availableDays;
+        this.address = address;
+        this.consultationFee = consultationFee;
+        this.status = status;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -59,12 +78,28 @@ public class Doctor {
         this.qualification = qualification;
     }
 
-    public String getContactNumber() {
-        return contactNumber;
+    public String getExperience() {
+        return experience;
     }
 
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -75,11 +110,27 @@ public class Doctor {
         this.email = email;
     }
 
-    public String getAvailableDays() {
-        return availableDays;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAvailableDays(String availableDays) {
-        this.availableDays = availableDays;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getConsultationFee() {
+        return consultationFee;
+    }
+
+    public void setConsultationFee(Double consultationFee) {
+        this.consultationFee = consultationFee;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

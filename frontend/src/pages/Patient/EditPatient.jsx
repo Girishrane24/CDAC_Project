@@ -1,19 +1,17 @@
+
+
 import React, { useState } from "react";
 import "../../components/patient/PatientForm.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { updatePatient } from "../../services/patientServices";
+
+
 
 function EditPatient() {
+const location = useLocation();
+const navigate = useNavigate();
 
-  const [patient, setPatient] = useState({
-    firstName: "Rahul",
-    lastName: "Sharma",
-    address: "Pune",
-    email: "rahul@gmail.com",
-    phone: "9876543210",
-    gender: "Male",
-    dob: "1998-03-12",
-    bloodGroup: "A+",
-  });
-
+const [patient, setPatient] = useState(location.state);
   const handleChange = (e) => {
     setPatient({
       ...patient,
@@ -21,13 +19,25 @@ function EditPatient() {
     });
   };
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(patient);
+    try {
 
-    alert("Patient Updated Successfully!");
-  };
+        await updatePatient(patient.id, patient);
+
+        alert("Patient Updated Successfully!");
+
+        navigate("/patients");
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Update Failed");
+
+    }
+};
 
   return (
     <div className="patient-form-page">
@@ -149,9 +159,18 @@ function EditPatient() {
 
           </div>
 
-          <button className="update-btn">
+          <button className="update-btn"   onClick={() => navigate("/patients")}>
             Update Patient
           </button>
+
+ <div style={{ marginTop: "20px" }}>
+          <button
+            className="back-btn"
+            onClick={() => navigate("/patients")}
+          >
+            Back
+          </button>
+        </div>
 
         </form>
 
