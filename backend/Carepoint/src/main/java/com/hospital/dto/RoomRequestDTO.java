@@ -1,55 +1,94 @@
 package com.hospital.dto;
 
 
+import lombok.Data;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-import java.math.BigDecimal;
 import java.util.List;
 
+import com.hospital.model.enumm.RoomStatus;
+import com.hospital.model.enumm.RoomType;
+
+@Data
 public class RoomRequestDTO {
-
-    @NotBlank(message = "Room number is required")
     private String roomNumber;
-
-    @NotBlank(message = "Room type is required")
-    private String type;
-
-    @NotNull(message = "Price per night is required")
-//    @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0")
-    private Double pricePerNight;
-
-    @NotNull(message = "Capacity is required")
-    @Min(value = 1, message = "Capacity must be at least 1 person")
-    private Integer capacity;
-
-    private Boolean isAvailable = true;
-
+    private Integer floor;
+    private RoomType roomType;
+    private Double dailyRate;
+    private RoomStatus status;
     private List<String> amenities;
+    private Integer totalBeds; // Helper to auto-create beds when room is added
 
-    // Getters and Setters
-    public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+    public RoomRequestDTO()
+    {}
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
-
-    public Double getPricePerNight() {
-		return pricePerNight;
+	public RoomRequestDTO(String roomNumber, Integer floor, RoomType roomType, Double dailyRate, RoomStatus status,
+			List<String> amenities, Integer totalBeds) {
+		super();
+		this.roomNumber = roomNumber;
+		this.floor = floor;
+		this.roomType = roomType;
+		this.dailyRate = dailyRate;
+		this.status = status;
+		this.amenities = amenities;
+		this.totalBeds = totalBeds;
 	}
-	public void setPricePerNight(Double pricePerNight) {
-		this.pricePerNight = pricePerNight;
+
+	public String getRoomNumber() {
+		return roomNumber;
 	}
-	public Integer getCapacity() { return capacity; }
-    public void setCapacity(Integer capacity) { this.capacity = capacity; }
 
-    public Boolean getIsAvailable() { return isAvailable; }
-    public void setIsAvailable(Boolean isAvailable) { this.isAvailable = isAvailable; }
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
+	}
 
-    public List<String> getAmenities() { return amenities; }
-    public void setAmenities(List<String> amenities) { this.amenities = amenities; }
+	public Integer getFloor() {
+		return floor;
+	}
+
+	public void setFloor(Integer floor) {
+		this.floor = floor;
+	}
+
+	public RoomType getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(RoomType roomType) {
+		this.roomType = roomType;
+	}
+
+	public Double getDailyRate() {
+		return dailyRate;
+	}
+
+	public void setDailyRate(Double dailyRate) {
+		this.dailyRate = dailyRate;
+	}
+
+	public RoomStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RoomStatus status) {
+		this.status = status;
+	}
+
+	public List<String> getAmenities() {
+		return amenities;
+	}
+
+	public void setAmenities(List<String> amenities) {
+		this.amenities = amenities;
+	}
+
+	public Integer getTotalBeds() {
+		return totalBeds;
+	}
+
+	public void setTotalBeds(Integer totalBeds) {
+		this.totalBeds = totalBeds;
+	}
+    
+    
 }
+

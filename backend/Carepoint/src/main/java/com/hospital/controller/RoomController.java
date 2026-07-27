@@ -1,12 +1,11 @@
 package com.hospital.controller;
 
-
 import com.hospital.dto.RoomRequestDTO;
+import com.hospital.dto.RoomStatusSummaryDTO;
 import com.hospital.model.Room;
+import com.hospital.model.enumm.RoomStatus;
 import com.hospital.service.RoomService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,40 +13,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // Connect with React frontend
 public class RoomController {
 
-    private final RoomService roomService;
-
     @Autowired
-    public RoomController(RoomService roomService) {
-        this.roomService = roomService;
-    }
+    private RoomService roomService;
 
-    @GetMapping
-    public ResponseEntity<List<Room>> getAllRooms() {
-        return ResponseEntity.ok(roomService.getAllRooms());
-    }
-
-    @GetMapping("/available")
-    public ResponseEntity<List<Room>> getAvailableRooms() {
-        return ResponseEntity.ok(roomService.getAvailableRooms());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable String id) {
-        return ResponseEntity.ok(roomService.getRoomById(id));
-    }
-
+    // Page: AddRoom
     @PostMapping
-    public ResponseEntity<Room> createRoom(@Valid @RequestBody RoomRequestDTO dto) {
-        Room createdRoom = roomService.createRoom(dto);
-        return new ResponseEntity<>(createdRoom, HttpStatus.CREATED);
+    public ResponseEntity<Room> createRoom(@RequestBody RoomRequestDTO dto) {
+        return ResponseEntity.ok(roomService.addRoom(dto));
     }
 
+    // Page: EditRoom
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable String id, @Valid @RequestBody RoomRequestDTO dto) {
+    public ResponseEntity<Room> updateRoom(@PathVariable String id, @RequestBody RoomRequestDTO dto) {
         return ResponseEntity.ok(roomService.updateRoom(id, dto));
+    }
+
+    // Page: RoomDetails
+    @GetMapping("/{id}")
+    public ResponseEntity<Room> getRoomDetails(@PathVariable String id) {
+        return ResponseEntity.ok(roomService.getRoomDetails(id));
+    }
+
+    // Page: RoomList (supports filtering ?status=AVAILABLE&floor=2)
+    @GetMapping
+    public ResponseEntity<List<Room>> getAllRooms(
+            @RequestParam(required = false) RoomStatus status,
+            @RequestParam(required = false) Integer floor) {
+        return ResponseEntity.ok(roomService.getAllRooms(status, floor));
+    }
+
+    // Page: RoomStatus (Dashboard metrics)
+    @GetMapping("/status-summary")
+    public ResponseEntity<RoomStatusSummaryDTO> getRoomStatusSummary() {
+        return ResponseEntity.ok(roomService.getRoomStatusSummary());
     }
 
     @DeleteMapping("/{id}")

@@ -2,75 +2,107 @@ package com.hospital.service;
 
 
 import com.hospital.dto.RoomRequestDTO;
+import com.hospital.dto.RoomStatusSummaryDTO;
+import com.hospital.model.Bed;
 import com.hospital.model.Room;
+import com.hospital.model.enumm.BedStatus;
+import com.hospital.model.enumm.*;
 import com.hospital.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RoomService {
 
-    private final RoomRepository roomRepository;
-
     @Autowired
-    public RoomService(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    private RoomRepository roomRepository;
+
+    // Handles AddRoom
+    public Room addRoom(RoomRequestDTO dto) {
+        Room room = new Room();
+        room.setRoomNumber(dto.getRoomNumber());
+        room.setFloor(dto.getFloor());
+        room.setRoomType(dto.getRoomType());
+        room.setDailyRate(dto.getDailyRate());
+        room.setAmenities(dto.getAmenities());
+        room.setStatus(dto.getStatus() != null ? dto.getStatus() : RoomStatus.AVAILABLE);
+
+        // Auto-populate beds based on totalBeds count
+        List<Bed> beds = new ArrayList<>();
+        int bedCount = dto.getTotalBeds() != null ? dto.getTotalBeds() : 1;
+        for (int i = 1; i <= bedCount; i++) {
+            beds.add(new Bed("B" + i, BedStatus.VACANT, null));
+        }
+        room.setBeds(beds);
+
+        return roomRepository.save(room);
     }
 
-    public List<Room> getAllRooms() {
+    // Handles EditRoom
+    public Room updateRoom(String id, RoomRequestDTO dto) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + id));
+
+        room.setRoomNumber(dto.getRoomNumber());
+        room.setFloor(dto.getFloor());
+        room.setRoomType(dto.getRoomType());
+        room.setDailyRate(dto.getDailyRate());
+        room.setAmenities(dto.getAmenities());
+        if (dto.getStatus() != null) {
+            room.setStatus(dto.getStatus());
+        }
+
+        return roomRepository.save(room);
+    }
+
+    // Handles RoomDetails
+    public Room getRoomDetails(String id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + id));
+    }
+
+    // Handles RoomList with Optional Filtering
+    public List<Room> getAllRooms(RoomStatus status, Integer floor) {
+        if (status != null) {
+            return roomRepository.findByStatus(status);
+        }
+        if (floor != null) {
+            return roomRepository.findByFloor(floor);
+        }
         return roomRepository.findAll();
     }
 
-    public Room getRoomById(String id) {
-        return roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
-    }
+    // Handles RoomStatus Dashboard Metrics
+    public RoomStatusSummaryDTO getRoomStatusSummary() {
+        List<Room> allRooms = roomRepository.findAll();
+        RoomStatusSummaryDTO summary = new RoomStatusSummaryDTO();
 
-    public Room createRoom(RoomRequestDTO dto) {
-        if (roomRepository.existsByRoomNumber(dto.getRoomNumber())) {
-            throw new IllegalArgumentException("Room number " + dto.getRoomNumber() + " already exists.");
+        summary.setTotalRooms(allRooms.size());
+        summary.setAvailableRooms(roomRepository.countByStatus(RoomStatus.AVAILABLE));
+        summary.setOccupiedRooms(roomRepository.countByStatus(RoomStatus.OCCUPIED));
+        summary.setUnderMaintenanceRooms(roomRepository.countByStatus(RoomStatus.UNDER_MAINTENANCE));
+        summary.setCleaningNeededRooms(roomRepository.countByStatus(RoomStatus.CLEANING_NEEDED));
+
+        long totalBeds = 0, vacantBeds = 0, occupiedBeds = 0;
+        for (Room room : allRooms) {
+            for (Bed bed : room.getBeds()) {
+                totalBeds++;
+                if (bed.getStatus() == BedStatus.VACANT) vacantBeds++;
+                if (bed.getStatus() == BedStatus.OCCUPIED) occupiedBeds++;
+            }
         }
 
-        Room room = new Room();
-        room.setRoomNumber(dto.getRoomNumber());
-        room.setType(dto.getType());
-        room.setPricePerNight(dto.getPricePerNight());
-        room.setCapacity(dto.getCapacity());
-        room.setIsAvailable(dto.getIsAvailable() != null ? dto.getIsAvailable() : true);
-        room.setAmenities(dto.getAmenities());
+        summary.setTotalBeds(totalBeds);
+        summary.setVacantBeds(vacantBeds);
+        summary.setOccupiedBeds(occupiedBeds);
 
-        return roomRepository.save(room);
-    }
-
-    public Room updateRoom(String id, RoomRequestDTO dto) {
-        Room room = getRoomById(id);
-
-        if (!room.getRoomNumber().equals(dto.getRoomNumber()) && roomRepository.existsByRoomNumber(dto.getRoomNumber())) {
-            throw new IllegalArgumentException("Room number " + dto.getRoomNumber() + " is already taken.");
-        }
-
-        room.setRoomNumber(dto.getRoomNumber());
-        room.setType(dto.getType());
-        room.setPricePerNight(dto.getPricePerNight());
-        room.setCapacity(dto.getCapacity());
-        if (dto.getIsAvailable() != null) {
-            room.setIsAvailable(dto.getIsAvailable());
-        }
-        room.setAmenities(dto.getAmenities());
-
-        return roomRepository.save(room);
+        return summary;
     }
 
     public void deleteRoom(String id) {
-        if (!roomRepository.existsById(id)) {
-            throw new RuntimeException("Room not found with id: " + id);
-        }
         roomRepository.deleteById(id);
-    }
-
-    public List<Room> getAvailableRooms() {
-        return roomRepository.findByIsAvailable(true);
     }
 }
