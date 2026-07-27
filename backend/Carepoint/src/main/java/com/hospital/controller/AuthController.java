@@ -1,58 +1,68 @@
 package com.hospital.controller;
 
-
+import com.hospital.dto.AuthResponse;
+import com.hospital.dto.LoginRequest;
 import com.hospital.model.User;
 import com.hospital.repository.UserRepository;
-import com.hospital.security.JwtUtils;
+import com.hospital.service.JwtService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/auth") // <-- CHANGE THIS TO /api/auth
+//@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
+    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
-    private final JwtUtils jwtUtils;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
-        this.encoder = encoder;
-        this.jwtUtils = jwtUtils;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String password = request.get("password");
-
-        if (userRepository.existsByEmail(email)) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Email is already registered!"));
+    public ResponseEntity<?> register(@Valid @RequestBody LoginRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email already in use!"));
         }
 
-        User user = new User(email, encoder.encode(password), password, password, null);
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword())); // BCrypt encoded
         userRepository.save(user);
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String password = request.get("password");
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
 
-        var userOpt = userRepository.findByEmail(email);
-        if (userOpt.isPresent() && encoder.matches(password, userOpt.get().getPassword())) {
-            String token = jwtUtils.generateJwtToken(email);
-            return ResponseEntity.ok(Map.of(
-                "token", token,
-                "email", email
-            ));
+            String token = jwtService.generateToken(request.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token, "/dashboard", request.getEmail()));
+
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid email or password"));
         }
-
-        return ResponseEntity.status(401).body(Map.of("message", "Invalid email or password"));
     }
 }
