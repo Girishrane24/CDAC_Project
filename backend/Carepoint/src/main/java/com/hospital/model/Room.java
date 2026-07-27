@@ -1,39 +1,32 @@
 package com.hospital.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.NotNull;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Document(collection = "rooms")
 public class Room {
 
     @Id
     private String id;
-
-    @Indexed(unique = true)
     private String roomNumber;
-
-    private String type; // e.g., Single, Double, Suite
-    private @NotNull(message = "Price per night is required") @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0") Double pricePerNight;
+    private String roomType; // General, Private, ICU, Deluxe
+    private Integer floor;
     private Integer capacity;
-    private Boolean isAvailable;
-    private List<String> amenities;
+    private Integer occupiedBeds = 0;
+    private Double dailyCharge;
+    private String status = "Available"; // Available, Occupied, Maintenance
+//    private String description;
 
     public Room() {}
 
-    public Room(String roomNumber, String type, @NotNull(message = "Price per night is required") @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0") Double pricePerNight, Integer capacity, Boolean isAvailable, List<String> amenities) {
+    public Room(String roomNumber, String roomType, Integer floor, Integer capacity, Double dailyCharge, String status, String description) {
         this.roomNumber = roomNumber;
-        this.type = type;
-        this.pricePerNight = pricePerNight;
+        this.roomType = roomType;
+        this.floor = floor;
         this.capacity = capacity;
-        this.isAvailable = isAvailable;
-        this.amenities = amenities;
+        this.dailyCharge = dailyCharge;
+        this.status = status;
+        //this.description = description;
     }
 
     // Getters and Setters
@@ -43,18 +36,24 @@ public class Room {
     public String getRoomNumber() { return roomNumber; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public String getRoomType() { return roomType; }
+    public void setRoomType(String roomType) { this.roomType = roomType; }
 
-    public Double getPricePerNight() { return pricePerNight; }
-    public void setPricePerNight(@NotNull(message = "Price per night is required") @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0") Double double1) { this.pricePerNight = double1; }
+    public Integer getFloor() { return floor; }
+    public void setFloor(Integer floor) { this.floor = floor; }
 
     public Integer getCapacity() { return capacity; }
     public void setCapacity(Integer capacity) { this.capacity = capacity; }
 
-    public Boolean getIsAvailable() { return isAvailable; }
-    public void setIsAvailable(Boolean isAvailable) { this.isAvailable = isAvailable; }
+    public Integer getOccupiedBeds() { return occupiedBeds; }
+    public void setOccupiedBeds(Integer occupiedBeds) { this.occupiedBeds = occupiedBeds; }
 
-    public List<String> getAmenities() { return amenities; }
-    public void setAmenities(List<String> amenities) { this.amenities = amenities; }
+    public Double getDailyCharge() { return dailyCharge; }
+    public void setDailyCharge(Double dailyCharge) { this.dailyCharge = dailyCharge; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    //public String getDescription() { return description; }
+    //public void setDescription(String description) { this.description = description; }
 }

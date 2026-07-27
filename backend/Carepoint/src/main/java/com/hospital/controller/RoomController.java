@@ -1,10 +1,7 @@
 package com.hospital.controller;
 
-
-import com.hospital.dto.RoomRequestDTO;
 import com.hospital.model.Room;
 import com.hospital.service.RoomService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,37 +14,29 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class RoomController {
 
-    private final RoomService roomService;
-
     @Autowired
-    public RoomController(RoomService roomService) {
-        this.roomService = roomService;
-    }
+    private RoomService roomService;
 
     @GetMapping
     public ResponseEntity<List<Room>> getAllRooms() {
         return ResponseEntity.ok(roomService.getAllRooms());
     }
 
-    @GetMapping("/available")
-    public ResponseEntity<List<Room>> getAvailableRooms() {
-        return ResponseEntity.ok(roomService.getAvailableRooms());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable String id) {
-        return ResponseEntity.ok(roomService.getRoomById(id));
+        return roomService.getRoomById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Room> createRoom(@Valid @RequestBody RoomRequestDTO dto) {
-        Room createdRoom = roomService.createRoom(dto);
-        return new ResponseEntity<>(createdRoom, HttpStatus.CREATED);
+    public ResponseEntity<Room> addRoom(@RequestBody Room room) {
+        return new ResponseEntity<>(roomService.addRoom(room), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable String id, @Valid @RequestBody RoomRequestDTO dto) {
-        return ResponseEntity.ok(roomService.updateRoom(id, dto));
+    public ResponseEntity<Room> updateRoom(@PathVariable String id, @RequestBody Room room) {
+        return ResponseEntity.ok(roomService.updateRoom(id, room));
     }
 
     @DeleteMapping("/{id}")
