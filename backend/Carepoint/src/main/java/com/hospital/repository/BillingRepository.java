@@ -1,9 +1,12 @@
 package com.hospital.repository;
 
-import com.hospital.model.Billing;
+import com.hospital.model.BillingInvoice;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 
-public interface BillingRepository extends MongoRepository<Billing, String> {
-    List<Billing> findByPatientId(String patientId);
+@Repository
+public interface BillingRepository extends MongoRepository<BillingInvoice, String> {
+    List<BillingInvoice> findByPatientId(String patientId);
+    List<BillingInvoice> findByPaymentStatus(String paymentStatus);
 }

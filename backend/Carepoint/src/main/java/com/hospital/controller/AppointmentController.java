@@ -2,71 +2,76 @@ package com.hospital.controller;
 
 import com.hospital.model.Appointment;
 import com.hospital.service.AppointmentService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/appointments")
+@RequestMapping("/api/appointments")
+//@CrossOrigin(origins = "http://localhost:5173")
 public class AppointmentController {
 
-    private final AppointmentService service;
+    @Autowired
+    private AppointmentService appointmentService;
 
-    public AppointmentController(AppointmentService service) {
-        this.service = service;
-    }
-
-    // GET /appointments - Fetch all appointments
     @GetMapping
     public ResponseEntity<List<Appointment>> getAllAppointments() {
-        return ResponseEntity.ok(service.getAllAppointments());
+        return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
-    // GET /appointments/{id} - Fetch single appointment
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointmentById(@PathVariable String id) {
-        return service.getAppointmentById(id)
+        return appointmentService.getAppointmentById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /appointments/patient/{patientId} - Fetch by patient
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<Appointment>> getByPatientId(@PathVariable String patientId) {
-        return ResponseEntity.ok(service.getAppointmentsByPatient(patientId));
+    public ResponseEntity<List<Appointment>> getAppointmentsByPatient(@PathVariable String patientId) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByPatient(patientId));
     }
 
-    // GET /appointments/doctor/{doctorId} - Fetch by doctor
-    @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<List<Appointment>> getByDoctorId(@PathVariable String doctorId) {
-        return ResponseEntity.ok(service.getAppointmentsByDoctor(doctorId));
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByDate(date));
     }
 
-    // POST /appointments - Create a new appointment
     @PostMapping
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
-        Appointment saved = service.createAppointment(appointment);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    public ResponseEntity<?> scheduleAppointment(@Valid @RequestBody Appointment appointment) {
+        try {
+            Appointment created = appointmentService.scheduleAppointment(appointment);
+            return new ResponseEntity<>(created, HttpStatus.CREATED);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", ex.getMessage()));
+        }
     }
 
-    // PUT /appointments/{id} - Update an existing appointment
     @PutMapping("/{id}")
     public ResponseEntity<Appointment> updateAppointment(
             @PathVariable String id, 
-            @RequestBody Appointment appointment) {
-        return service.updateAppointment(id, appointment)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            @Valid @RequestBody Appointment appointment) {
+        return ResponseEntity.ok(appointmentService.updateAppointmentDetails(id, appointment));
     }
 
-    // DELETE /appointments/{id} - Delete/Cancel appointment
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Appointment> updateStatus(
+            @PathVariable String id, 
+            @RequestBody Map<String, String> body) {
+        String status = body.get("status");
+        return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, status));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAppointment(@PathVariable String id) {
-        if (service.deleteAppointment(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> cancelAppointment(@PathVariable String id) {
+        appointmentService.cancelAppointment(id);
+        return ResponseEntity.noContent().build();
     }
 }
