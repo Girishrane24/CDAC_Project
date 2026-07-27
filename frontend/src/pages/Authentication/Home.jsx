@@ -48,8 +48,15 @@ function Home() {
                         <FaHeartbeat className="me-2" />
                          CarePoint Hospital System
                     </a>
+                    <Link
+          to="/appointments/book"
+          className="btn btn-primary ms-auto text-lg-center"
+        >
+          + Book Appointment
+        </Link> 
                 </div>
             </nav>
+
 
             {/* Hero */}
 

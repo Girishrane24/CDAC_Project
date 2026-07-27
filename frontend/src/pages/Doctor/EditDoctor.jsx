@@ -1,35 +1,70 @@
-import "./EditDoctor.css";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import DoctorForm from "../../components/doctor/DoctorForm";
-import { useNavigate } from "react-router-dom";
+import {
+    getDoctorById,
+    updateDoctor
+} from "../../services/doctorService";
+import "./EditDoctor.css";
 
 function EditDoctor() {
 
+    const { id } = useParams();
+
     const navigate = useNavigate();
 
-    // Dummy data
-    const doctor = {
-        name: "Dr. Rajesh Sharma",
-        specialization: "Cardiology",
-        qualification: "MBBS, MD",
-        experience: 10,
-        gender: "Male",
-        phone: "9876543210",
-        email: "rajesh@gmail.com",
-        address: "Pune, Maharashtra",
-        consultationFee: 800,
-        status: "Available",
+    const [doctor, setDoctor] = useState(null);
+
+    useEffect(() => {
+
+        loadDoctor();
+
+    }, []);
+
+    const loadDoctor = async () => {
+
+        try {
+
+            const response = await getDoctorById(id);
+
+            setDoctor(response.data);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to load doctor.");
+
+        }
+
     };
 
-    const handleUpdate = (updatedDoctor) => {
+    const handleUpdate = async (updatedDoctor) => {
 
-        console.log(updatedDoctor);
+        try {
 
-        alert("Doctor Updated Successfully");
+            await updateDoctor(id, updatedDoctor);
 
-        // axios.put(...)
+            alert("Doctor Updated Successfully");
 
-        navigate("/doctor");
+            navigate("/doctors");
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to update doctor.");
+
+        }
+
     };
+
+    if (!doctor) {
+
+        return <h2>Loading...</h2>;
+
+    }
 
     return (
 
@@ -52,6 +87,7 @@ function EditDoctor() {
         </div>
 
     );
+
 }
 
 export default EditDoctor;

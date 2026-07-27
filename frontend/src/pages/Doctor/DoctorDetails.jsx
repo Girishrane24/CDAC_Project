@@ -1,30 +1,51 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getDoctorById } from "../../services/doctorService";
 import "./DoctorDetails.css";
 
 function DoctorDetails() {
 
-    const doctor = {
-        id: 101,
-        name: "Dr. Rajesh Sharma",
-        specialization: "Cardiology",
-        qualification: "MBBS, MD",
-        experience: 10,
-        gender: "Male",
-        phone: "9876543210",
-        email: "rajesh@gmail.com",
-        address: "Pune, Maharashtra",
-        consultationFee: 800,
-        status: "Available",
-        image: "https://cdn-icons-png.flaticon.com/512/387/387561.png"
+    const { id } = useParams();
+
+    const [doctor, setDoctor] = useState(null);
+
+    useEffect(() => {
+        loadDoctor();
+    }, []);
+
+    const loadDoctor = async () => {
+
+        try {
+
+            const response = await getDoctorById(id);
+
+            setDoctor(response.data);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to load doctor details.");
+
+        }
+
     };
 
-    return (
+    if (!doctor) {
 
+        return <h2>Loading...</h2>;
+
+    }
+
+
+    return (
         <div className="doctor-details-page">
 
             <div className="doctor-profile-card">
 
                 <img
-                    src={doctor.image}
+                    src="https://cdn-icons-png.flaticon.com/512/387/387561.png"
                     alt={doctor.name}
                 />
 
@@ -79,11 +100,8 @@ function DoctorDetails() {
                         </div>
 
                         <div className="full-width">
-
                             <strong>Address</strong>
-
                             <p>{doctor.address}</p>
-
                         </div>
 
                     </div>
@@ -95,6 +113,7 @@ function DoctorDetails() {
         </div>
 
     );
+
 }
 
 export default DoctorDetails;

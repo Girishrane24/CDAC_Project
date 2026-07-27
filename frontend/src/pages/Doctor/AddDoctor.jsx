@@ -13,7 +13,9 @@ const handleSubmit = async (doctorData) => {
 
         await addDoctor(doctorData);
 
+         console.log(doctorData);
         alert("Doctor Added Successfully");
+
 
         navigate("/doctors");
 

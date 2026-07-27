@@ -61,7 +61,7 @@ public class DoctorService {
 
             repository.deleteById(id);
 
-            return true;
+            return true; 
         }
 
         return false;
