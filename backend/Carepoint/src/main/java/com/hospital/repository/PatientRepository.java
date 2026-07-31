@@ -1,11 +1,12 @@
 package com.hospital.repository;
 
-
 import com.hospital.model.Patient;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;
+
 public interface PatientRepository extends MongoRepository<Patient, String> {
-    // Basic CRUD operations are handled automatically by MongoRepository
+
+    List<Patient> findByFirstNameContainingIgnoreCase(String firstName);
+
 }

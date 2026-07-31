@@ -1,609 +1,777 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import "./CreateBill.css";
-
-// function CreateBill() {
-
-//     const navigate = useNavigate();
-
-//     const [bill, setBill] = useState({
-
-//         patientName: "",
-//         doctorName: "",
-//         consultationFee: "",
-//         labCharges: "",
-//         medicineCharges: "",
-//         roomCharges: "",
-//         paymentMode: "Cash",
-//         status: "Paid"
-
-//     });
-
-//     const handleChange = (e) => {
-
-//         setBill({
-
-//             ...bill,
-//             [e.target.name]: e.target.value
-
-//         });
-
-//     };
-
-//     const totalAmount =
-//         (Number(bill.consultationFee) || 0) +
-//         (Number(bill.labCharges) || 0) +
-//         (Number(bill.medicineCharges) || 0) +
-//         (Number(bill.roomCharges) || 0);
-
-//     const handleSubmit = (e) => {
-
-//         e.preventDefault();
-
-//         alert("Bill Generated Successfully!");
-
-//         console.log({
-
-//             ...bill,
-//             totalAmount
-
-//         });
-
-//         navigate("/billing");
-
-//     };
-
-//     return (
-
-//         <div className="create-bill-container">
-
-//             <div className="card shadow">
-
-//                 <div className="card-header bg-primary text-white">
-
-//                     <h3>Generate Bill</h3>
-
-//                 </div>
-
-//                 <div className="card-body">
-
-//                     <form onSubmit={handleSubmit}>
-
-//                         <div className="row">
-
-//                             <div className="col-md-6 mb-3">
-
-//                                 <label className="form-label">
-//                                     Patient Name
-//                                 </label>
-
-//                                 <input
-//                                     type="text"
-//                                     className="form-control"
-//                                     name="patientName"
-//                                     value={bill.patientName}
-//                                     onChange={handleChange}
-//                                     required
-//                                 />
-
-//                             </div>
-
-//                             <div className="col-md-6 mb-3">
-
-//                                 <label className="form-label">
-//                                     Doctor Name
-//                                 </label>
-
-//                                 <select
-//                                     className="form-select"
-//                                     name="doctorName"
-//                                     value={bill.doctorName}
-//                                     onChange={handleChange}
-//                                     required
-//                                 >
-
-//                                     <option value="">
-//                                         Select Doctor
-//                                     </option>
-
-//                                     <option>Dr. Amit Patel</option>
-//                                     <option>Dr. Sneha Joshi</option>
-//                                     <option>Dr. Anil Kumar</option>
-//                                     <option>Dr. Pooja Mehta</option>
-
-//                                 </select>
-
-//                             </div>
-
-//                             <div className="col-md-3 mb-3">
-
-//                                 <label className="form-label">
-//                                     Consultation Fee
-//                                 </label>
-
-//                                 <input
-//                                     type="number"
-//                                     className="form-control"
-//                                     name="consultationFee"
-//                                     value={bill.consultationFee}
-//                                     onChange={handleChange}
-//                                 />
-
-//                             </div>
-
-//                             <div className="col-md-3 mb-3">
-
-//                                 <label className="form-label">
-//                                     Lab Charges
-//                                 </label>
-
-//                                 <input
-//                                     type="number"
-//                                     className="form-control"
-//                                     name="labCharges"
-//                                     value={bill.labCharges}
-//                                     onChange={handleChange}
-//                                 />
-
-//                             </div>
-
-//                             <div className="col-md-3 mb-3">
-
-//                                 <label className="form-label">
-//                                     Medicine Charges
-//                                 </label>
-
-//                                 <input
-//                                     type="number"
-//                                     className="form-control"
-//                                     name="medicineCharges"
-//                                     value={bill.medicineCharges}
-//                                     onChange={handleChange}
-//                                 />
-
-//                             </div>
-
-//                             <div className="col-md-3 mb-3">
-
-//                                 <label className="form-label">
-//                                     Room Charges
-//                                 </label>
-
-//                                 <input
-//                                     type="number"
-//                                     className="form-control"
-//                                     name="roomCharges"
-//                                     value={bill.roomCharges}
-//                                     onChange={handleChange}
-//                                 />
-
-//                             </div>
-
-//                             <div className="col-md-6 mb-3">
-
-//                                 <label className="form-label">
-//                                     Payment Mode
-//                                 </label>
-
-//                                 <select
-//                                     className="form-select"
-//                                     name="paymentMode"
-//                                     value={bill.paymentMode}
-//                                     onChange={handleChange}
-//                                 >
-
-//                                     <option>Cash</option>
-//                                     <option>Card</option>
-//                                     <option>UPI</option>
-//                                     <option>Net Banking</option>
-
-//                                 </select>
-
-//                             </div>
-
-//                             <div className="col-md-6 mb-3">
-
-//                                 <label className="form-label">
-//                                     Payment Status
-//                                 </label>
-
-//                                 <select
-//                                     className="form-select"
-//                                     name="status"
-//                                     value={bill.status}
-//                                     onChange={handleChange}
-//                                 >
-
-//                                     <option>Paid</option>
-//                                     <option>Pending</option>
-
-//                                 </select>
-
-//                             </div>
-
-//                             <div className="col-md-12 mb-4">
-
-//                                 <div className="alert alert-success">
-
-//                                     <h4>
-//                                         Total Amount : ₹ {totalAmount}
-//                                     </h4>
-
-//                                 </div>
-
-//                             </div>
-
-//                         </div>
-
-//                         <div className="text-end">
-
-//                             <button
-//                                 type="button"
-//                                 className="btn btn-secondary me-2"
-//                                 onClick={() => navigate("/billing")}
-//                             >
-//                                 Cancel
-//                             </button>
-
-//                             <button
-//                                 type="submit"
-//                                 className="btn btn-primary"
-//                             >
-//                                 Generate Bill
-//                             </button>
-
-//                         </div>
-
-//                     </form>
-
-//                 </div>
-
-//             </div>
-
-//         </div>
-
-//     );
-
-// }
-
-// export default CreateBill;
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreateBill.css";
+import api from "../../api/axios";
 
 function CreateBill() {
+
   const navigate = useNavigate();
 
   const [bill, setBill] = useState({
     patientName: "",
     doctorName: "",
-    consultationFee: "",
-    labCharges: "",
-    medicineCharges: "",
-    roomCharges: "",
+    consultationFee: 0,
+    labCharges: 0,
+    roomCharges: 0,
+    totalAmount: 0,
     paymentMode: "Cash",
     status: "Paid",
+    generatedDate: "",
   });
+
 
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const [patients, setPatients] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [appointments, setAppointments] = useState([]);
 
-    if (
-      [
-        "consultationFee",
-        "labCharges",
-        "medicineCharges",
-        "roomCharges",
-      ].includes(name)
-    ) {
-      if (Number(value) < 0) return;
+  const [labTests, setLabTests] = useState([]);
+  const [roomAllocations, setRoomAllocations] = useState([]);
+  const [rooms, setRooms] = useState([]);
+
+
+
+  useEffect(() => {
+
+    loadPatients();
+    loadDoctors();
+    loadAppointments();
+    loadLabTests();
+    loadRoomAllocations();
+    loadRooms();
+
+  }, []);
+
+
+
+  const loadPatients = async () => {
+
+    try {
+
+      const response = await api.get("/patients");
+      setPatients(response.data);
+
+    } catch(error){
+
+      console.error(error);
+
     }
 
-    setBill({
+  };
+
+
+
+  const loadDoctors = async () => {
+
+    try {
+
+      const response = await api.get("/doctors");
+      setDoctors(response.data);
+
+    }catch(error){
+
+      console.error(error);
+
+    }
+
+  };
+
+
+
+  // NEW - Load appointments
+
+  const loadAppointments = async () => {
+
+    try{
+
+      const response = await api.get("/appointments");
+      setAppointments(response.data);
+
+    }catch(error){
+
+      console.error("Appointment loading error",error);
+
+    }
+
+  };
+
+
+
+
+  const loadLabTests = async () => {
+
+    try{
+
+      const response = await api.get("/labtests");
+      setLabTests(response.data);
+
+    }catch(error){
+
+      console.error(error);
+
+    }
+
+  };
+
+
+
+  const loadRoomAllocations = async () => {
+
+    try{
+
+      const response = await api.get("/room-allocations");
+      setRoomAllocations(response.data);
+
+    }catch(error){
+
+      console.error(error);
+
+    }
+
+  };
+
+
+
+  const loadRooms = async () => {
+
+    try{
+
+      const response = await api.get("/rooms");
+      setRooms(response.data);
+
+    }catch(error){
+
+      console.error(error);
+
+    }
+
+  };
+
+
+
+
+
+  const handleChange = (e)=>{
+
+    const {name,value}=e.target;
+
+
+    let updatedBill={
       ...bill,
-      [name]: value,
-    });
+      [name]:value
+    };
+
+
+
+
+    // Doctor selection removed
+    // Doctor will come automatically from appointment
+
+
+
+    if(name==="patientName"){
+
+
+      // FIND APPOINTMENT
+
+      const appointment = appointments.find(
+        app => app.patientName === value
+      );
+
+
+
+      if(appointment){
+
+
+        // AUTO SELECT DOCTOR
+
+        updatedBill.doctorName =
+        appointment.doctorName;
+
+
+
+        // AUTO CONSULTATION FEE
+
+        const doctor = doctors.find(
+          doc => doc.name === appointment.doctorName
+        );
+
+
+        if(doctor){
+
+          updatedBill.consultationFee =
+          doctor.consultationFee || 0;
+
+        }
+
+
+      }
+
+
+
+
+
+      // LAB CHARGES
+
+
+      const patientLabTests = labTests.filter(
+        test=>test.patientName===value
+      );
+
+
+      updatedBill.labCharges =
+      patientLabTests.reduce(
+        (sum,test)=>
+        sum+(test.price || 0),
+        0
+      );
+
+
+
+
+
+      // ROOM CHARGES
+
+
+      updatedBill.roomCharges=0;
+
+
+      const allocation =
+      roomAllocations.find(
+        room=>room.patientName===value
+      );
+
+
+
+      if(allocation){
+
+
+        const room =
+        rooms.find(
+          r=>r.id===allocation.roomId
+        );
+
+
+
+        if(room){
+
+
+          const admission =
+          new Date(allocation.admissionDate);
+
+
+          const discharge =
+          new Date(allocation.dischargeDate);
+
+
+
+          let days =
+          Math.ceil(
+            (discharge-admission) /
+            (1000*60*60*24)
+          );
+
+
+          if(days<=0)
+            days=1;
+
+
+
+          updatedBill.roomCharges =
+          room.dailyCharge * days;
+
+
+        }
+
+
+      }
+
+
+
+    }
+
+
+
+
+
+    setBill(updatedBill);
+
+
 
     setErrors({
       ...errors,
-      [name]: "",
+      [name]:""
     });
+
+
   };
+
+
+
+
 
   const totalAmount =
-    (Number(bill.consultationFee) || 0) +
-    (Number(bill.labCharges) || 0) +
-    (Number(bill.medicineCharges) || 0) +
-    (Number(bill.roomCharges) || 0);
+    Number(bill.consultationFee || 0)+
+    Number(bill.labCharges || 0)+
+    Number(bill.roomCharges || 0);
 
-  const validate = () => {
-    let newErrors = {};
 
-    if (!bill.patientName.trim()) {
-      newErrors.patientName = "Patient name is required";
+  const validate=()=>{
+
+    let newErrors={};
+
+
+    if(!bill.patientName){
+
+      newErrors.patientName=
+      "Patient name is required";
+
     }
 
-    if (!bill.doctorName) {
-      newErrors.doctorName = "Please select a doctor";
+
+
+    if(!bill.doctorName){
+
+      newErrors.doctorName=
+      "Doctor not found for this patient";
+
     }
 
-    if (totalAmount <= 0) {
-      newErrors.totalAmount =
-        "Total amount must be greater than zero";
+
+    if(totalAmount<=0){
+
+      newErrors.totalAmount=
+      "Total amount should be greater than zero";
+
     }
+
+
 
     return newErrors;
+
   };
 
-  const handleSubmit = (e) => {
+
+
+
+
+  const handleSubmit=async(e)=>{
+
     e.preventDefault();
 
-    const validationErrors = validate();
 
-    if (Object.keys(validationErrors).length > 0) {
+
+    const validationErrors=validate();
+
+
+    if(Object.keys(validationErrors).length>0){
+
       setErrors(validationErrors);
       return;
+
     }
 
-    const generatedBill = {
+
+
+
+    const generatedBill={
+
       ...bill,
+
+      consultationFee:
+      Number(bill.consultationFee),
+
+
+      labCharges:
+      Number(bill.labCharges),
+
+
+      roomCharges:
+      Number(bill.roomCharges),
+
+
       totalAmount,
-      generatedDate: new Date().toLocaleDateString("en-IN"),
+
+
+      paymentMode:
+      bill.paymentMode || "Cash",
+
+
+      status:
+      bill.status || "Pending",
+
+
+
+      generatedDate:
+      new Date().toLocaleDateString("en-IN")
+
     };
 
-    console.log(generatedBill);
 
-    alert("Bill Generated Successfully!");
 
-    navigate("/billing");
+
+
+    try{
+
+
+      await api.post(
+        "/billing",
+        generatedBill
+      );
+
+
+      alert("Bill Generated Successfully");
+
+
+      navigate("/billing");
+
+
+    }catch(error){
+
+      console.error(error);
+
+      alert("Failed to generate bill");
+
+    }
+
+
   };
 
+
   return (
-    <div className="create-bill-container">
 
-      <div className="card billing-card">
+<div className="create-bill-container">
 
-        <div className="card-header">
-          <h3>Generate Patient Bill</h3>
-          <p>Create and calculate hospital bill instantly</p>
-        </div>
+<div className="card billing-card">
 
-        <div className="card-body">
 
-          <form onSubmit={handleSubmit}>
+<div className="card-header">
 
-            <h5 className="section-title">
-              Patient Information
-            </h5>
+<h3>Generate Patient Bill</h3>
 
-            <div className="row">
+<p>Create and calculate hospital bill instantly</p>
 
-              <div className="col-lg-6 mb-3">
+</div>
 
-                <label className="form-label">
-                  Patient Name
-                </label>
 
-                <input
-                  type="text"
-                  className={`form-control ${
-                    errors.patientName ? "is-invalid" : ""
-                  }`}
-                  placeholder="Enter patient name"
-                  name="patientName"
-                  value={bill.patientName}
-                  onChange={handleChange}
-                />
 
-                {errors.patientName && (
-                  <div className="invalid-feedback">
-                    {errors.patientName}
-                  </div>
-                )}
-              </div>
+<div className="card-body">
 
-              <div className="col-lg-6 mb-3">
 
-                <label className="form-label">
-                  Doctor Name
-                </label>
+<form onSubmit={handleSubmit}>
 
-                <select
-                  className={`form-select ${
-                    errors.doctorName ? "is-invalid" : ""
-                  }`}
-                  name="doctorName"
-                  value={bill.doctorName}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Doctor</option>
-                  <option>Dr. Amit Patel</option>
-                  <option>Dr. Sneha Joshi</option>
-                  <option>Dr. Anil Kumar</option>
-                  <option>Dr. Pooja Mehta</option>
-                </select>
 
-                {errors.doctorName && (
-                  <div className="invalid-feedback">
-                    {errors.doctorName}
-                  </div>
-                )}
-              </div>
+<h5 className="section-title">
+Patient Information
+</h5>
 
-            </div>
 
-            <h5 className="section-title">
-              Charges
-            </h5>
 
-            <div className="row">
+<div className="row">
 
-              <div className="col-md-6 col-lg-3 mb-3">
 
-                <label className="form-label">
-                  Consultation Fee
-                </label>
 
-                <input
-                  type="number"
-                  min="0"
-                  className="form-control"
-                  placeholder="₹ 0"
-                  name="consultationFee"
-                  value={bill.consultationFee}
-                  onChange={handleChange}
-                />
+<div className="col-lg-6 mb-3">
 
-              </div>
 
-              <div className="col-md-6 col-lg-3 mb-3">
+<label className="form-label">
+Patient Name
+</label>
 
-                <label className="form-label">
-                  Lab Charges
-                </label>
 
-                <input
-                  type="number"
-                  min="0"
-                  className="form-control"
-                  placeholder="₹ 0"
-                  name="labCharges"
-                  value={bill.labCharges}
-                  onChange={handleChange}
-                />
+<select
 
-              </div>
+className="form-select"
 
-              <div className="col-md-6 col-lg-3 mb-3">
+name="patientName"
 
-                <label className="form-label">
-                  Medicine Charges
-                </label>
+value={bill.patientName}
 
-                <input
-                  type="number"
-                  min="0"
-                  className="form-control"
-                  placeholder="₹ 0"
-                  name="medicineCharges"
-                  value={bill.medicineCharges}
-                  onChange={handleChange}
-                />
+onChange={handleChange}
 
-              </div>
+>
 
-              <div className="col-md-6 col-lg-3 mb-3">
 
-                <label className="form-label">
-                  Room Charges
-                </label>
+<option value="">
+Select Patient
+</option>
 
-                <input
-                  type="number"
-                  min="0"
-                  className="form-control"
-                  placeholder="₹ 0"
-                  name="roomCharges"
-                  value={bill.roomCharges}
-                  onChange={handleChange}
-                />
 
-              </div>
 
-            </div>
+{
+patients.map(patient=>(
 
-            <h5 className="section-title">
-              Payment Details
-            </h5>
+<option
 
-            <div className="row">
+key={patient.id}
 
-              <div className="col-md-6 mb-3">
+value={`${patient.firstName} ${patient.lastName}`}
 
-                <label className="form-label">
-                  Payment Mode
-                </label>
+>
 
-                <select
-                  className="form-select"
-                  name="paymentMode"
-                  value={bill.paymentMode}
-                  onChange={handleChange}
-                >
-                  <option>Cash</option>
-                  <option>Card</option>
-                  <option>UPI</option>
-                  <option>Net Banking</option>
-                </select>
+{patient.firstName} {patient.lastName}
 
-              </div>
+</option>
 
-              <div className="col-md-6 mb-3">
-
-                <label className="form-label">
-                  Payment Status
-                </label>
-
-                <select
-                  className="form-select"
-                  name="status"
-                  value={bill.status}
-                  onChange={handleChange}
-                >
-                  <option>Paid</option>
-                  <option>Pending</option>
-                </select>
-
-              </div>
-
-            </div>
-
-            <div className="total-card">
-
-              <span>Total Amount</span>
-
-              <h2>
-                ₹ {totalAmount.toLocaleString("en-IN")}
-              </h2>
-
-              {errors.totalAmount && (
-                <div className="text-warning mt-2 fw-semibold">
-                  {errors.totalAmount}
-                </div>
-              )}
-
-            </div>
-
-            <div className="button-group mt-4">
-
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => navigate("/billing")}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >
-                Generate Bill
-              </button>
-
-            </div>
-
-          </form>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
+))
 }
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+<div className="col-lg-6 mb-3">
+
+
+<label className="form-label">
+Doctor Name
+</label>
+
+
+<select
+
+className="form-select"
+
+name="doctorName"
+
+value={bill.doctorName}
+
+disabled
+
+>
+
+
+<option>
+Select Doctor
+</option>
+
+
+<option value={bill.doctorName}>
+{bill.doctorName}
+</option>
+
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<h5 className="section-title">
+Charges
+</h5>
+
+
+<div className="row">
+
+
+<div className="col-md-4 mb-3">
+
+<label>
+Consultation Fee
+</label>
+
+<input
+
+className="form-control"
+
+value={bill.consultationFee}
+
+readOnly
+
+/>
+
+</div>
+
+
+
+<div className="col-md-4 mb-3">
+
+<label>
+Lab Charges
+</label>
+
+<input
+
+className="form-control"
+
+value={bill.labCharges}
+
+readOnly
+
+/>
+
+</div>
+
+
+
+<div className="col-md-4 mb-3">
+
+<label>
+Room Charges
+</label>
+
+<input
+
+className="form-control"
+
+value={bill.roomCharges}
+
+readOnly
+
+/>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<h5 className="section-title">
+Payment Details
+</h5>
+
+
+
+<div className="row">
+
+
+<div className="col-md-6 mb-3">
+
+<label>
+Payment Mode
+</label>
+
+
+<select
+
+className="form-select"
+
+name="paymentMode"
+
+value={bill.paymentMode}
+
+onChange={handleChange}
+
+>
+
+<option>Cash</option>
+<option>Card</option>
+<option>UPI</option>
+<option>Net Banking</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+<div className="col-md-6 mb-3">
+
+<label>
+Status
+</label>
+
+
+<select
+
+className="form-select"
+
+name="status"
+
+value={bill.status}
+
+onChange={handleChange}
+
+>
+
+
+<option>Paid</option>
+<option>Pending</option>
+
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<div className="total-card">
+
+  <span>Total Amount</span>
+
+  <h2>
+    ₹ {totalAmount.toLocaleString("en-IN")}
+  </h2>
+
+  {errors.totalAmount && (
+    <div className="text-warning mt-2 fw-semibold">
+      {errors.totalAmount}
+    </div>
+  )}
+
+</div>
+
+
+<div className="button-group mt-4">
+
+  <button
+    type="button"
+    className="btn btn-secondary"
+    onClick={() => navigate("/billing")}
+  >
+    Cancel
+  </button>
+
+
+  <button
+    type="submit"
+    className="btn btn-primary"
+  >
+    Generate Bill
+  </button>
+
+</div>
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+  );
+
+}
+
 
 export default CreateBill;

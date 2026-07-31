@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import "./RoomAllocation.css";
 
+import patientService from "../../services/patientServices";
+import roomService from "../../services/roomService";
+import roomAllocationService from "../../services/roomAllocationService";
+
 function RoomAllocation() {
 
     const [patients, setPatients] = useState([]);
@@ -10,6 +14,7 @@ function RoomAllocation() {
     const [formData, setFormData] = useState({
         patientId: "",
         patientName: "",
+        roomId: "",
         roomNumber: "",
         roomType: "",
         admissionDate: "",
@@ -19,92 +24,139 @@ function RoomAllocation() {
     useEffect(() => {
         loadPatients();
         loadRooms();
+        loadAllocations();
     }, []);
 
-    const loadPatients = () => {
 
-        setPatients([
-            {
-                id: 1,
-                name: "Rahul Sharma"
-            },
-            {
-                id: 2,
-                name: "Priya Patel"
-            },
-            {
-                id: 3,
-                name: "Amit Kumar"
-            }
-        ]);
+
+    const loadPatients = async () => {
+
+        try {
+
+           const response = await patientService.getAllPatients();
+
+            setPatients(response.data);
+
+        } catch (error) {
+
+            console.error("Error loading patients:", error);
+
+        }
+
     };
 
-    const loadRooms = () => {
 
-        setRooms([
-            {
-                id: 1,
-                roomNumber: "101",
-                roomType: "General",
-                status: "Available"
-            },
-            {
-                id: 2,
-                roomNumber: "102",
-                roomType: "Private",
-                status: "Available"
-            },
-            {
-                id: 3,
-                roomNumber: "201",
-                roomType: "ICU",
-                status: "Occupied"
-            }
-        ]);
+    const loadRooms = async () => {
+
+        try {
+
+            const response = await roomService.getAllRooms();
+
+            setRooms(
+                response.data.filter(
+                    room => room.status === "Available"
+                )
+            );
+
+        } catch (error) {
+
+            console.error("Error loading rooms:", error);
+
+        }
+
     };
+
+    // ===========================
+    // Load Room Allocations
+    // ===========================
+
+    const loadAllocations = async () => {
+
+        try {
+
+            const response =
+                await roomAllocationService.getAllAllocations();
+
+            setAllocations(response.data);
+
+        } catch (error) {
+
+            console.error(
+                "Error loading allocations:",
+                error
+            );
+
+        }
+
+    };
+
 
     const handleChange = (e) => {
 
         const { name, value } = e.target;
 
+        // Patient Selection
         if (name === "patientId") {
 
             const patient = patients.find(
-                p => p.id === Number(value)
+
+                p => p.id === value
+
             );
 
             setFormData({
+
                 ...formData,
+
                 patientId: value,
-                patientName: patient ? patient.name : ""
+
+                patientName:
+                    patient?.name ||
+                    `${patient?.firstName ?? ""} ${patient?.lastName ?? ""}`.trim()
+
             });
 
             return;
+
         }
 
+        // Room Selection
         if (name === "roomNumber") {
 
             const room = rooms.find(
+
                 r => r.roomNumber === value
+
             );
 
             setFormData({
+
                 ...formData,
+
+                roomId: room?.id || "",
+
                 roomNumber: value,
-                roomType: room ? room.roomType : ""
+
+                roomType: room?.roomType || ""
+
             });
 
             return;
+
         }
 
         setFormData({
+
             ...formData,
+
             [name]: value
+
         });
 
     };
+      
 
-    const allocateRoom = (e) => {
+    const allocateRoom = async (e) => {
 
         e.preventDefault();
 
@@ -118,45 +170,60 @@ function RoomAllocation() {
             return;
         }
 
-        const allocation = {
+        try {
 
-            id: Date.now(),
+            await roomAllocationService.allocateRoom(formData);
 
-            ...formData,
+            alert("Room Allocated Successfully.");
 
-            status: "Allocated"
+            loadAllocations();
+            loadRooms();
 
-        };
+            setFormData({
 
-        setAllocations([
-            ...allocations,
-            allocation
-        ]);
+                patientId: "",
+                patientName: "",
+                roomId: "",
+                roomNumber: "",
+                roomType: "",
+                admissionDate: "",
+                dischargeDate: ""
 
-        alert("Room Allocated Successfully.");
+            });
 
-        setFormData({
+        } catch (error) {
 
-            patientId: "",
-            patientName: "",
-            roomNumber: "",
-            roomType: "",
-            admissionDate: "",
-            dischargeDate: ""
+            console.error(error);
 
-        });
+            alert(
+                error.response?.data?.message ||
+                "Failed to allocate room."
+            );
+
+        }
 
     };
 
-    const dischargePatient = (id) => {
 
-        if (window.confirm("Discharge this patient?")) {
+    const dischargePatient = async (id) => {
 
-            setAllocations(
-                allocations.filter(
-                    allocation => allocation.id !== id
-                )
-            );
+        if (!window.confirm("Discharge this patient?"))
+            return;
+
+        try {
+
+            await roomAllocationService.dischargePatient(id);
+
+            alert("Patient discharged successfully.");
+
+            loadAllocations();
+            loadRooms();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to discharge patient.");
 
         }
 
@@ -192,7 +259,11 @@ function RoomAllocation() {
                                 value={patient.id}
                             >
 
-                                {patient.name}
+                                {
+                                    patient.name
+                                        ? patient.name
+                                        : `${patient.firstName} ${patient.lastName}`
+                                }
 
                             </option>
 

@@ -4,55 +4,41 @@ import { NavLink } from "react-router-dom";
 import NurseCard from "../../components/nurse/NurseCard";
 import NurseTable from "../../components/nurse/NurseTable";
 
+import { getAllNurses } from "../../services/nurseService";
+
 import "./NurseList.css";
 
 function NurseList() {
-  const [nurses, setNurses] = useState([]);
-
+const [nurses, setNurses] = useState([]);
   const [view, setView] = useState("table");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Temporary data (replace with API call)
-
-    const nurseData = [
-      {
-        id: 1,
-        name: "Priya Sharma",
-        email: "priya@gmail.com",
-        phone: "9876543210",
-        department: "ICU",
-        shift: "Morning",
-        availabilityStatus: "Available",
-      },
-
-      {
-        id: 2,
-        name: "Sneha Patil",
-        email: "sneha@gmail.com",
-        phone: "9123456789",
-        department: "Emergency",
-        shift: "Night",
-        availabilityStatus: "Assigned",
-      },
-
-      {
-        id: 3,
-        name: "Anjali Deshmukh",
-        email: "anjali@gmail.com",
-        phone: "9988776655",
-        department: "General",
-        shift: "Evening",
-        availabilityStatus: "Available",
-      },
-    ];
-
-    setNurses(nurseData);
+    fetchNurses();
   }, []);
+
+  const fetchNurses = async () => {
+    try {
+      const data = await getAllNurses();
+
+      console.log("Nurses API Response:", data);
+
+      setNurses(data);
+    } catch (error) {
+      console.error("Error Fetching Nurses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <h3 style={{ textAlign: "center" }}>Loading Nurses...</h3>;
+  }
 
   return (
     <div className="nurse-container">
       <div className="nurse-header">
-        <h2>👩‍⚕️ Nurse Management</h2>
+        <h2> Nurse Management</h2>
 
         <div className="header-buttons">
           <NavLink to="/nurses/add">
@@ -72,14 +58,14 @@ function NurseList() {
           className={view === "table" ? "active" : ""}
           onClick={() => setView("table")}
         >
-          📋 Table View
+           Table View
         </button>
 
         <button
           className={view === "card" ? "active" : ""}
           onClick={() => setView("card")}
         >
-          🗂 Card View
+           Card View
         </button>
       </div>
 
@@ -88,7 +74,7 @@ function NurseList() {
       ) : (
         <div className="nurse-card-container">
           {nurses.map((nurse) => (
-            <NurseCard key={nurse.id} nurse={nurse} />
+            <NurseCard key={nurse.nurseId} nurse={nurse} />
           ))}
         </div>
       )}

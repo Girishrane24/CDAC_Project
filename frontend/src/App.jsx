@@ -7,12 +7,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Authentication
 import Home from "./pages/Authentication/Home.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import ForgotPassword from "./pages/Authentication/ForgotPassword.jsx";
 import ResetPassword from "./pages/Authentication/ResetPassword.jsx";
 import Logout from "./pages/Authentication/Logout.jsx";
 
 //Dashboard
-import DashboardLayout from "./layouts/DashboardLayout.jsx";
+// import DashboardLayout from "./layouts/DashboardLayout.jsx";
+import DashboardRoute from "./layouts/DashboardRoute";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 
 //Patient
@@ -27,9 +29,7 @@ import MedicalHistory from "./pages/Patient/MedicalHistory.jsx";
 import DoctorList from "./pages/Doctor/DoctorList.jsx";
 import AddDoctor from "./pages/Doctor/AddDoctor.jsx";
 import EditDoctor from "./pages/Doctor/EditDoctor.jsx";
-// import DoctorDetails from "./pages/Doctor/DoctorDetails.jsx";
 import DoctorDetails from "./pages/Doctor/DoctorDetails.jsx";
-import DoctorSchedule from "./pages/Doctor/DoctorSchedule.jsx";
 
 // Appointment
 import AppointmentList from "./pages/Appointment/AppointmentList.jsx";
@@ -62,7 +62,6 @@ import LabTestList from "./pages/Laboratory/LabTest/LabTestList";
 import AddLabTest from "./pages/Laboratory/LabTest/AddLabTest";
 import EditLabTest from "./pages/Laboratory/LabTest/EditLabTest";
 import LabTestDetails from "./pages/Laboratory/LabTest/LabTestDetails";
-import TestReport from "./pages/Laboratory/LabTest/TestReport";
 
 // Nurse Module Imports
 import NurseList from "./pages/Nurse/NurseList";
@@ -71,146 +70,139 @@ import EditNurse from "./pages/Nurse/EditNurse";
 import NurseDetails from "./pages/Nurse/NurseDetails";
 import AssignNurse from "./pages/Nurse/AssignNurse";
 
-
-
 function App() {
   return (
     <>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/register" element={<PatientRegistration />} />
+          <Route path="/patients/add" element={<AddPatient />} />
+           <Route path="/appointments/book" element={<BookAppointment />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/logout" element={<Logout />} />
+         
+
           <Route
-            path="/dashboard"
-            element={
-              <DashboardLayout>
-                <Dashboard />
-              </DashboardLayout>
-            }
-          />
+    path="/dashboard"
+    element={
+       <DashboardRoute>
+            <Dashboard />
+        </DashboardRoute>
+    }
+/>
 
           <Route
             path="/patients"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <PatientList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="/patients/add"
+            path="/dashboard/patients/add"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AddPatient />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/patients/edit"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditPatient />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/patients/details"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <PatientDetails />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/patients/history"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <MedicalHistory />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/doctors"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <DoctorList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
           <Route
             path="/doctors/add"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AddDoctor />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
           <Route
             path="/doctors/edit/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditDoctor />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
           <Route
             path="/doctors/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <DoctorDetails />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/doctors/schedule"
-            element={
-              <DashboardLayout>
-                <DoctorSchedule />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/appointments"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AppointmentList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="/appointments/book"
+            path="/dashboard/appointments/book"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <BookAppointment />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/appointments/edit/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditAppointment />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/appointments/details/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AppointmentDetails />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
@@ -219,45 +211,45 @@ function App() {
           <Route
             path="/billing"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <BillingList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/billing/create"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <CreateBill />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/billing/edit/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditBill />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/billing/details/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <BillDetails />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/billing/payment-history"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <PaymentHistory />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
@@ -266,216 +258,188 @@ function App() {
           <Route
             path="/rooms"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <RoomList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/rooms/add"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AddRoom />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/rooms/edit/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditRoom />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/rooms/details/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <RoomDetails />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="/rooms/allocation"
+            path="/rooms/room-allocations"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <RoomAllocation />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/rooms/beds"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <BedManagement />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
             path="/rooms/status"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <RoomStatus />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           {/* Laboratory Module */}
 
           <Route
-            path="laboratory/labs"
+            path="/laboratory/labs"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <LabList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="laboratory/labs/add"
+            path="/laboratory/labs/add"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AddLab />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="laboratory/labs/edit/:id"
+            path="/laboratory/labs/edit/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditLab />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="laboratory/labs/details/:id"
+            path="/laboratory/labs/details/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <LabDetails />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           {/* Lab Test Module */}
 
           <Route
-            path="laboratory/tests"
+            path="/laboratory/tests"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <LabTestList />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="laboratory/tests/add"
+            path="/laboratory/tests/add"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <AddLabTest />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="laboratory/tests/edit/:id"
+            path="/laboratory/tests/edit/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <EditLabTest />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
           <Route
-            path="laboratory/tests/details/:id"
+            path="/laboratory/tests/details/:id"
             element={
-              <DashboardLayout>
+              <DashboardRoute>
                 <LabTestDetails />
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
-          <Route
-            path="laboratory/tests/report/:id"
-            element={
-              <DashboardLayout>
-                <TestReport />
-              </DashboardLayout>
-            }
-          />
-
-
-{/* Nurse Module Routes */}
-
+          {/* Nurse Module Routes */}
 
           <Route
-            path="nurses"
+            path="/nurses"
             element={
-              
-              <DashboardLayout>
-               
+              <DashboardRoute>
                 <NurseList />
-              </DashboardLayout>
-          }
-          />
-
-
-
-          <Route
-            path="nurses/add"
-            element={
-              <DashboardLayout>
-    <AddNurse />
-              
-              </DashboardLayout>
+              </DashboardRoute>
             }
           />
 
-
-
           <Route
-            path="nurses/edit/:id"
+            path="/nurses/add"
             element={
-                <DashboardLayout>
-               
-                  <EditNurse />
-              </DashboardLayout>
-          }
+              <DashboardRoute>
+                <AddNurse />
+              </DashboardRoute>
+            }
           />
 
-
-
           <Route
-            path="nurses/:id"
+            path="/nurses/edit/:id"
             element={
-                <DashboardLayout>
-         
-                  <NurseDetails />
-              </DashboardLayout>
-          }
+              <DashboardRoute>
+                <EditNurse />
+              </DashboardRoute>
+            }
           />
 
-
+          <Route
+            path="/nurses/:id"
+            element={
+              <DashboardRoute>
+                <NurseDetails />
+              </DashboardRoute>
+            }
+          />
 
           <Route
-            path="nurses/assign"
+            path="/nurses/assign"
             element={
-              <DashboardLayout>
-            
+              <DashboardRoute>
                 <AssignNurse />
-              </DashboardLayout>
-          }
+              </DashboardRoute>
+            }
           />
-
-
-
         </Routes>
       </Router>
     </>

@@ -1,12 +1,37 @@
+// import { Link } from "react-router-dom";
 import "./DoctorTable.css";
+import { useNavigate } from "react-router-dom";
+import { deleteDoctor } from "../../services/doctorService";
 
 function DoctorTable({ doctors }) {
+
+  const navigate = useNavigate();
+
+  const handleView = (id) => {
+    navigate(`/doctors/${id}`);
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/doctors/edit/${id}`);
+  };
+
+const handleDelete = async (id) => {
+
+    if (!window.confirm("Delete doctor?"))
+        return;
+
+    await deleteDoctor(id);
+
+    window.location.reload();
+
+};
+
   return (
     <div className="doctor-table-container">
       <table className="doctor-table">
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>Doctor</th>
             <th>Department</th>
             <th>Experience</th>
@@ -20,7 +45,7 @@ function DoctorTable({ doctors }) {
         <tbody>
           {doctors.map((doctor) => (
             <tr key={doctor.id}>
-              <td>{doctor.id}</td>
+              {/* <td>{doctor.id}</td> */}
 
               <td>{doctor.name}</td>
 
@@ -45,11 +70,28 @@ function DoctorTable({ doctors }) {
               </td>
 
               <td>
-                <button className="view-btn">View</button>
+             
 
-                <button className="edit-btn">Edit</button>
+                  <button
+                  className="view-btn"
+                  onClick={() => handleView(doctor.id)}
+                >
+                  View
+                </button>
 
-                <button className="delete-btn">Delete</button>
+                <button
+                  className="edit-btn"
+                  onClick={() => handleEdit(doctor.id)}
+                >
+                  Edit
+                </button>
+
+         <button
+className="delete-btn"
+onClick={() => handleDelete(doctor.id)}
+>
+Delete
+</button>
               </td>
             </tr>
           ))}

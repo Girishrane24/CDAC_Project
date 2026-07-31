@@ -1,19 +1,40 @@
-import { useState } from "react";
 import "./DoctorForm.css";
+import { useEffect, useState } from "react";
 
-function DoctorForm({ onSubmit, initialData = {}, buttonText = "Save Doctor" }) {
-  const [doctor, setDoctor] = useState({
-    name: initialData.name || "",
-    specialization: initialData.specialization || "",
-    qualification: initialData.qualification || "",
-    experience: initialData.experience || "",
-    gender: initialData.gender || "",
-    phone: initialData.phone || "",
-    email: initialData.email || "",
-    address: initialData.address || "",
-    consultationFee: initialData.consultationFee || "",
-    status: initialData.status || "Available",
-  });
+function DoctorForm({
+    onSubmit,
+    initialData,
+    buttonText = "Save Doctor"
+}) {
+ const [doctor, setDoctor] = useState({
+    name: "",
+    specialization: "",
+    qualification: "",
+    experience: "",
+    gender: "",
+    phone: "",
+    email: "",
+    address: "",
+    consultationFee: "",
+    status: "Available",
+});
+
+useEffect(() => {
+    if (!initialData?.id) return;
+
+    setDoctor({
+        name: initialData.name || "",
+        specialization: initialData.specialization || "",
+        qualification: initialData.qualification || "",
+        experience: initialData.experience || "",
+        gender: initialData.gender || "",
+        phone: initialData.phone || "",
+        email: initialData.email || "",
+        address: initialData.address || "",
+        consultationFee: initialData.consultationFee || "",
+        status: initialData.status || "Available",
+    });
+}, [initialData?.id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -28,6 +28,16 @@
     font-weight:600;
 }
 
+.schedule-doctor-btn{
+    background:#1976d2;
+    color:white;
+    text-decoration:none;
+    padding:12px 18px;
+    border-radius:8px;
+    font-weight:600;
+    margin-left:800px;
+}
+
 .add-doctor-btn:hover{
     background:#125aa2;
 }

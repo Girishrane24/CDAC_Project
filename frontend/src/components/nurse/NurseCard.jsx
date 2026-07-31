@@ -28,9 +28,9 @@ function NurseCard({ nurse }) {
                     </h3>
 
 
-                    <p>
-                        ID : {nurse.id}
-                    </p>
+                    {/* <p>
+                        ID : {nurse.nurseId}
+                    </p> */}
 
 
                 </div>
@@ -142,7 +142,7 @@ function NurseCard({ nurse }) {
             <div className="nurse-card-actions">
 
 
-                <NavLink to={`/nurses/${nurse.id}`}>
+                <NavLink to={`/nurses/${nurse.nurseId}`}>
 
 
                     <button className="view-card-btn">
@@ -158,7 +158,7 @@ function NurseCard({ nurse }) {
 
 
 
-                <NavLink to={`/nurses/edit/${nurse.id}`}>
+                <NavLink to={`/nurses/edit/${nurse.nurseId}`}>
 
 
                     <button className="edit-card-btn">

@@ -1,188 +1,250 @@
-
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./AppointmentList.css";
+import {
+    getAppointments,
+    deleteAppointment,
+} from "../../services/appointmentService";
 
 function AppointmentList() {
+    const [appointments, setAppointments] = useState([]);
+    const [search, setSearch] = useState("");
 
-  const appointments = [
-    {
-      id: "APT001",
-      patient: "Rahul Sharma",
-      doctor: "Dr. Amit Patel",
-      department: "Cardiology",
-      date: "20-Jul-2026",
-      time: "10:00 AM",
-      status: "Confirmed",
-    },
-    {
-      id: "APT002",
-      patient: "Priya Singh",
-      doctor: "Dr. Sneha Joshi",
-      department: "Neurology",
-      date: "20-Jul-2026",
-      time: "11:30 AM",
-      status: "Pending",
-    },
-    {
-      id: "APT003",
-      patient: "Rohan Verma",
-      doctor: "Dr. Anil Kumar",
-      department: "Orthopedics",
-      date: "21-Jul-2026",
-      time: "02:00 PM",
-      status: "Completed",
-    },
-    {
-      id: "APT004",
-      patient: "Neha Gupta",
-      doctor: "Dr. Pooja Mehta",
-      department: "Dermatology",
-      date: "22-Jul-2026",
-      time: "09:30 AM",
-      status: "Cancelled",
-    },
-  ];
+    useEffect(() => {
+        loadAppointments();
+    }, []);
 
-  const getBadge = (status) => {
-    switch (status) {
-      case "Confirmed":
-        return "success";
-      case "Pending":
-        return "warning";
-      case "Completed":
-        return "primary";
-      case "Cancelled":
-        return "danger";
-      default:
-        return "secondary";
-    }
-  };
+    const loadAppointments = async () => {
+        try {
+            const res = await getAppointments();
+            setAppointments(res.data);
+        } catch (error) {
+            console.error("Error loading appointments:", error);
+        }
+    };
 
-  return (
-    <div className="appointment-container">
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this appointment?")) {
+            return;
+        }
 
-      <div className="d-flex justify-content-between align-items-center mb-4">
+        try {
+            await deleteAppointment(id);
+            alert("Appointment deleted successfully!");
+            loadAppointments();
+        } catch (error) {
+            console.error(error);
+            alert("Unable to delete appointment.");
+        }
+    };
 
-        <h2>Appointment List</h2>
+    const getBadge = (status) => {
+        switch (status?.toLowerCase()) {
+            case "confirmed":
+                return "success";
+            case "pending":
+                return "warning";
+            case "completed":
+                return "primary";
+            case "cancelled":
+                return "danger";
+            default:
+                return "secondary";
+        }
+    };
 
-        <Link
-          to="/appointments/book"
-          className="btn btn-primary"
-        >
-          + Book Appointment
-        </Link>
+    const formatDate = (date) => {
+        if (!date) return "-";
 
-      </div>
+        return new Date(date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
 
-      <div className="card shadow-sm">
+    const formatTime = (time) => {
+        if (!time) return "-";
 
-        <div className="card-body">
+        const [hours, minutes] = time.split(":");
 
-          <div className="row mb-3">
+        const d = new Date();
+        d.setHours(hours);
+        d.setMinutes(minutes);
 
-            <div className="col-md-4">
+        return d.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+    };
 
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search Appointment..."
-              />
+    const filteredAppointments = appointments.filter((appointment) => {
+        const keyword = search.toLowerCase();
+
+        return (
+            appointment.patientName?.toLowerCase().includes(keyword) ||
+            appointment.doctorName?.toLowerCase().includes(keyword) ||
+            appointment.department?.toLowerCase().includes(keyword) ||
+            appointment.status?.toLowerCase().includes(keyword)
+        );
+    });
+
+    return (
+        <div className="container-fluid">
+
+            <div className="d-flex justify-content-between align-items-center mb-4">
+
+                <h2 className="fw-bold">Appointment List</h2>
+
+                <Link
+                    to="/appointments/book"
+                    className="btn btn-primary"
+                >
+                    + Book Appointment
+                </Link>
 
             </div>
 
-          </div>
+            <div className="card shadow-sm">
 
-          <div className="table-responsive">
+                <div className="card-body">
 
-            <table className="table table-bordered table-hover align-middle">
+                    <div className="row mb-3">
 
-              <thead className="table-primary">
+                        <div className="col-md-4">
 
-                <tr>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Search by Patient, Doctor..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
 
-                  <th>ID</th>
-                  <th>Patient</th>
-                  <th>Doctor</th>
-                  <th>Department</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                        </div>
 
-                </tr>
+                    </div>
 
-              </thead>
+                    <div className="table-responsive">
 
-              <tbody>
+                        <table className="table table-bordered table-hover align-middle">
 
-                {appointments.map((appointment) => (
+                            <thead className="table-primary">
 
-                  <tr key={appointment.id}>
+                                <tr>
 
-                    <td>{appointment.id}</td>
+                                    {/* <th>ID</th> */}
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Department</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th width="220">Actions</th>
 
-                    <td>{appointment.patient}</td>
+                                </tr>
 
-                    <td>{appointment.doctor}</td>
+                            </thead>
 
-                    <td>{appointment.department}</td>
+                            <tbody>
 
-                    <td>{appointment.date}</td>
+                                {filteredAppointments.length === 0 ? (
 
-                    <td>{appointment.time}</td>
+                                    <tr>
 
-                    <td>
+                                        <td
+                                            colSpan="8"
+                                            className="text-center text-muted py-4"
+                                        >
+                                            No Appointments Found
+                                        </td>
 
-                      <span
-                        className={`badge bg-${getBadge(
-                          appointment.status
-                        )}`}
-                      >
-                        {appointment.status}
-                      </span>
+                                    </tr>
 
-                    </td>
+                                ) : (
 
-                    <td>
+                                    filteredAppointments.map((appointment) => (
 
-                      <Link
-                        to={`/appointments/details/${appointment.id}`}
-                        className="btn btn-info btn-sm me-2"
-                      >
-                        View
-                      </Link>
+                                        <tr key={appointment.id}>
 
-                      <Link
-                        to={`/appointments/edit/${appointment.id}`}
-                        className="btn btn-warning btn-sm me-2"
-                      >
-                        Edit
-                      </Link>
+                                            {/* <td>{appointment.id}</td> */}
 
-                      <button
-                        className="btn btn-danger btn-sm"
-                      >
-                        Delete
-                      </button>
+                                            <td>{appointment.patientName}</td>
 
-                    </td>
+                                            <td>{appointment.doctorName}</td>
 
-                  </tr>
+                                            <td>{appointment.department}</td>
 
-                ))}
+                                            <td>
+                                                {formatDate(
+                                                    appointment.appointmentDate
+                                                )}
+                                            </td>
 
-              </tbody>
+                                            <td>
+                                                {formatTime(
+                                                    appointment.appointmentTime
+                                                )}
+                                            </td>
 
-            </table>
+                                            <td>
 
-          </div>
+                                                <span
+                                                    className={`badge bg-${getBadge(
+                                                        appointment.status
+                                                    )}`}
+                                                >
+                                                    {appointment.status}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
+                                                <Link
+                                                    to={`/appointments/details/${appointment.id}`}
+                                                    className="btn btn-info btn-sm me-2"
+                                                >
+                                                    View
+                                                </Link>
+
+                                                <Link
+                                                    to={`/appointments/edit/${appointment.id}`}
+                                                    className="btn btn-warning btn-sm me-2"
+                                                >
+                                                    Edit
+                                                </Link>
+
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() =>
+                                                        handleDelete(appointment.id)
+                                                    }
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))
+
+                                )}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
-
-      </div>
-
-    </div>
-  );
+    );
 }
 
 export default AppointmentList;

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../../components/patient/PatientForm.css";
+import {addPatient} from "../../services/patientServices";
+import { useNavigate } from "react-router-dom";
 
 function AddPatient() {
   const [patient, setPatient] = useState({
@@ -20,13 +22,27 @@ function AddPatient() {
     });
   };
 
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
+
     e.preventDefault();
 
-    console.log(patient);
+    try {
 
-    alert("Patient Added Successfully!");
-  };
+        await addPatient(patient);
+
+        alert("Patient Added Successfully!");
+
+    } catch (err) {
+
+        console.log(err);
+
+        alert("Unable to save patient");
+
+    }
+
+}
+
+
 
   return (
     <div className="patient-form-page">
@@ -140,7 +156,7 @@ function AddPatient() {
 
           </div>
 
-          <button className="save-btn">
+          <button className="save-btn"   onClick={() => navigate("/patients")}>
             Save Patient
           </button>
 

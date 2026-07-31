@@ -75,11 +75,12 @@
 }
 
 .edit-btn{
-    background:#ffc107;
-    color:#000;
+   background:#eb9f11;
+    color:white;
     border:none;
-    padding:8px 20px;
-    border-radius:5px;
+    padding:6px 12px;
+    margin-right:8px;
+    border-radius:4px;
     cursor:pointer;
 }
 

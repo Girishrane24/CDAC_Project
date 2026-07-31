@@ -1,22 +1,31 @@
 import "./AddDoctor.css";
 import DoctorForm from "../../components/doctor/DoctorForm";
 import { useNavigate } from "react-router-dom";
+import { addDoctor } from "../../services/doctorService";
 
 function AddDoctor() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (doctorData) => {
+const handleSubmit = async (doctorData) => {
 
-    console.log(doctorData);
+    try {
 
-    alert("Doctor Added Successfully");
+        await addDoctor(doctorData);
 
-    // Later
-    // axios.post("http://localhost:8080/api/doctors",doctorData)
+         console.log(doctorData);
+        alert("Doctor Added Successfully");
 
-    navigate("/doctor");
-  };
+
+        navigate("/doctors");
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to Add Doctor");
+    }
+};
 
   return (
     <div className="add-doctor-page">
@@ -33,6 +42,9 @@ function AddDoctor() {
         onSubmit={handleSubmit}
         buttonText="Add Doctor"
       />
+     
+
+      
 
     </div>
   );

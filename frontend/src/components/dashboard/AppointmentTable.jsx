@@ -1,46 +1,74 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { getAppointments } from "../../services/appointmentService";
+
 import "./AppointmentTable.css";
 
 function AppointmentTable() {
 
-    const appointments = [
-        {
-            patient: "John",
-            doctor: "Dr. Smith",
-            department: "Cardiology",
-            time: "10:00 AM",
-            status: "Completed"
-        },
-        {
-            patient: "Emma",
-            doctor: "Dr. Brown",
-            department: "Neurology",
-            time: "11:30 AM",
-            status: "Pending"
-        },
-        {
-            patient: "David",
-            doctor: "Dr. Wilson",
-            department: "Orthopedic",
-            time: "1:00 PM",
-            status: "Completed"
-        },
-        {
-            patient: "Sophia",
-            doctor: "Dr. Thomas",
-            department: "Pediatrics",
-            time: "3:30 PM",
-            status: "Cancelled"
+    const navigate = useNavigate();
+
+    const [appointments, setAppointments] = useState([]);
+
+    useEffect(() => {
+        loadAppointments();
+    }, []);
+
+    const loadAppointments = async () => {
+
+        try {
+
+            const response = await getAppointments();
+
+            // Show latest 5 appointments
+            const latestAppointments = response.data.slice(0, 5);
+
+            setAppointments(latestAppointments);
+
+        } catch (error) {
+
+            console.error("Error loading appointments:", error);
+
         }
-    ];
+
+    };
+
+    const getStatusClass = (status) => {
+
+        switch (status) {
+
+            case "Completed":
+                return "completed";
+
+            case "Pending":
+                return "pending";
+
+            case "Cancelled":
+                return "cancelled";
+
+            default:
+                return "default";
+
+        }
+
+    };
 
     return (
 
         <div className="appointment-table">
 
             <div className="table-header">
-                <h3>Today's Appointments</h3>
 
-                <button>View All</button>
+                <h3>Recent Appointments</h3>
+
+                <button
+                    className="view-btn"
+                    onClick={() => navigate("/appointments")}
+                >
+                    View All
+                </button>
+
             </div>
 
             <table>
@@ -48,11 +76,17 @@ function AppointmentTable() {
                 <thead>
 
                     <tr>
+
                         <th>Patient</th>
+
                         <th>Doctor</th>
+
                         <th>Department</th>
-                        <th>Time</th>
+
+                        <th>Date</th>
+
                         <th>Status</th>
+
                     </tr>
 
                 </thead>
@@ -60,37 +94,49 @@ function AppointmentTable() {
                 <tbody>
 
                     {
-                        appointments.map((item, index) => (
+                        appointments.length > 0 ?
 
-                            <tr key={index}>
+                            appointments.map((appointment) => (
 
-                                <td>{item.patient}</td>
+                                <tr key={appointment.id}>
 
-                                <td>{item.doctor}</td>
+                                    <td>{appointment.patientName}</td>
 
-                                <td>{item.department}</td>
+                                    <td>{appointment.doctorName}</td>
 
-                                <td>{item.time}</td>
+                                    <td>{appointment.department}</td>
 
-                                <td>
+                                    <td>{appointment.appointmentDate}</td>
 
-                                    <span
-                                        className={
-                                            item.status === "Completed"
-                                                ? "completed"
-                                                : item.status === "Pending"
-                                                ? "pending"
-                                                : "cancelled"
-                                        }
-                                    >
-                                        {item.status}
-                                    </span>
+                                    <td>
 
+                                        <span
+                                            className={getStatusClass(
+                                                appointment.status
+                                            )}
+                                        >
+                                            {appointment.status}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            ))
+
+                            :
+
+                            <tr>
+
+                                <td
+                                    colSpan="5"
+                                    className="no-data"
+                                >
+                                    No Appointments Found
                                 </td>
 
                             </tr>
 
-                        ))
                     }
 
                 </tbody>
@@ -100,6 +146,7 @@ function AppointmentTable() {
         </div>
 
     );
+
 }
 
 export default AppointmentTable;

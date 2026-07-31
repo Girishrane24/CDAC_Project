@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import "./AddRoom.css";
-// import roomService from "../../services/roomService";
+import roomService from "../../services/roomService";
 import RoomForm from "../../components/room/RoomForm";
 
 

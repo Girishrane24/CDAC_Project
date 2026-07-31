@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./RoomStatus.css";
+import roomService from "../../services/roomService";
 
 function RoomStatus() {
   const [rooms, setRooms] = useState([]);
@@ -8,51 +9,21 @@ function RoomStatus() {
   useEffect(() => {
     loadRooms();
   }, []);
+const loadRooms = async () => {
 
-  const loadRooms = () => {
-    // Replace with API call later
-    const roomData = [
-      {
-        id: 1,
-        roomNumber: "101",
-        roomType: "General",
-        floor: 1,
-        capacity: 4,
-        occupiedBeds: 2,
-        status: "Available",
-      },
-      {
-        id: 2,
-        roomNumber: "102",
-        roomType: "Private",
-        floor: 1,
-        capacity: 1,
-        occupiedBeds: 1,
-        status: "Occupied",
-      },
-      {
-        id: 3,
-        roomNumber: "201",
-        roomType: "ICU",
-        floor: 2,
-        capacity: 2,
-        occupiedBeds: 0,
-        status: "Maintenance",
-      },
-      {
-        id: 4,
-        roomNumber: "202",
-        roomType: "Deluxe",
-        floor: 2,
-        capacity: 2,
-        occupiedBeds: 1,
-        status: "Available",
-      },
-    ];
+    try {
 
-    setRooms(roomData);
-  };
+        const response = await roomService.getAllRooms();
 
+        setRooms(response.data);
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+};
   const filteredRooms = rooms.filter(
     (room) =>
       room.roomNumber.toLowerCase().includes(search.toLowerCase()) ||
