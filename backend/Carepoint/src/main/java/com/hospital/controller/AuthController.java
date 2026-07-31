@@ -1,58 +1,57 @@
 package com.hospital.controller;
 
-
+import com.hospital.dto.LoginRequest;
+import com.hospital.dto.LoginResponse;
 import com.hospital.model.User;
-import com.hospital.repository.UserRepository;
-import com.hospital.security.JwtUtils;
+import com.hospital.service.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
-@RequestMapping
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
-    private final JwtUtils jwtUtils;
+    @Autowired
+    private AuthService authService;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
-        this.jwtUtils = jwtUtils;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String password = request.get("password");
-
-        if (userRepository.existsByEmail(email)) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Email is already registered!"));
-        }
-
-        User user = new User(email, encoder.encode(password), password, password, null);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
-    }
-
+    /**
+     * Login API
+     * POST: /api/auth/login
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String password = request.get("password");
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
 
-        var userOpt = userRepository.findByEmail(email);
-        if (userOpt.isPresent() && encoder.matches(password, userOpt.get().getPassword())) {
-            String token = jwtUtils.generateJwtToken(email);
-            return ResponseEntity.ok(Map.of(
-                "token", token,
-                "email", email
-            ));
-        }
+        LoginResponse response = authService.login(request);
 
-        return ResponseEntity.status(401).body(Map.of("message", "Invalid email or password"));
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Register Admin/User
+     * (Optional - Useful for testing)
+     * POST: /api/auth/register
+     */
+    @PostMapping("/register")
+    public ResponseEntity<User> register(
+            @Valid @RequestBody User user) {
+
+        User savedUser = authService.register(user);
+
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    /**
+     * Health Check
+     * GET: /api/auth/test
+     */
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+
+        return ResponseEntity.ok("Authentication API is working.");
     }
 }

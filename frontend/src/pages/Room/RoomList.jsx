@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RoomList.css";
 import RoomTable from "../../components/room/RoomTable";
-// import roomService from "../../services/roomService";
+import roomService from "../../services/roomService";
 
 function RoomList() {
   const navigate = useNavigate();
@@ -26,12 +26,17 @@ function RoomList() {
   };
 
   useEffect(() => {
-    const result = rooms.filter(
-      (room) =>
-        room.roomNumber.toLowerCase().includes(search.toLowerCase()) ||
-        room.roomType.toLowerCase().includes(search.toLowerCase()) ||
-        room.status.toLowerCase().includes(search.toLowerCase())
-    );
+    const result = rooms.filter((room) => {
+      const roomNumber = room.roomNumber?.toLowerCase() || "";
+      const roomType = room.roomType?.toLowerCase() || "";
+      const status = room.status?.toLowerCase() || "";
+
+      return (
+        roomNumber.includes(search.toLowerCase()) ||
+        roomType.includes(search.toLowerCase()) ||
+        status.includes(search.toLowerCase())
+      );
+    });
 
     setFilteredRooms(result);
   }, [search, rooms]);

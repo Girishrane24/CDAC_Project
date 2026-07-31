@@ -1,6 +1,5 @@
 package com.hospital.repository;
 
-
 import com.hospital.model.Appointment;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -10,9 +9,17 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends MongoRepository<Appointment, String> {
-    List<Appointment> findByPatientId(String patientId);
-    List<Appointment> findByAssignedProviderId(String providerId);
-    List<Appointment> findByAppointmentDate(LocalDate date);
-    List<Appointment> findByAssignedProviderIdAndAppointmentDate(String providerId, LocalDate date);
+
+    List<Appointment> findByPatientName(String patientName);
+
+    List<Appointment> findByDoctorName(String doctorName);
+
+    List<Appointment> findByAppointmentDate(LocalDate appointmentDate);
+
+    List<Appointment> findByDoctorNameAndAppointmentDate(
+            String doctorName,
+            LocalDate appointmentDate);
+
     List<Appointment> findByStatus(String status);
+
 }

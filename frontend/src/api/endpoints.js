@@ -1,3 +1,4 @@
+
 export const ENDPOINTS = {
 
     LOGIN: "/auth/login",
@@ -16,6 +17,10 @@ export const ENDPOINTS = {
 
     NURSE: "/nurses",
 
-    ROOM: "/rooms"
+    ROOM: "/rooms",
+
+    ROOM_ALLOCATION: "/room-allocations",
+
+    BED: "/beds"
 
 };

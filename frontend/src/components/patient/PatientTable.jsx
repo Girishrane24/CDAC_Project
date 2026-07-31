@@ -51,7 +51,7 @@ function PatientTable() {
     <table className="patient-table">
       <thead>
         <tr>
-          <th>ID</th>
+          {/* <th>ID</th> */}
           <th>First Name</th>
           <th>Last Name</th>
           <th>Gender</th>
@@ -65,7 +65,7 @@ function PatientTable() {
         {patients.length > 0 ? (
           patients.map((patient) => (
             <tr key={patient.id}>
-              <td>{patient.id}</td>
+              {/* <td>{patient.id}</td> */}
 
               <td>{patient.firstName}</td>
 

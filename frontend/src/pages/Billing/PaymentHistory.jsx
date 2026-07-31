@@ -1,179 +1,356 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 import "./PaymentHistory.css";
+
 
 function PaymentHistory() {
 
-    const payments = [
+    const navigate = useNavigate();
 
-        {
-            paymentId: "PAY001",
-            billId: "BILL001",
-            patient: "Rahul Sharma",
-            amount: 3500,
-            paymentMode: "Cash",
-            status: "Paid",
-            date: "21-Jul-2026"
-        },
+    const [payments, setPayments] = useState([]);
+    const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
-        {
-            paymentId: "PAY002",
-            billId: "BILL002",
-            patient: "Priya Singh",
-            amount: 4200,
-            paymentMode: "UPI",
-            status: "Paid",
-            date: "22-Jul-2026"
-        },
 
-        {
-            paymentId: "PAY003",
-            billId: "BILL003",
-            patient: "Amit Verma",
-            amount: 2800,
-            paymentMode: "Card",
-            status: "Pending",
-            date: "23-Jul-2026"
+
+    useEffect(() => {
+
+        loadPayments();
+
+    }, []);
+
+
+
+    const loadPayments = async () => {
+
+        try {
+
+            const response = await api.get("/billing");
+
+            setPayments(response.data);
+
         }
+        catch (error) {
 
-    ];
+            console.error(
+                "Payment history error",
+                error
+            );
 
-    const getStatusColor = (status) => {
+        }
+        finally {
 
-        switch (status) {
+            setLoading(false);
 
-            case "Paid":
-                return "success";
-
-            case "Pending":
-                return "warning";
-
-            case "Failed":
-                return "danger";
-
-            default:
-                return "secondary";
         }
 
     };
 
+
+
+
+    const filteredPayments = payments.filter((payment) =>
+
+        (payment.patientName || "")
+            .toLowerCase()
+            .includes(search.toLowerCase())
+
+        ||
+
+        (payment.paymentMode || "")
+            .toLowerCase()
+            .includes(search.toLowerCase())
+
+        ||
+
+        (payment.status || "")
+            .toLowerCase()
+            .includes(search.toLowerCase())
+
+    );
+
+
+
+
+
+    const getStatusClass = (status) => {
+
+        if (status === "Paid")
+            return "paid";
+
+        if (status === "Pending")
+            return "pending";
+
+        return "cancelled";
+
+    };
+
+
+
+
+
     return (
 
-        <div className="payment-history-container">
+        <div className="payment-container">
 
-            <div className="d-flex justify-content-between align-items-center mb-4">
 
-                <h2>Payment History</h2>
+            <div className="payment-header">
 
-                <Link
-                    to="/billing"
+
+                <h2>
+                    Payment History
+                </h2>
+
+
+                <button
+
                     className="btn btn-primary"
+
+                    onClick={() => navigate("/billing")}
+
                 >
+
                     Back to Billing
-                </Link>
+
+                </button>
+
 
             </div>
+
+
+
+
 
             <div className="card shadow">
 
                 <div className="card-body">
 
-                    <div className="row mb-3">
 
-                        <div className="col-md-4">
+                    <input
 
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search Payment..."
-                            />
+                        type="text"
 
-                        </div>
+                        className="form-control search-box"
 
-                    </div>
+                        placeholder="Search Payment..."
 
-                    <div className="table-responsive">
+                        value={search}
 
-                        <table className="table table-bordered table-hover">
+                        onChange={(e) => setSearch(e.target.value)}
 
-                            <thead className="table-primary">
+                    />
 
-                                <tr>
 
-                                    <th>Payment ID</th>
-                                    <th>Bill ID</th>
-                                    <th>Patient</th>
-                                    <th>Amount</th>
-                                    <th>Payment Mode</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
 
-                                </tr>
+                    <hr />
 
-                            </thead>
 
-                            <tbody>
 
-                                {
 
-                                    payments.map((payment) => (
+                    {
+                        loading ?
 
-                                        <tr key={payment.paymentId}>
+                            (
+                                <div className="text-center">
+                                    Loading...
+                                </div>
+                            )
 
-                                            <td>{payment.paymentId}</td>
+                            :
 
-                                            <td>{payment.billId}</td>
+                            filteredPayments.length === 0 ?
 
-                                            <td>{payment.patient}</td>
+                                (
+                                    <div className="alert alert-warning">
+                                        No Payment Found
+                                    </div>
+                                )
 
-                                            <td>₹ {payment.amount}</td>
+                                :
 
-                                            <td>{payment.paymentMode}</td>
+                                (
 
-                                            <td>
+                                    <div className="table-responsive">
 
-                                                <span
-                                                    className={`badge bg-${getStatusColor(payment.status)}`}
-                                                >
 
-                                                    {payment.status}
+                                        <table className="table table-hover">
 
-                                                </span>
 
-                                            </td>
+                                            <thead>
 
-                                            <td>{payment.date}</td>
 
-                                            <td>
+                                                <tr>
 
-                                                <button className="btn btn-info btn-sm">
+                                                    <th>
+                                                        Payment ID
+                                                    </th>
 
-                                                    View Receipt
+                                                    <th>
+                                                        Bill ID
+                                                    </th>
 
-                                                </button>
+                                                    <th>
+                                                        Patient
+                                                    </th>
 
-                                            </td>
+                                                    <th>
+                                                        Amount
+                                                    </th>
 
-                                        </tr>
+                                                    <th>
+                                                        Payment Mode
+                                                    </th>
 
-                                    ))
+                                                    <th>
+                                                        Status
+                                                    </th>
 
-                                }
+                                                    <th>
+                                                        Date
+                                                    </th>
 
-                            </tbody>
+                                                    <th>
+                                                        Action
+                                                    </th>
 
-                        </table>
 
-                    </div>
+                                                </tr>
+
+
+                                            </thead>
+
+
+
+
+                                            <tbody>
+
+
+                                                {
+                                                    filteredPayments.map((payment, index) => (
+
+
+                                                        <tr key={payment.id}>
+
+
+                                                            <td>
+                                                                PAY{String(index + 1).padStart(3, "0")}
+                                                            </td>
+
+
+
+                                                            <td>
+                                                                BILL{String(index + 1).padStart(3, "0")}
+                                                            </td>
+
+
+
+                                                            <td>
+                                                                {payment.patientName}
+                                                            </td>
+
+
+
+                                                            <td>
+
+                                                                ₹ {Number(
+                                                                    payment.totalAmount || 0
+                                                                ).toLocaleString("en-IN")}
+
+                                                            </td>
+
+
+
+                                                            <td>
+                                                                {payment.paymentMode || "N/A"}
+                                                            </td>
+
+
+
+
+                                                            <td>
+
+                                                                <span
+
+                                                                    className={`status ${getStatusClass(payment.status)}`}
+
+                                                                >
+
+                                                                    {payment.status || "Pending"}
+
+                                                                </span>
+
+
+                                                            </td>
+
+
+
+
+                                                            <td>
+
+                                                                {payment.generatedDate}
+
+                                                            </td>
+
+
+
+
+                                                            <td>
+
+
+                                                                <button
+
+                                                                    className="btn btn-info btn-sm"
+
+                                                                    onClick={() =>
+                                                                        navigate(`/billing/details/${payment.id}`)
+                                                                    }
+
+                                                                >
+
+                                                                    View Receipt
+
+                                                                </button>
+
+
+                                                            </td>
+
+
+
+                                                        </tr>
+
+
+                                                    ))
+                                                }
+
+
+
+                                            </tbody>
+
+
+
+                                        </table>
+
+
+
+                                    </div>
+
+                                )
+
+                    }
+
 
                 </div>
 
             </div>
 
+
+
         </div>
 
-    );
+    )
 
 }
+
 
 export default PaymentHistory;

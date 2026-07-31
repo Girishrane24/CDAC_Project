@@ -1,14 +1,7 @@
 package com.hospital.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.NotNull;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Document(collection = "rooms")
 public class Room {
@@ -16,45 +9,93 @@ public class Room {
     @Id
     private String id;
 
-    @Indexed(unique = true)
     private String roomNumber;
-
-    private String type; // e.g., Single, Double, Suite
-    private @NotNull(message = "Price per night is required") @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0") Double pricePerNight;
+    private String roomType;
+    private Integer floor;
     private Integer capacity;
-    private Boolean isAvailable;
-    private List<String> amenities;
+    private Double dailyCharge;
+    private String status;
+    private Integer occupiedBeds;
 
-    public Room() {}
-
-    public Room(String roomNumber, String type, @NotNull(message = "Price per night is required") @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0") Double pricePerNight, Integer capacity, Boolean isAvailable, List<String> amenities) {
-        this.roomNumber = roomNumber;
-        this.type = type;
-        this.pricePerNight = pricePerNight;
-        this.capacity = capacity;
-        this.isAvailable = isAvailable;
-        this.amenities = amenities;
+    public Room() {
     }
 
-    // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Room(String id, String roomNumber, String roomType,
+                Integer floor, Integer capacity,
+                Double dailyCharge, String status,Integer occupiedBeds) {
+        this.id = id;
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.floor = floor;
+        this.capacity = capacity;
+        this.dailyCharge = dailyCharge;
+        this.status = status;
+        this.occupiedBeds=occupiedBeds;
+        
+    }
 
-    public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+    public String getId() {
+        return id;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public Double getPricePerNight() { return pricePerNight; }
-    public void setPricePerNight(@NotNull(message = "Price per night is required") @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0") Double double1) { this.pricePerNight = double1; }
+    public String getRoomNumber() {
+        return roomNumber;
+    }
 
-    public Integer getCapacity() { return capacity; }
-    public void setCapacity(Integer capacity) { this.capacity = capacity; }
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
 
-    public Boolean getIsAvailable() { return isAvailable; }
-    public void setIsAvailable(Boolean isAvailable) { this.isAvailable = isAvailable; }
+    public String getRoomType() {
+        return roomType;
+    }
 
-    public List<String> getAmenities() { return amenities; }
-    public void setAmenities(List<String> amenities) { this.amenities = amenities; }
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Double getDailyCharge() {
+        return dailyCharge;
+    }
+
+    public void setDailyCharge(Double dailyCharge) {
+        this.dailyCharge = dailyCharge;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    
+    public Integer getOccupiedBeds() {
+        return occupiedBeds;
+    }
+
+    public void setOccupiedBeds(Integer occupiedBeds) {
+        this.occupiedBeds = occupiedBeds;
+    }
 }

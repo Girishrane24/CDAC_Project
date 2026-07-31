@@ -1,74 +1,143 @@
 package com.hospital.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-@Document(collection = "lab_tests")
+@Document(collection = "labtests")
 public class LabTest {
 
-    @Id
-    private String id;
+	   @Id
+	    private String id;
 
-    @Indexed(unique = true)
-    private String testCode;
+	    private String labTestId;
 
-    private String patientId;
-    private String testName;
-    private String category; // e.g., Hematology, Biochemistry, Radiology
-    private BigDecimal cost;
-    private String status; // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
-    private String testResult;
-    private String remarks;
-    private LocalDateTime sampleCollectedAt;
-    private LocalDateTime resultGeneratedAt;
+	    private String appointmentId;
 
-    public LabTest() {}
+	    private String patientId;
+	    private String patientName;
 
-    public LabTest(String testCode, String patientId, String testName, String category, BigDecimal cost, String status) {
-        this.testCode = testCode;
-        this.patientId = patientId;
-        this.testName = testName;
-        this.category = category;
-        this.cost = cost;
-        this.status = status;
-        this.sampleCollectedAt = LocalDateTime.now();
+	    private String labId;
+	    private String labName;
+	    private String doctorName; 
+	    private String testName;
+	    private String sampleType;
+	    private String testDate;
+	    private String result;
+	    private String status;
+	    private Double price;
+
+    public LabTest() {
     }
 
-    // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTestCode() { return testCode; }
-    public void setTestCode(String testCode) { this.testCode = testCode; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getPatientId() { return patientId; }
-    public void setPatientId(String patientId) { this.patientId = patientId; }
+    public String getLabTestId() {
+        return labTestId;
+    }
 
-    public String getTestName() { return testName; }
-    public void setTestName(String testName) { this.testName = testName; }
+    public void setLabTestId(String labTestId) {
+        this.labTestId = labTestId;
+    }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public String getAppointmentId() {
+        return appointmentId;
+    }
 
-    public BigDecimal getCost() { return cost; }
-    public void setCost(BigDecimal cost) { this.cost = cost; }
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getPatientName() {
+		return patientName;
+	}
 
-    public String getTestResult() { return testResult; }
-    public void setTestResult(String testResult) { this.testResult = testResult; }
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
 
-    public String getRemarks() { return remarks; }
-    public void setRemarks(String remarks) { this.remarks = remarks; }
+	public String getLabName() {
+		return labName;
+	}
 
-    public LocalDateTime getSampleCollectedAt() { return sampleCollectedAt; }
-    public void setSampleCollectedAt(LocalDateTime sampleCollectedAt) { this.sampleCollectedAt = sampleCollectedAt; }
+	public void setLabName(String labName) {
+		this.labName = labName;
+	}
 
-    public LocalDateTime getResultGeneratedAt() { return resultGeneratedAt; }
-    public void setResultGeneratedAt(LocalDateTime resultGeneratedAt) { this.resultGeneratedAt = resultGeneratedAt; }
+	public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getLabId() {
+        return labId;
+    }
+
+    public void setLabId(String labId) {
+        this.labId = labId;
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public void setTestName(String testName) {
+        this.testName = testName;
+    }
+
+    public String getSampleType() {
+        return sampleType;
+    }
+
+    public void setSampleType(String sampleType) {
+        this.sampleType = sampleType;
+    }
+
+    public String getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(String testDate) {
+        this.testDate = testDate;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getDoctorName() {
+		return doctorName;
+	}
+
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
+	}
+
+	public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }

@@ -23,8 +23,8 @@ public class AppointmentService {
         return appointmentRepository.findById(id);
     }
 
-    public List<Appointment> getAppointmentsByPatient(String patientId) {
-        return appointmentRepository.findByPatientId(patientId);
+    public List<Appointment> getAppointmentsByPatient(String patientName) {
+        return appointmentRepository.findByPatientName(patientName);
     }
 
     public List<Appointment> getAppointmentsByDate(LocalDate date) {
@@ -32,55 +32,82 @@ public class AppointmentService {
     }
 
     public Appointment scheduleAppointment(Appointment appointment) {
-        // Prevent double booking for the same provider at the exact date and time
-        List<Appointment> existingAppointments = appointmentRepository
-                .findByAssignedProviderIdAndAppointmentDate(
-                        appointment.getAssignedProviderId(), 
-                        appointment.getAppointmentDate()
-                );
 
-        boolean isSlotTaken = existingAppointments.stream()
-                .anyMatch(a -> a.getAppointmentTime().equals(appointment.getAppointmentTime()) 
-                            && !"CANCELLED".equalsIgnoreCase(a.getStatus()));
+        List<Appointment> existingAppointments =
+                appointmentRepository.findByDoctorNameAndAppointmentDate(
+                        appointment.getDoctorName(),
+                        appointment.getAppointmentDate());
 
-        if (isSlotTaken) {
-            throw new IllegalArgumentException("The selected provider is already booked for this time slot.");
+        boolean slotTaken = existingAppointments.stream()
+                .anyMatch(a ->
+                        a.getAppointmentTime().equals(appointment.getAppointmentTime())
+                                && !"Cancelled".equalsIgnoreCase(a.getStatus()));
+
+        if (slotTaken) {
+            throw new IllegalArgumentException(
+                    "Doctor is already booked for this time slot.");
         }
 
-        if (appointment.getStatus() == null) {
-            appointment.setStatus("SCHEDULED");
+        if (appointment.getStatus() == null ||
+                appointment.getStatus().isBlank()) {
+
+            appointment.setStatus("Pending");
         }
 
         return appointmentRepository.save(appointment);
     }
 
     public Appointment updateAppointmentStatus(String id, String status) {
-        return appointmentRepository.findById(id).map(appointment -> {
-            appointment.setStatus(status.toUpperCase());
-            return appointmentRepository.save(appointment);
-        }).orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
+
+        return appointmentRepository.findById(id)
+                .map(appointment -> {
+
+                    appointment.setStatus(status);
+
+                    return appointmentRepository.save(appointment);
+
+                })
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Appointment not found with id : " + id));
     }
 
-    public Appointment updateAppointmentDetails(String id, Appointment updatedDetails) {
-        return appointmentRepository.findById(id).map(appointment -> {
-            appointment.setAppointmentDate(updatedDetails.getAppointmentDate());
-            appointment.setAppointmentTime(updatedDetails.getAppointmentTime());
-            appointment.setAssignedProviderId(updatedDetails.getAssignedProviderId());
-            appointment.setAssignedProviderName(updatedDetails.getAssignedProviderName());
-            appointment.setDepartment(updatedDetails.getDepartment());
-            appointment.setReasonForVisit(updatedDetails.getReasonForVisit());
-            appointment.setNotes(updatedDetails.getNotes());
-            if (updatedDetails.getStatus() != null) {
-                appointment.setStatus(updatedDetails.getStatus());
-            }
-            return appointmentRepository.save(appointment);
-        }).orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
+    public Appointment updateAppointmentDetails(
+            String id,
+            Appointment updatedAppointment) {
+
+        return appointmentRepository.findById(id)
+                .map(appointment -> {
+
+                    appointment.setPatientName(updatedAppointment.getPatientName());
+
+                    appointment.setDoctorName(updatedAppointment.getDoctorName());
+
+                    appointment.setDepartment(updatedAppointment.getDepartment());
+
+                    appointment.setAppointmentDate(updatedAppointment.getAppointmentDate());
+
+                    appointment.setAppointmentTime(updatedAppointment.getAppointmentTime());
+
+                    appointment.setReason(updatedAppointment.getReason());
+
+                    appointment.setStatus(updatedAppointment.getStatus());
+
+                    return appointmentRepository.save(appointment);
+
+                })
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Appointment not found with id : " + id));
     }
 
     public void cancelAppointment(String id) {
-        appointmentRepository.findById(id).ifPresent(appointment -> {
-            appointment.setStatus("CANCELLED");
-            appointmentRepository.save(appointment);
-        });
+
+        if (!appointmentRepository.existsById(id)) {
+            throw new RuntimeException("Appointment not found with id: " + id);
+        }
+
+        appointmentRepository.deleteById(id);
     }
+
 }

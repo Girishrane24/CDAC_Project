@@ -1,53 +1,280 @@
+// import { Link, useParams } from "react-router-dom";
+// import "./AppointmentDetails.css";
+// import { useEffect, useState } from "react";
+// import { getAppointmentById } from "../../services/appointmentService";
+
+// function AppointmentDetails() {
+
+//     const { id } = useParams();
+
+//   const [appointment, setAppointment] = useState({});
+
+// useEffect(() => {
+//     loadAppointment();
+// }, []);
+
+// const loadAppointment = async () => {
+
+//     try {
+
+//         const res = await getAppointmentById(id);
+
+//         setAppointment(res.data);
+
+//     } catch (error) {
+
+//         console.error(error);
+
+//     }
+
+// };
+
+//     return (
+
+//         <div className="appointment-details">
+
+//             <div className="card shadow">
+
+//                 <div className="card-header bg-primary text-white">
+
+//                     <h3>Appointment Details</h3>
+
+//                 </div>
+
+//                 <div className="card-body">
+
+//                     <div className="row">
+
+//                         <div className="col-md-6">
+
+//                             <h5 className="section-title">
+//                                 Patient Information
+//                             </h5>
+
+//                             <table className="table table-bordered">
+
+//                                 <tbody>
+
+//                                     <tr>
+//                                         <th>Patient ID</th>
+//                                         <td>{appointment.patientId}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Name</th>
+//                                         <td>{appointment.patientName}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Age</th>
+//                                         <td>{appointment.age}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Gender</th>
+//                                         <td>{appointment.gender}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Phone</th>
+//                                         <td>{appointment.phone}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Email</th>
+//                                         <td>{appointment.email}</td>
+//                                     </tr>
+
+//                                 </tbody>
+
+//                             </table>
+
+//                         </div>
+
+//                         <div className="col-md-6">
+
+//                             <h5 className="section-title">
+//                                 Appointment Information
+//                             </h5>
+
+//                             <table className="table table-bordered">
+
+//                                 <tbody>
+
+//                                     <tr>
+//                                         <th>Appointment ID</th>
+//                                         <td>{appointment.appointmentId}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Doctor</th>
+//                                         <td>{appointment.doctorName}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Department</th>
+//                                         <td>{appointment.department}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Date</th>
+//                                         <td>{appointment.appointmentDate}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Time</th>
+//                                         <td>{appointment.appointmentTime}</td>
+//                                     </tr>
+
+//                                     <tr>
+//                                         <th>Status</th>
+
+//                                         <td>
+
+//                                             <span className="badge bg-success">
+
+//                                                 {appointment.status}
+
+//                                             </span>
+
+//                                         </td>
+
+//                                     </tr>
+
+//                                 </tbody>
+
+//                             </table>
+
+//                         </div>
+
+//                     </div>
+
+//                     <div className="mt-4">
+
+//                         <h5 className="section-title">
+//                             Reason For Visit
+//                         </h5>
+
+//                         <div className="reason-box">
+
+//                             {appointment.reason}
+
+//                         </div>
+
+//                     </div>
+
+//                     <div className="text-end mt-4">
+
+//                         <Link
+//                             to={`/appointments/edit/${appointment.appointmentId}`}
+//                             className="btn btn-warning me-2"
+//                         >
+//                             Edit
+//                         </Link>
+
+//                         <Link
+//                             to="/appointments"
+//                             className="btn btn-secondary"
+//                         >
+//                             Back
+//                         </Link>
+
+//                     </div>
+
+//                 </div>
+
+//             </div>
+
+//         </div>
+
+//     );
+
+// }
+
+// export default AppointmentDetails;
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./AppointmentDetails.css";
+import { getAppointmentById } from "../../services/appointmentService";
 
 function AppointmentDetails() {
-
     const { id } = useParams();
 
-    // Dummy Data (Replace with API later)
+    const [appointment, setAppointment] = useState({});
 
-    const appointment = {
-        appointmentId: id || "APT001",
-        patientName: "Rahul Sharma",
-        patientId: "PAT101",
-        age: 35,
-        gender: "Male",
+    useEffect(() => {
+        loadAppointment();
+    }, []);
 
-        doctorName: "Dr. Amit Patel",
-        department: "Cardiology",
+    const loadAppointment = async () => {
+        try {
+            const res = await getAppointmentById(id);
+            setAppointment(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-        appointmentDate: "25-Jul-2026",
-        appointmentTime: "10:00 AM",
+    const formatDate = (date) => {
+        if (!date) return "-";
 
-        reason: "Regular Heart Checkup",
+        return new Date(date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
 
-        status: "Confirmed",
+    const formatTime = (time) => {
+        if (!time) return "-";
 
-        phone: "9876543210",
-        email: "rahul@gmail.com"
+        const [hours, minutes] = time.split(":");
+
+        const d = new Date();
+        d.setHours(hours);
+        d.setMinutes(minutes);
+
+        return d.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+    };
+
+    const getBadge = (status) => {
+        switch (status?.toLowerCase()) {
+            case "confirmed":
+                return "success";
+            case "pending":
+                return "warning";
+            case "completed":
+                return "primary";
+            case "cancelled":
+                return "danger";
+            default:
+                return "secondary";
+        }
     };
 
     return (
-
-        <div className="appointment-details">
+        <div className="appointment-details container-fluid">
 
             <div className="card shadow">
 
                 <div className="card-header bg-primary text-white">
-
-                    <h3>Appointment Details</h3>
-
+                    <h3 className="mb-0">Appointment Details</h3>
                 </div>
 
                 <div className="card-body">
 
                     <div className="row">
 
-                        <div className="col-md-6">
+                        {/* Patient Details */}
 
-                            <h5 className="section-title">
-                                Patient Information
+                        <div className="col-lg-6 mb-4">
+
+                            <h5 className="section-title mb-3">
+                                 Information
                             </h5>
 
                             <table className="table table-bordered">
@@ -55,54 +282,8 @@ function AppointmentDetails() {
                                 <tbody>
 
                                     <tr>
-                                        <th>Patient ID</th>
-                                        <td>{appointment.patientId}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Name</th>
+                                        <th width="40%">Patient Name</th>
                                         <td>{appointment.patientName}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Age</th>
-                                        <td>{appointment.age}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Gender</th>
-                                        <td>{appointment.gender}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Phone</th>
-                                        <td>{appointment.phone}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Email</th>
-                                        <td>{appointment.email}</td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                        <div className="col-md-6">
-
-                            <h5 className="section-title">
-                                Appointment Information
-                            </h5>
-
-                            <table className="table table-bordered">
-
-                                <tbody>
-
-                                    <tr>
-                                        <th>Appointment ID</th>
-                                        <td>{appointment.appointmentId}</td>
                                     </tr>
 
                                     <tr>
@@ -116,28 +297,59 @@ function AppointmentDetails() {
                                     </tr>
 
                                     <tr>
+                                        <th>Status</th>
+
+                                        <td>
+                                            <span
+                                                className={`badge bg-${getBadge(
+                                                    appointment.status
+                                                )}`}
+                                            >
+                                                {appointment.status}
+                                            </span>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        {/* Appointment Details */}
+
+                        <div className="col-lg-6 mb-4">
+
+                            <h5 className="section-title mb-3">
+                                Appointment Information
+                            </h5>
+
+                            <table className="table table-bordered">
+
+                                <tbody>
+
+                                    <tr>
+                                        <th width="40%">Appointment ID</th>
+                                        <td>{appointment.id}</td>
+                                    </tr>
+
+                                    <tr>
                                         <th>Date</th>
-                                        <td>{appointment.appointmentDate}</td>
+                                        <td>
+                                            {formatDate(
+                                                appointment.appointmentDate
+                                            )}
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <th>Time</th>
-                                        <td>{appointment.appointmentTime}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Status</th>
-
                                         <td>
-
-                                            <span className="badge bg-success">
-
-                                                {appointment.status}
-
-                                            </span>
-
+                                            {formatTime(
+                                                appointment.appointmentTime
+                                            )}
                                         </td>
-
                                     </tr>
 
                                 </tbody>
@@ -151,12 +363,12 @@ function AppointmentDetails() {
                     <div className="mt-4">
 
                         <h5 className="section-title">
-                            Reason For Visit
+                            Reason for Visit
                         </h5>
 
-                        <div className="reason-box">
+                        <div className="reason-box p-3 border rounded bg-light">
 
-                            {appointment.reason}
+                            {appointment.reason || "No reason provided."}
 
                         </div>
 
@@ -165,7 +377,7 @@ function AppointmentDetails() {
                     <div className="text-end mt-4">
 
                         <Link
-                            to={`/appointments/edit/${appointment.appointmentId}`}
+                            to={`/appointments/edit/${appointment.id}`}
                             className="btn btn-warning me-2"
                         >
                             Edit
@@ -185,9 +397,7 @@ function AppointmentDetails() {
             </div>
 
         </div>
-
     );
-
 }
 
 export default AppointmentDetails;
