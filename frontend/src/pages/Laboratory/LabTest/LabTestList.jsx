@@ -128,7 +128,7 @@ function LabTestList() {
                   </button>
 
                    <button
-                    className="edit-btn"
+                    className="edit-btn p-2"
                     onClick={() =>
                       navigate(`/laboratory/tests/edit/${test.id}`)
                     }

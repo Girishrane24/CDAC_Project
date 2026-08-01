@@ -145,13 +145,13 @@ function LabTestDetails() {
                       <div className="report-footer">
 
                     <button
-                        className="print-btn"
+                        className="print-btn m-2"
                         onClick={handlePrint}
                     >
                         Print Report
                     </button>
                     <button
-                        className="back-btn btn btn-sm"
+                        className="back-btn btn btn-sm m-2"
                         onClick={() =>
                             navigate("/laboratory/tests")
                         }

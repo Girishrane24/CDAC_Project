@@ -1,5 +1,6 @@
 import "./DoctorForm.css";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function DoctorForm({
     onSubmit,
@@ -188,6 +189,14 @@ useEffect(() => {
           <button type="submit" className="save-btn">
             {buttonText}
           </button>
+          
+           <Link
+                            to="/doctors"
+                            className="btn btn-secondary   p-2 mr-9"
+                         
+                        >
+                            Back
+                        </Link>
         </div>
       </form>
     </div>

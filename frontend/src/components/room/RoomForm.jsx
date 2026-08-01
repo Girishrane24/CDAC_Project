@@ -93,6 +93,7 @@ function RoomForm({
           </select>
         </div>
 
+
         <div className="button-group">
 
           <button
@@ -101,16 +102,17 @@ function RoomForm({
           >
             {buttonText}
           </button>
-
-          <button
+         
+ <button
             type="button"
-            className="cancel-btn"
+            className="cancel-btn mr-2 mt-4"
             onClick={onCancel}
           >
             Cancel
           </button>
 
         </div>
+
 
       </form>
 

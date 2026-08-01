@@ -45,9 +45,9 @@ const [nurses, setNurses] = useState([]);
             <button className="add-nurse-btn">+ Add Nurse</button>
           </NavLink>
 
-          <NavLink to="/nurses/assign">
+          {/* <NavLink to="/nurses/assign">
             <button className="assign-nurse-btn">Assign Nurse</button>
-          </NavLink>
+          </NavLink> */}
         </div>
       </div>
 

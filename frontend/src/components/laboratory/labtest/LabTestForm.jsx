@@ -191,7 +191,7 @@ function LabTestForm({
               {buttonText}
             </button>
 
-            <button type="button" className="cancel-btn" onClick={onCancel}>
+            <button type="button" className="cancel-btn p-2 mt-4" onClick={onCancel}>
               Cancel
             </button>
           </div>

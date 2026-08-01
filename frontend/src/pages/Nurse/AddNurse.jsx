@@ -74,7 +74,7 @@ function AddNurse() {
       <div className="form-card">
 
 
-        <h2>👩‍⚕️ Add New Nurse</h2>
+        <h2> Add New Nurse</h2>
 
 
         <form onSubmit={handleSubmit}>

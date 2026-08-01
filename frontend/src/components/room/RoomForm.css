@@ -43,8 +43,8 @@
     margin-top: 10px;
 }
 
-.save-btn,
-.cancel-btn {
+.save-btn
+ {
   
     transition: 0.3s;
 
@@ -65,13 +65,7 @@
     background: #1d4ed8;
 }
 
-.cancel-btn {
-    background: #dc3545;
-}
 
-.cancel-btn:hover {
-    background: #b91c1c;
-}
 
 @media (max-width: 768px) {
 
@@ -81,11 +75,12 @@
 
     .button-group {
         grid-column: span 1;
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
     }
 
-    .save-btn,
-    .cancel-btn {
+    .save-btn
+     {
         width: 100%;
     }
 }

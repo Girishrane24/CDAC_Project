@@ -40,47 +40,51 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        System.out.println("******** SecurityConfig Loaded ********");
 
         http
+            
+            .csrf(csrf -> csrf.disable())
 
-                .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
 
-                .cors(Customizer.withDefaults())
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
 
-                .authorizeHttpRequests(auth -> auth
+            	    .requestMatchers("/api/auth/**").permitAll()
 
-                        // Public APIs
-                        .requestMatchers(
-                                "/api/auth/**"
-                        ).permitAll()
+            	    .requestMatchers("/api/patients", "/api/patients/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_RECEPTIONIST")
 
-                        // Admin APIs
-                        .requestMatchers(
-                                "/api/patients/**",
-                                "/api/doctors/**",
-                                "/api/appointments/**",
-                                "/api/billing/**",
-                                "/api/labs/**",
-                                "/api/labtests/**",
-                                "/api/nurses/**",
-                                "/api/rooms/**",
-                                "/api/beds/**",
-                                "/api/room-allocations/**"
-                        ).hasRole("ADMIN")
+            	    .requestMatchers("/api/doctors", "/api/doctors/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_DOCTOR")
 
-                        // Everything else requires login
-                        .anyRequest()
-                        .authenticated())
+            	    .requestMatchers("/api/appointments", "/api/appointments/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_RECEPTIONIST")
 
-                .addFilterBefore(
-                        jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+            	    .requestMatchers("/api/billing", "/api/billing/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_RECEPTIONIST")
+
+            	    .requestMatchers("/api/labs", "/api/labs/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_LAB_TECHNICIAN")
+
+            	    .requestMatchers("/api/labtests", "/api/labtests/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_LAB_TECHNICIAN")
+
+            	    .requestMatchers(
+            	            "/api/rooms", "/api/rooms/**",
+            	            "/api/beds", "/api/beds/**",
+            	            "/api/room-allocations", "/api/room-allocations/**")
+            	    .hasAnyAuthority("ROLE_ADMIN", "ROLE_RECEPTIONIST")
+
+            	    .anyRequest().authenticated()
+            	)
+            .addFilterBefore(jwtAuthenticationFilter,
+                    UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -86,7 +86,7 @@ function PatientTable() {
                 </button>
 
                 <button
-                  className="edit-btn"
+                  className="edit-btn p-2"
                   onClick={() => handleEdit(patient)}
                 >
                   Edit
