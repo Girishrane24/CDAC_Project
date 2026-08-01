@@ -39,9 +39,7 @@ const loadDoctors = async () => {
           <p>Manage hospital doctors</p>
         </div>
 
- <Link to="/doctors/schedule" className="schedule-doctor-btn">
-          Doctor Schedule 
-        </Link>
+
         <Link to="/doctors/add" className="add-doctor-btn">
           + Add Doctor
         </Link>

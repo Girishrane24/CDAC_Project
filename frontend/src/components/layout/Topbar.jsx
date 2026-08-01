@@ -1,4 +1,5 @@
 import "./Topbar.css";
+import { FaHospital } from "react-icons/fa";
 
 function Topbar({ openSidebar }) {
 
@@ -19,17 +20,33 @@ function Topbar({ openSidebar }) {
                 ☰
             </button>
 
-            <h4>Hospital Management System</h4>
+             {/* Header */}
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            <FaHospital />
+          </div>
+
+          <div className="sidebar-title">
+            <h3>CarePoint Hospital System</h3>
+          </div>
+        </div>
 
             <div className="topbar-right">
 
                 <span>{today}</span>
 
-                <img
-                    src="https://i.pravatar.cc/40"
-                    alt="Admin"
-                    className="profile-image"
-                />
+                <div className="profile">
+                    <span>{localStorage.getItem("name")} </span>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                        alt="Profile"
+                        className="profile-img"
+
+                        width="40"
+                        height="40"
+
+                    />
+                </div>
 
             </div>
 

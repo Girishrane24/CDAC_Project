@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../../api/axios"; // Change path if needed
 import "./EditBill.css";
 
 function EditBill() {
@@ -7,67 +8,79 @@ function EditBill() {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // Dummy Data (Replace with API later)
     const [bill, setBill] = useState({
-
-        billId: id || "BILL001",
-        patientName: "Rahul Sharma",
-        doctorName: "Dr. Amit Patel",
-
-        consultationFee: 1000,
-        labCharges: 800,
-        medicineCharges: 1200,
-        roomCharges: 500,
-
+        id: "",
+        patientName: "",
+        doctorName: "",
+        consultationFee: "",
+        labCharges: "",
+        roomCharges: "",
         paymentMode: "Cash",
-        status: "Paid"
-
+        status: "Paid",
+        generatedDate: ""
     });
 
+    useEffect(() => {
+        loadBill();
+    }, []);
+
+    const loadBill = async () => {
+        try {
+            const response = await api.get(`/billing/${id}`);
+            setBill(response.data);
+        } catch (error) {
+            console.error("Error loading bill:", error);
+            alert("Failed to load bill.");
+        }
+    };
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
 
         setBill({
-
             ...bill,
-            [e.target.name]: e.target.value
-
+            [name]: value
         });
-
     };
 
     const totalAmount =
-        Number(bill.consultationFee) +
-        Number(bill.labCharges) +
-        Number(bill.medicineCharges) +
-        Number(bill.roomCharges);
+        (Number(bill.consultationFee) || 0) +
+        (Number(bill.labCharges) || 0) +
+        (Number(bill.roomCharges) || 0);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        alert("Bill Updated Successfully!");
-
-        console.log({
-
+        const updatedBill = {
             ...bill,
+            consultationFee: Number(bill.consultationFee),
+            labCharges: Number(bill.labCharges),
+            roomCharges: Number(bill.roomCharges),
             totalAmount
+        };
 
-        });
+        try {
 
-        navigate("/billing");
+            await api.put(`/billing/${id}`, updatedBill);
 
+            alert("Bill Updated Successfully!");
+
+            navigate("/billing");
+
+        } catch (error) {
+            console.error("Error updating bill:", error);
+            alert("Failed to update bill.");
+        }
     };
 
     return (
-
         <div className="edit-bill-container">
 
             <div className="card shadow">
 
                 <div className="card-header bg-warning">
-
                     <h3>Edit Bill</h3>
-
                 </div>
 
                 <div className="card-body">
@@ -76,8 +89,7 @@ function EditBill() {
 
                         <div className="row">
 
-                            <div className="col-md-6 mb-3">
-
+                            {/* <div className="col-md-6 mb-3">
                                 <label className="form-label">
                                     Bill ID
                                 </label>
@@ -85,14 +97,12 @@ function EditBill() {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    value={bill.billId}
+                                    value={bill.id}
                                     disabled
                                 />
-
-                            </div>
+                            </div> */}
 
                             <div className="col-md-6 mb-3">
-
                                 <label className="form-label">
                                     Patient Name
                                 </label>
@@ -104,97 +114,68 @@ function EditBill() {
                                     value={bill.patientName}
                                     onChange={handleChange}
                                 />
-
                             </div>
 
                             <div className="col-md-6 mb-3">
-
                                 <label className="form-label">
                                     Doctor Name
                                 </label>
 
-                                <select
-                                    className="form-select"
+                                <input
+                                    type="text"
+                                    className="form-control"
                                     name="doctorName"
                                     value={bill.doctorName}
                                     onChange={handleChange}
-                                >
-
-                                    <option>Dr. Amit Patel</option>
-                                    <option>Dr. Sneha Joshi</option>
-                                    <option>Dr. Anil Kumar</option>
-                                    <option>Dr. Pooja Mehta</option>
-
-                                </select>
-
+                                />
                             </div>
 
-                            <div className="col-md-3 mb-3">
-
+                            <div className="col-md-4 mb-3">
                                 <label className="form-label">
                                     Consultation Fee
                                 </label>
 
                                 <input
                                     type="number"
+                                    min="0"
                                     className="form-control"
                                     name="consultationFee"
                                     value={bill.consultationFee}
                                     onChange={handleChange}
                                 />
-
                             </div>
 
-                            <div className="col-md-3 mb-3">
-
+                            <div className="col-md-4 mb-3">
                                 <label className="form-label">
                                     Lab Charges
                                 </label>
 
                                 <input
                                     type="number"
+                                    min="0"
                                     className="form-control"
                                     name="labCharges"
                                     value={bill.labCharges}
                                     onChange={handleChange}
                                 />
-
                             </div>
 
-                            <div className="col-md-3 mb-3">
-
-                                <label className="form-label">
-                                    Medicine Charges
-                                </label>
-
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    name="medicineCharges"
-                                    value={bill.medicineCharges}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-                            <div className="col-md-3 mb-3">
-
+                            <div className="col-md-4 mb-3">
                                 <label className="form-label">
                                     Room Charges
                                 </label>
 
                                 <input
                                     type="number"
+                                    min="0"
                                     className="form-control"
                                     name="roomCharges"
                                     value={bill.roomCharges}
                                     onChange={handleChange}
                                 />
-
                             </div>
 
                             <div className="col-md-6 mb-3">
-
                                 <label className="form-label">
                                     Payment Mode
                                 </label>
@@ -205,18 +186,14 @@ function EditBill() {
                                     value={bill.paymentMode}
                                     onChange={handleChange}
                                 >
-
-                                    <option>Cash</option>
-                                    <option>Card</option>
-                                    <option>UPI</option>
-                                    <option>Net Banking</option>
-
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Net Banking">Net Banking</option>
                                 </select>
-
                             </div>
 
                             <div className="col-md-6 mb-3">
-
                                 <label className="form-label">
                                     Payment Status
                                 </label>
@@ -227,24 +204,17 @@ function EditBill() {
                                     value={bill.status}
                                     onChange={handleChange}
                                 >
-
-                                    <option>Paid</option>
-                                    <option>Pending</option>
-
+                                    <option value="Paid">Paid</option>
+                                    <option value="Pending">Pending</option>
                                 </select>
-
                             </div>
 
                             <div className="col-12 mb-4">
 
                                 <div className="alert alert-info">
-
                                     <h4>
-
-                                        Total Amount : ₹ {totalAmount}
-
+                                        Total Amount : ₹ {totalAmount.toLocaleString("en-IN")}
                                     </h4>
-
                                 </div>
 
                             </div>
@@ -277,9 +247,7 @@ function EditBill() {
             </div>
 
         </div>
-
     );
-
 }
 
 export default EditBill;

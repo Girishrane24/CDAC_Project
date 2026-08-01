@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./RoomDetails.css";
-// import roomService from "../../services/roomService";
+ import roomService from "../../services/roomService";
 
 function RoomDetails() {
   const { id } = useParams();
@@ -81,10 +81,7 @@ function RoomDetails() {
             </span>
           </div>
 
-          <div className="detail-item">
-            <label>Description</label>
-            <span>{room.description || "No description available."}</span>
-          </div>
+       
 
         </div>
 

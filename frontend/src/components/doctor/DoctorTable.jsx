@@ -31,7 +31,7 @@ const handleDelete = async (id) => {
       <table className="doctor-table">
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>Doctor</th>
             <th>Department</th>
             <th>Experience</th>
@@ -45,7 +45,7 @@ const handleDelete = async (id) => {
         <tbody>
           {doctors.map((doctor) => (
             <tr key={doctor.id}>
-              <td>{doctor.id}</td>
+              {/* <td>{doctor.id}</td> */}
 
               <td>{doctor.name}</td>
 
@@ -80,7 +80,7 @@ const handleDelete = async (id) => {
                 </button>
 
                 <button
-                  className="edit-btn"
+                  className="edit-btn p-2"
                   onClick={() => handleEdit(doctor.id)}
                 >
                   Edit

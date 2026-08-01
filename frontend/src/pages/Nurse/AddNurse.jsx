@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { addNurse } from "../../services/nurseService";
 import "./AddNurse.css";
 
 function AddNurse() {
@@ -35,24 +36,34 @@ function AddNurse() {
   };
 
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
+  try {
 
     console.log("Nurse Data :", nurse);
 
+    const response = await addNurse(nurse);
 
-    // API Integration later
-    // axios.post("http://localhost:8080/api/nurses", nurse)
-
+    console.log("Nurse Added:", response);
 
     alert("Nurse Added Successfully");
 
-
     navigate("/nurses");
 
-  };
+  } catch (error) {
+
+    console.error(
+      "Error Adding Nurse:",
+      error.response?.data || error.message
+    );
+
+    alert("Failed to add nurse");
+
+  }
+
+};
 
 
   return (
@@ -63,7 +74,7 @@ function AddNurse() {
       <div className="form-card">
 
 
-        <h2>👩‍⚕️ Add New Nurse</h2>
+        <h2> Add New Nurse</h2>
 
 
         <form onSubmit={handleSubmit}>

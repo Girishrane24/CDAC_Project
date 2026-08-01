@@ -1,71 +1,90 @@
 package com.hospital.service;
 
-
-import com.hospital.dto.LabResultUpdateDTO;
-import com.hospital.dto.LabTestRequestDTO;
 import com.hospital.model.LabTest;
 import com.hospital.repository.LabTestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LabTestService {
 
-    private final LabTestRepository labTestRepository;
+    private final LabTestRepository repository;
 
-    @Autowired
-    public LabTestService(LabTestRepository labTestRepository) {
-        this.labTestRepository = labTestRepository;
+    public LabTestService(LabTestRepository repository) {
+        this.repository = repository;
     }
 
+    // Get All
     public List<LabTest> getAllLabTests() {
-        return labTestRepository.findAll();
+        return repository.findAll();
     }
 
-    public LabTest getLabTestById(String id) {
-        return labTestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lab test record not found with ID: " + id));
+    // Get By Mongo Id
+    public Optional<LabTest> getLabTestById(String id) {
+        return repository.findById(id);
     }
 
-    public List<LabTest> getTestsByPatientId(String patientId) {
-        return labTestRepository.findByPatientId(patientId);
+    // Save
+    public LabTest saveLabTest(LabTest labTest) {
+        return repository.save(labTest);
     }
 
-    public LabTest createLabTest(LabTestRequestDTO dto) {
-        if (labTestRepository.existsByTestCode(dto.getTestCode())) {
-            throw new IllegalArgumentException("Test code " + dto.getTestCode() + " already exists.");
-        }
+    // Update
+    public LabTest updateLabTest(String id, LabTest updatedLabTest) {
 
-        LabTest test = new LabTest();
-        test.setTestCode(dto.getTestCode());
-        test.setPatientId(dto.getPatientId());
-        test.setTestName(dto.getTestName());
-        test.setCategory(dto.getCategory());
-        test.setCost(dto.getCost());
-        test.setStatus("PENDING");
-        test.setSampleCollectedAt(LocalDateTime.now());
+        LabTest existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lab Test not found"));
 
-        return labTestRepository.save(test);
+        existing.setLabTestId(updatedLabTest.getLabTestId());
+
+        existing.setAppointmentId(updatedLabTest.getAppointmentId());
+
+        existing.setPatientId(updatedLabTest.getPatientId());
+        existing.setPatientName(updatedLabTest.getPatientName());
+
+        existing.setLabId(updatedLabTest.getLabId());
+        existing.setLabName(updatedLabTest.getLabName());
+
+        existing.setDoctorName(updatedLabTest.getDoctorName());
+
+        existing.setTestName(updatedLabTest.getTestName());
+        existing.setSampleType(updatedLabTest.getSampleType());
+
+        existing.setTestDate(updatedLabTest.getTestDate());
+
+        existing.setResult(updatedLabTest.getResult());
+
+        existing.setStatus(updatedLabTest.getStatus());
+
+        existing.setPrice(updatedLabTest.getPrice());
+
+        return repository.save(existing);
     }
 
-    public LabTest updateTestResult(String id, LabResultUpdateDTO dto) {
-        LabTest test = getLabTestById(id);
-
-        test.setStatus(dto.getStatus());
-        test.setTestResult(dto.getTestResult());
-        test.setRemarks(dto.getRemarks());
-        test.setResultGeneratedAt(LocalDateTime.now());
-
-        return labTestRepository.save(test);
-    }
-
+    // Delete
     public void deleteLabTest(String id) {
-        if (!labTestRepository.existsById(id)) {
-            throw new RuntimeException("Lab test record not found with ID: " + id);
-        }
-        labTestRepository.deleteById(id);
+        repository.deleteById(id);
+    }
+
+    // Search by Patient
+    public List<LabTest> getByPatientId(String patientId) {
+        return repository.findByPatientId(patientId);
+    }
+
+    // Search by Appointment
+    public List<LabTest> getByAppointmentId(String appointmentId) {
+        return repository.findByAppointmentId(appointmentId);
+    }
+
+    // Search by Lab
+    public List<LabTest> getByLabId(String labId) {
+        return repository.findByLabId(labId);
+    }
+
+    // Search by Status
+    public List<LabTest> getByStatus(String status) {
+        return repository.findByStatus(status);
     }
 }

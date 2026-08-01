@@ -1,60 +1,89 @@
 package com.hospital.controller;
 
-
-import com.hospital.dto.LabResultUpdateDTO;
-import com.hospital.dto.LabTestRequestDTO;
 import com.hospital.model.LabTest;
 import com.hospital.service.LabTestService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/lab-tests")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/labtests")
+@CrossOrigin(origins = "http://localhost:5173")
 public class LabTestController {
 
-    private final LabTestService labTestService;
+    private final LabTestService service;
 
-    @Autowired
-    public LabTestController(LabTestService labTestService) {
-        this.labTestService = labTestService;
+    public LabTestController(LabTestService service) {
+        this.service = service;
     }
 
+    // Get All Lab Tests
     @GetMapping
-    public ResponseEntity<List<LabTest>> getAllLabTests() {
-        return ResponseEntity.ok(labTestService.getAllLabTests());
+    public List<LabTest> getAllLabTests() {
+        return service.getAllLabTests();
     }
 
+    // Get Lab Test by Mongo ID
     @GetMapping("/{id}")
     public ResponseEntity<LabTest> getLabTestById(@PathVariable String id) {
-        return ResponseEntity.ok(labTestService.getLabTestById(id));
+
+        return service.getLabTestById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<LabTest>> getTestsByPatientId(@PathVariable String patientId) {
-        return ResponseEntity.ok(labTestService.getTestsByPatientId(patientId));
-    }
-
+    // Create Lab Test
     @PostMapping
-    public ResponseEntity<LabTest> createLabTest(@Valid @RequestBody LabTestRequestDTO dto) {
-        return new ResponseEntity<>(labTestService.createLabTest(dto), HttpStatus.CREATED);
+    public ResponseEntity<LabTest> createLabTest(@RequestBody LabTest labTest) {
+
+        LabTest saved = service.saveLabTest(labTest);
+
+        return ResponseEntity.ok(saved);
     }
 
-    @PutMapping("/{id}/results")
-    public ResponseEntity<LabTest> updateTestResult(
-            @PathVariable String id, 
-            @Valid @RequestBody LabResultUpdateDTO dto) {
-        return ResponseEntity.ok(labTestService.updateTestResult(id, dto));
+    // Update Lab Test
+    @PutMapping("/{id}")
+    public ResponseEntity<LabTest> updateLabTest(
+            @PathVariable String id,
+            @RequestBody LabTest labTest) {
+
+        LabTest updated = service.updateLabTest(id, labTest);
+
+        return ResponseEntity.ok(updated);
     }
 
+    // Delete Lab Test
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLabTest(@PathVariable String id) {
-        labTestService.deleteLabTest(id);
+
+        service.deleteLabTest(id);
+
         return ResponseEntity.noContent().build();
     }
+
+    // Search by Patient
+    @GetMapping("/patient/{patientId}")
+    public List<LabTest> getByPatient(@PathVariable String patientId) {
+        return service.getByPatientId(patientId);
+    }
+
+    // Search by Appointment
+    @GetMapping("/appointment/{appointmentId}")
+    public List<LabTest> getByAppointment(@PathVariable String appointmentId) {
+        return service.getByAppointmentId(appointmentId);
+    }
+
+    // Search by Laboratory
+    @GetMapping("/lab/{labId}")
+    public List<LabTest> getByLab(@PathVariable String labId) {
+        return service.getByLabId(labId);
+    }
+
+    // Search by Status
+    @GetMapping("/status/{status}")
+    public List<LabTest> getByStatus(@PathVariable String status) {
+        return service.getByStatus(status);
+    }
+
 }

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LabForm from "../../../components/laboratory/lab/LabForm";
-// import "./AddLab.css";
-
+import { addLab } from "../../../services/labService";
 
 function AddLab() {
 
@@ -24,39 +23,48 @@ function AddLab() {
 
         const { name, value } = e.target;
 
-        setLab({
+        setLab((prev) => ({
 
-            ...lab,
+            ...prev,
 
             [name]: value
 
-        });
+        }));
 
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        console.log(lab);
+        try {
 
-        // Spring Boot API Call
+            await addLab(lab);
 
-        alert("Laboratory Added Successfully");
+            alert("Laboratory Added Successfully");
 
-        navigate("/laboratory/labs");
+            navigate("/laboratory/labs");
+
+        } catch (error) {
+
+            console.error("Error adding laboratory:", error);
+
+            alert("Failed to add laboratory.");
+
+        }
 
     };
 
     return (
 
-       <LabForm
-      lab={lab}
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
-      buttonText="Save"
-      onCancel={() => navigate("/laboratory/labs")}
-    />
+        <LabForm
+            lab={lab}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            buttonText="Save Laboratory"
+            isEdit={false}
+            onCancel={() => navigate("/laboratory/labs")}
+        />
 
     );
 

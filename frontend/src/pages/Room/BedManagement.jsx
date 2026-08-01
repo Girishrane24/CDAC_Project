@@ -1,236 +1,546 @@
+// import { useEffect, useState } from "react";
+// import "./BedManagement.css";
+
+// function BedManagement() {
+//   const [beds, setBeds] = useState([]);
+//   const [search, setSearch] = useState("");
+
+//   const [newBed, setNewBed] = useState({
+//     bedNumber: "",
+//     roomNumber: "",
+//     status: "Available",
+//   });
+
+//   useEffect(() => {
+//     loadBeds();
+//   }, []);
+
+//   const loadBeds = () => {
+//     // Replace this with API call later
+//     const sampleBeds = [
+//       {
+//         id: 1,
+//         bedNumber: "B101",
+//         roomNumber: "101",
+//         status: "Available",
+//       },
+//       {
+//         id: 2,
+//         bedNumber: "B102",
+//         roomNumber: "101",
+//         status: "Occupied",
+//       },
+//       {
+//         id: 3,
+//         bedNumber: "B201",
+//         roomNumber: "201",
+//         status: "Maintenance",
+//       },
+//     ];
+
+//     setBeds(sampleBeds);
+//   };
+
+//   const handleChange = (e) => {
+//     setNewBed({
+//       ...newBed,
+//       [e.target.name]: e.target.value,
+//     });
+//   };
+
+//   const addBed = () => {
+//     if (
+//       newBed.bedNumber === "" ||
+//       newBed.roomNumber === ""
+//     ) {
+//       alert("Please fill all fields");
+//       return;
+//     }
+
+//     const bed = {
+//       id: Date.now(),
+//       ...newBed,
+//     };
+
+//     setBeds([...beds, bed]);
+
+//     setNewBed({
+//       bedNumber: "",
+//       roomNumber: "",
+//       status: "Available",
+//     });
+//   };
+
+//   const deleteBed = (id) => {
+//     if (window.confirm("Delete this bed?")) {
+//       setBeds(beds.filter((bed) => bed.id !== id));
+//     }
+//   };
+
+//   const toggleStatus = (id) => {
+//     setBeds(
+//       beds.map((bed) => {
+//         if (bed.id === id) {
+//           let nextStatus = "Available";
+
+//           if (bed.status === "Available") {
+//             nextStatus = "Occupied";
+//           } else if (bed.status === "Occupied") {
+//             nextStatus = "Maintenance";
+//           }
+
+//           return {
+//             ...bed,
+//             status: nextStatus,
+//           };
+//         }
+
+//         return bed;
+//       })
+//     );
+//   };
+
+//   const filteredBeds = beds.filter(
+//     (bed) =>
+//       bed.bedNumber
+//         .toLowerCase()
+//         .includes(search.toLowerCase()) ||
+//       bed.roomNumber
+//         .toLowerCase()
+//         .includes(search.toLowerCase())
+//   );
+
+//   return (
+//     <div className="bed-management">
+
+//       <div className="header">
+
+//         <h2>Bed Management</h2>
+
+//         <input
+//           type="text"
+//           placeholder="Search Bed..."
+//           value={search}
+//           onChange={(e) =>
+//             setSearch(e.target.value)
+//           }
+//         />
+
+//       </div>
+
+//       <div className="bed-form">
+
+//         <input
+//           type="text"
+//           name="bedNumber"
+//           placeholder="Bed Number"
+//           value={newBed.bedNumber}
+//           onChange={handleChange}
+//         />
+
+//         <input
+//           type="text"
+//           name="roomNumber"
+//           placeholder="Room Number"
+//           value={newBed.roomNumber}
+//           onChange={handleChange}
+//         />
+
+//         <select
+//           name="status"
+//           value={newBed.status}
+//           onChange={handleChange}
+//         >
+//           <option>Available</option>
+//           <option>Occupied</option>
+//           <option>Maintenance</option>
+//         </select>
+
+//         <button onClick={addBed}>
+//           Add Bed
+//         </button>
+
+//       </div>
+
+//       <table>
+
+//         <thead>
+
+//           <tr>
+//             <th>Bed No</th>
+//             <th>Room</th>
+//             <th>Status</th>
+//             <th>Actions</th>
+//           </tr>
+
+//         </thead>
+
+//         <tbody>
+
+//           {filteredBeds.length === 0 ? (
+//             <tr>
+//               <td colSpan="4">
+//                 No Beds Found
+//               </td>
+//             </tr>
+//           ) : (
+//             filteredBeds.map((bed) => (
+//               <tr key={bed.id}>
+
+//                 <td>{bed.bedNumber}</td>
+
+//                 <td>{bed.roomNumber}</td>
+
+//                 <td>
+//                   <span
+//                     className={`status ${bed.status.toLowerCase()}`}
+//                   >
+//                     {bed.status}
+//                   </span>
+//                 </td>
+
+//                 <td>
+
+//                   <button
+//                     className="statusBtn"
+//                     onClick={() =>
+//                       toggleStatus(bed.id)
+//                     }
+//                   >
+//                     Change Status
+//                   </button>
+
+//                   <button
+//                     className="deleteBtn"
+//                     onClick={() =>
+//                       deleteBed(bed.id)
+//                     }
+//                   >
+//                     Delete
+//                   </button>
+
+//                 </td>
+
+//               </tr>
+//             ))
+//           )}
+
+//         </tbody>
+
+//       </table>
+
+//     </div>
+//   );
+// }
+
+// export default BedManagement;
+
 import { useEffect, useState } from "react";
 import "./BedManagement.css";
+import bedService from "../../services/bedService";
 
 function BedManagement() {
-  const [beds, setBeds] = useState([]);
-  const [search, setSearch] = useState("");
 
-  const [newBed, setNewBed] = useState({
-    bedNumber: "",
-    roomNumber: "",
-    status: "Available",
-  });
+    const [beds, setBeds] = useState([]);
+    const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    loadBeds();
-  }, []);
-
-  const loadBeds = () => {
-    // Replace this with API call later
-    const sampleBeds = [
-      {
-        id: 1,
-        bedNumber: "B101",
-        roomNumber: "101",
+    const [newBed, setNewBed] = useState({
+        bedNumber: "",
+        roomNumber: "",
         status: "Available",
-      },
-      {
-        id: 2,
-        bedNumber: "B102",
-        roomNumber: "101",
-        status: "Occupied",
-      },
-      {
-        id: 3,
-        bedNumber: "B201",
-        roomNumber: "201",
-        status: "Maintenance",
-      },
-    ];
-
-    setBeds(sampleBeds);
-  };
-
-  const handleChange = (e) => {
-    setNewBed({
-      ...newBed,
-      [e.target.name]: e.target.value,
     });
-  };
 
-  const addBed = () => {
-    if (
-      newBed.bedNumber === "" ||
-      newBed.roomNumber === ""
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
+    useEffect(() => {
+        loadBeds();
+    }, []);
 
-    const bed = {
-      id: Date.now(),
-      ...newBed,
-    };
+    // ===========================
+    // Load Beds
+    // ===========================
 
-    setBeds([...beds, bed]);
+    const loadBeds = async () => {
 
-    setNewBed({
-      bedNumber: "",
-      roomNumber: "",
-      status: "Available",
-    });
-  };
+        try {
 
-  const deleteBed = (id) => {
-    if (window.confirm("Delete this bed?")) {
-      setBeds(beds.filter((bed) => bed.id !== id));
-    }
-  };
+            const response = await bedService.getAllBeds();
 
-  const toggleStatus = (id) => {
-    setBeds(
-      beds.map((bed) => {
-        if (bed.id === id) {
-          let nextStatus = "Available";
+            setBeds(response.data);
 
-          if (bed.status === "Available") {
-            nextStatus = "Occupied";
-          } else if (bed.status === "Occupied") {
-            nextStatus = "Maintenance";
-          }
+        } catch (error) {
 
-          return {
-            ...bed,
-            status: nextStatus,
-          };
+            console.error("Error loading beds:", error);
+
+            alert("Failed to load beds.");
+
         }
 
-        return bed;
-      })
-    );
-  };
+    };
 
-  const filteredBeds = beds.filter(
+    // ===========================
+    // Handle Input Change
+    // ===========================
+
+    const handleChange = (e) => {
+
+        const { name, value } = e.target;
+
+        setNewBed({
+
+            ...newBed,
+
+            [name]: value
+
+        });
+
+    };
+
+    // ===========================
+    // Add Bed
+    // ===========================
+
+    const addBed = async () => {
+
+        if (
+            newBed.bedNumber.trim() === "" ||
+            newBed.roomNumber.trim() === ""
+        ) {
+
+            alert("Please fill all fields");
+
+            return;
+
+        }
+
+        try {
+
+            await bedService.addBed(newBed);
+
+            alert("Bed added successfully.");
+
+            loadBeds();
+
+            setNewBed({
+
+                bedNumber: "",
+                roomNumber: "",
+                status: "Available",
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to add bed."
+            );
+
+        }
+
+    };
+
+   // Delete Bed
+const deleteBed = async (id) => {
+
+    if (window.confirm("Delete this bed?")) {
+
+        try {
+
+            await bedService.deleteBed(id);
+
+            alert("Bed deleted successfully.");
+
+            loadBeds();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to delete bed.");
+
+        }
+
+    }
+
+};
+
+// Change Bed Status
+const toggleStatus = async (bed) => {
+
+    let nextStatus = "Available";
+
+    if (bed.status === "Available") {
+
+        nextStatus = "Occupied";
+
+    } else if (bed.status === "Occupied") {
+
+        nextStatus = "Maintenance";
+
+    }
+
+    try {
+
+        await bedService.changeStatus(
+            bed.id,
+            nextStatus
+        );
+
+        loadBeds();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to update bed status.");
+
+    }
+
+};
+
+const filteredBeds = beds.filter(
     (bed) =>
-      bed.bedNumber
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      bed.roomNumber
-        .toLowerCase()
-        .includes(search.toLowerCase())
-  );
+        bed.bedNumber
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+        bed.roomNumber
+            .toLowerCase()
+            .includes(search.toLowerCase())
+);
 
-  return (
-    <div className="bed-management">
+return (
 
-      <div className="header">
+    <div>
 
-        <h2>Bed Management</h2>
+        <div className="header">
 
-        <input
-          type="text"
-          placeholder="Search Bed..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-        />
+            <h2>Bed Management</h2>
 
-      </div>
+            <input
+                type="text"
+                placeholder="Search Bed..."
+                value={search}
+                onChange={(e) =>
+                    setSearch(e.target.value)
+                }
+            />
 
-      <div className="bed-form">
+        </div>
 
-        <input
-          type="text"
-          name="bedNumber"
-          placeholder="Bed Number"
-          value={newBed.bedNumber}
-          onChange={handleChange}
-        />
+        <div className="bed-form">
 
-        <input
-          type="text"
-          name="roomNumber"
-          placeholder="Room Number"
-          value={newBed.roomNumber}
-          onChange={handleChange}
-        />
+            <input
+                type="text"
+                name="bedNumber"
+                placeholder="Bed Number"
+                value={newBed.bedNumber}
+                onChange={handleChange}
+            />
 
-        <select
-          name="status"
-          value={newBed.status}
-          onChange={handleChange}
-        >
-          <option>Available</option>
-          <option>Occupied</option>
-          <option>Maintenance</option>
-        </select>
+            <input
+                type="text"
+                name="roomNumber"
+                placeholder="Room Number"
+                value={newBed.roomNumber}
+                onChange={handleChange}
+            />
 
-        <button onClick={addBed}>
-          Add Bed
-        </button>
+            <select
+                name="status"
+                value={newBed.status}
+                onChange={handleChange}
+            >
+                <option>Available</option>
+                <option>Occupied</option>
+                <option>Maintenance</option>
+            </select>
 
-      </div>
+            <button onClick={addBed}>
+                Add Bed
+            </button>
 
-      <table>
+        </div>
 
-        <thead>
+        <table>
 
-          <tr>
-            <th>Bed No</th>
-            <th>Room</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
+            <thead>
 
-        </thead>
+                <tr>
+                    <th>Bed No</th>
+                    <th>Room</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
 
-        <tbody>
+            </thead>
 
-          {filteredBeds.length === 0 ? (
-            <tr>
-              <td colSpan="4">
-                No Beds Found
-              </td>
-            </tr>
-          ) : (
-            filteredBeds.map((bed) => (
-              <tr key={bed.id}>
+            <tbody>
 
-                <td>{bed.bedNumber}</td>
+                {filteredBeds.length === 0 ? (
 
-                <td>{bed.roomNumber}</td>
+                    <tr>
+                        <td colSpan="4">
+                            No Beds Found
+                        </td>
+                    </tr>
 
-                <td>
-                  <span
-                    className={`status ${bed.status.toLowerCase()}`}
-                  >
-                    {bed.status}
-                  </span>
-                </td>
+                ) : (
 
-                <td>
+                    filteredBeds.map((bed) => (
 
-                  <button
-                    className="statusBtn"
-                    onClick={() =>
-                      toggleStatus(bed.id)
-                    }
-                  >
-                    Change Status
-                  </button>
+                        <tr key={bed.id}>
 
-                  <button
-                    className="deleteBtn"
-                    onClick={() =>
-                      deleteBed(bed.id)
-                    }
-                  >
-                    Delete
-                  </button>
+                            <td>{bed.bedNumber}</td>
 
-                </td>
+                            <td>{bed.roomNumber}</td>
 
-              </tr>
-            ))
-          )}
+                            <td>
 
-        </tbody>
+                                <span
+                                    className={`status ${bed.status.toLowerCase()}`}
+                                >
+                                    {bed.status}
+                                </span>
 
-      </table>
+                            </td>
+
+                            <td>
+
+                                <button
+                                    className="statusBtn"
+                                    onClick={() =>
+                                        toggleStatus(bed)
+                                    }
+                                >
+                                    Change Status
+                                </button>
+
+                                <button
+                                    className="deleteBtn"
+                                    onClick={() =>
+                                        deleteBed(bed.id)
+                                    }
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    ))
+
+                )}
+
+            </tbody>
+
+        </table>
 
     </div>
-  );
+
+);
+
 }
 
 export default BedManagement;

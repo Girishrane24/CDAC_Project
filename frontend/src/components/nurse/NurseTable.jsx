@@ -1,14 +1,43 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./NurseTable.css";
+import { deleteNurse } from "../../services/nurseService";
 
 function NurseTable({ nurses }) {
+
+const handleDelete = async (id) => {
+
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete this nurse?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+
+        await deleteNurse(id);
+
+        alert("Nurse deleted successfully.");
+
+        // Reload the list
+        window.location.reload();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to delete nurse.");
+
+    }
+
+};
+
   return (
     <div className="nurse-table-wrapper">
       <table className="nurse-table">
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
@@ -22,8 +51,8 @@ function NurseTable({ nurses }) {
         <tbody>
           {nurses && nurses.length > 0 ? (
             nurses.map((nurse) => (
-              <tr key={nurse.id}>
-                <td>{nurse.id}</td>
+              <tr key={nurse.nurseId}>
+                {/* <td>{nurse.nurseId}</td> */}
 
                 <td>{nurse.name}</td>
 
@@ -48,13 +77,21 @@ function NurseTable({ nurses }) {
                 </td>
 
                 <td>
-                  <NavLink to={`/nurses/${nurse.id}`}>
-                    <button className="view-btn">View</button>
+                  <NavLink to={`/nurses/${nurse.nurseId}`}>
+                    <button className="view-btn p-2">View</button>
                   </NavLink>
 
-                  <NavLink to={`/nurses/edit/${nurse.id}`}>
-                    <button className="edit-btn">Edit</button>
+                  <NavLink to={`/nurses/edit/${nurse.nurseId}`}>
+                    <button className="edit-btn p-2">Edit</button>
                   </NavLink>
+
+   <button
+    className="delete-btn p-2"
+    onClick={() => handleDelete(nurse.nurseId)}
+>
+    Delete
+</button>
+
                 </td>
               </tr>
             ))

@@ -2,10 +2,6 @@ package com.hospital.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Document(collection = "users")
 public class User {
@@ -13,61 +9,68 @@ public class User {
     @Id
     private String id;
 
-//    @NotBlank(message = "Username is required")
-    private String username;
+    private String name;
 
-//    @Email(message = "Invalid email format")
-//    @NotBlank(message = "Email is required")
     private String email;
 
-//    @NotBlank(message = "Password is required")
     private String password;
 
-    private String fullName;
-    private String phone;
-    private Set<String> roles; // e.g., ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_RECEPTIONIST
-    private boolean enabled = true; // For Admin activation/deactivation
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime lastLogin;
+//    private String role;
 
-    public User() {}
-
-    public User(String username, String email, String password, String fullName, Set<String> roles) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-        this.roles = roles;
+    private Role role;
+    
+    public User() {
     }
 
-    // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+	public User(String id, String name, String email, String password, Role role) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+	}
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+	public String getId() {
+		return id;
+	}
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+	public String getName() {
+		return name;
+	}
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+	public String getEmail() {
+		return email;
+	}
 
-    public Set<String> getRoles() { return roles; }
-    public void setRoles(Set<String> roles) { this.roles = roles; }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public boolean isEnabled() { return enabled; }
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
+	public String getPassword() {
+		return password;
+	}
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public LocalDateTime getLastLogin() { return lastLogin; }
-    public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	
+   
 }

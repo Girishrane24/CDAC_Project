@@ -11,7 +11,7 @@ export const getDoctorById = (id) => {
 export const addDoctor = (doctor) => {
   return api.post("/doctors", doctor);
 };
-
+  
 export const updateDoctor = (id, doctor) => {
   return api.put(`/doctors/${id}`, doctor);
 };

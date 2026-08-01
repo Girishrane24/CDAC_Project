@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import "./AddRoom.css";
-// import roomService from "../../services/roomService";
+import roomService from "../../services/roomService";
 import RoomForm from "../../components/room/RoomForm";
 
 
@@ -30,7 +29,7 @@ function AddRoom() {
     try {
       await roomService.addRoom(room);
       alert("Room added successfully!");
-      navigate("/rooms");
+      // navigate("/rooms");
     } catch (error) {
       console.error(error);
       alert("Failed to add room.");

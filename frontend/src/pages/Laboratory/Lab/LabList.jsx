@@ -1,218 +1,139 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LabList.css";
+import { getLabs, deleteLab } from "../../../services/labService";
 
 function LabList() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [labs, setLabs] = useState([]);
 
-    const [labs, setLabs] = useState([]);
+  const [search, setSearch] = useState("");
 
-    const [search, setSearch] = useState("");
+  useEffect(() => {
+    loadLabs();
+  }, []);
 
-    useEffect(() => {
-        loadLabs();
-    }, []);
+  const loadLabs = async () => {
+    try {
+      const res = await getLabs();
 
-    const loadLabs = () => {
+      setLabs(res.data);
+    } catch (error) {
+      console.error("Error loading laboratories:", error);
+    }
+  };
 
-        // Replace with Spring Boot API
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this laboratory?")) {
+      return;
+    }
 
-        const data = [
+    try {
+      await deleteLab(id);
 
-            {
-                labId: "LAB001",
-                labName: "Central Pathology Lab",
-                location: "First Floor",
-                phone: "9876543210"
-            },
+      alert("Laboratory deleted successfully.");
 
-            {
-                labId: "LAB002",
-                labName: "Radiology Lab",
-                location: "Ground Floor",
-                phone: "9988776655"
-            },
+      loadLabs();
+    } catch (error) {
+      console.error(error);
 
-            {
-                labId: "LAB003",
-                labName: "Blood Bank Lab",
-                location: "Second Floor",
-                phone: "9123456789"
-            }
+      alert("Unable to delete laboratory.");
+    }
+  };
 
-        ];
-
-        setLabs(data);
-
-    };
-
-    const deleteLab = (id) => {
-
-        if (window.confirm("Delete this Laboratory?")) {
-
-            setLabs(
-                labs.filter(
-                    lab => lab.labId !== id
-                )
-            );
-
-            alert("Laboratory Deleted Successfully");
-
-        }
-
-    };
-
-    const filteredLabs = labs.filter(lab =>
-
-        lab.labId.toLowerCase().includes(search.toLowerCase()) ||
-
-        lab.labName.toLowerCase().includes(search.toLowerCase()) ||
-
-        lab.location.toLowerCase().includes(search.toLowerCase())
-
-    );
+  const filteredLabs = labs.filter((lab) => {
+    const keyword = search.toLowerCase();
 
     return (
-
-        <div className="lab-container">
-
-            <div className="lab-header">
-
-                <h2>Laboratory List</h2>
-
-                <button
-                    onClick={() => navigate("/laboratory/labs/add")}
-                >
-                    + Add Laboratory
-                </button>
-
-            </div>
-
-            <div className="search-box">
-
-                <input
-
-                    type="text"
-
-                    placeholder="Search Laboratory..."
-
-                    value={search}
-
-                    onChange={(e) => setSearch(e.target.value)}
-
-                />
-
-            </div>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>Lab ID</th>
-
-                        <th>Laboratory Name</th>
-
-                        <th>Location</th>
-
-                        <th>Phone</th>
-
-                        <th>Actions</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {
-
-                        filteredLabs.length === 0 ?
-
-                            (
-
-                                <tr>
-
-                                    <td colSpan="5">
-
-                                        No Laboratories Found
-
-                                    </td>
-
-                                </tr>
-
-                            )
-
-                            :
-
-                            filteredLabs.map(lab => (
-
-                                <tr key={lab.labId}>
-
-                                    <td>{lab.labId}</td>
-
-                                    <td>{lab.labName}</td>
-
-                                    <td>{lab.location}</td>
-
-                                    <td>{lab.phone}</td>
-
-                                    <td>
-
-                                        <button
-
-                                            className="view-btn"
-
-                                            onClick={() => navigate(`/laboratory/labs/details/${lab.labId}`)}
-
-                                        >
-
-                                            View
-
-                                        </button>
-
-                                        <button
-
-                                            className="edit-btn"
-
-                                            onClick={() => navigate(`/laboratory/labs/edit/${lab.labId}`)}
-
-                                        >
-
-                                            Edit
-
-                                        </button>
-
-                                        <button
-
-                                            className="delete-btn"
-
-                                            onClick={() => deleteLab(lab.labId)}
-
-                                        >
-
-                                            Delete
-
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-                            ))
-
-                    }
-
-                </tbody>
-
-            </table>
-
-        </div>
-
+      lab.labId?.toLowerCase().includes(keyword) ||
+      lab.labName?.toLowerCase().includes(keyword) ||
+      lab.location?.toLowerCase().includes(keyword) ||
+      lab.phone?.toLowerCase().includes(keyword)
     );
+  });
 
+  return (
+    <div className="lab-container">
+      <div className="lab-header">
+        <h2>Laboratory List</h2>
+
+        <button onClick={() => navigate("/laboratory/labs/add")}>
+          + Add Laboratory
+        </button>
+      </div>
+
+      <div className="search-box">
+        <input
+          type="text"
+          placeholder="Search Laboratory..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Lab ID</th>
+            <th>Laboratory Name</th>
+            <th>Location</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {filteredLabs.length === 0 ? (
+            <tr>
+              <td colSpan="5" style={{ textAlign: "center" }}>
+                No Laboratories Found
+              </td>
+            </tr>
+          ) : (
+            filteredLabs.map((lab) => (
+              <tr key={lab.labId}>
+                <td>{lab.labId}</td>
+
+                <td>{lab.labName}</td>
+
+                <td>{lab.location}</td>
+
+                <td>{lab.phone}</td>
+
+                <td>
+                  <button
+                    className="view-btn"
+                    onClick={() =>
+                      navigate(`/laboratory/labs/details/${lab.labId}`)
+                    }
+                  >
+                    View
+                  </button>
+
+                  <button
+                    className="edit-btn p-2"
+                    onClick={() =>
+                      navigate(`/laboratory/labs/edit/${lab.labId}`)
+                    }
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(lab.labId)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default LabList;

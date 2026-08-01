@@ -1,4 +1,7 @@
+
+
 import "./LabTestForm.css";
+import labTests from "../../../data/labTests";
 
 function LabTestForm({
   labTest,
@@ -13,13 +16,11 @@ function LabTestForm({
 }) {
   return (
     <div className="labtest-form-container">
-
       <div className="labtest-form-card">
-
         <h2>{isEdit ? "Edit Lab Test" : "Add Lab Test"}</h2>
 
         <form onSubmit={handleSubmit}>
-
+          {/* Lab Test ID */}
           <div className="form-group">
             <label>Lab Test ID</label>
 
@@ -28,13 +29,13 @@ function LabTestForm({
               name="labTestId"
               value={labTest.labTestId}
               onChange={handleChange}
-              readOnly={isEdit}
+              disabled={isEdit}
               required
             />
           </div>
 
+          {/* Appointment */}
           <div className="form-group">
-
             <label>Appointment</label>
 
             <select
@@ -46,20 +47,15 @@ function LabTestForm({
               <option value="">Select Appointment</option>
 
               {appointments.map((appointment) => (
-                <option
-                  key={appointment.id}
-                  value={appointment.id}
-                >
-                  {appointment.id}
+                <option key={appointment.id} value={appointment.id}>
+                  {appointment.patientName} ({appointment.appointmentDate})
                 </option>
               ))}
-
             </select>
-
           </div>
 
+          {/* Patient */}
           <div className="form-group">
-
             <label>Patient</label>
 
             <select
@@ -71,20 +67,15 @@ function LabTestForm({
               <option value="">Select Patient</option>
 
               {patients.map((patient) => (
-                <option
-                  key={patient.id}
-                  value={patient.id}
-                >
-                  {patient.id} - {patient.name}
+                <option key={patient.id} value={patient.id}>
+                  {patient.firstName} {patient.lastName}
                 </option>
               ))}
-
             </select>
-
           </div>
 
+          {/* Laboratory */}
           <div className="form-group">
-
             <label>Laboratory</label>
 
             <select
@@ -96,56 +87,52 @@ function LabTestForm({
               <option value="">Select Laboratory</option>
 
               {labs.map((lab) => (
-                <option
-                  key={lab.id}
-                  value={lab.id}
-                >
-                  {lab.name}
+                <option key={lab.labId} value={lab.labId}>
+                  {lab.labName}
                 </option>
               ))}
-
             </select>
-
           </div>
 
+          {/* Test Name */}
           <div className="form-group">
-
             <label>Test Name</label>
 
-            <input
-              type="text"
+            <select
               name="testName"
               value={labTest.testName}
               onChange={handleChange}
-              placeholder="Enter Test Name"
-              required
-            />
-
-          </div>
-
-          <div className="form-group">
-
-            <label>Sample Type</label>
-
-            <select
-              name="sampleType"
-              value={labTest.sampleType}
-              onChange={handleChange}
               required
             >
-              <option value="">Select Sample Type</option>
-              <option value="Blood">Blood</option>
-              <option value="Urine">Urine</option>
-              <option value="Saliva">Saliva</option>
-              <option value="X-Ray">X-Ray</option>
-              <option value="ECG">ECG</option>
-              <option value="MRI">MRI</option>
-            </select>
+              <option value="">Select Test</option>
 
+              {labTests.map((test) => (
+                <option key={test.testName} value={test.testName}>
+                  {test.testName}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
+    <label>Doctor</label>
 
+    <input
+        type="text"
+        value={labTest.doctorName}
+        disabled
+    />
+</div>
+
+          {/* Sample Type */}
+          <div className="form-group">
+            <label>Sample Type</label>
+
+            <input type="text" value={labTest.sampleType} disabled />
+          </div>
+
+          {/* Test Date */}
+          <div className="form-group">
             <label>Test Date</label>
 
             <input
@@ -155,11 +142,17 @@ function LabTestForm({
               onChange={handleChange}
               required
             />
-
           </div>
 
+          {/* Price */}
           <div className="form-group">
+            <label>Price (₹)</label>
 
+            <input type="number" value={labTest.price ?? ""} disabled />
+          </div>
+
+          {/* Result */}
+          <div className="form-group">
             <label>Result</label>
 
             <textarea
@@ -167,50 +160,43 @@ function LabTestForm({
               value={labTest.result}
               onChange={handleChange}
               rows="4"
-              placeholder="Enter Test Result"
+              placeholder={
+                isEdit
+                  ? "Enter Test Result"
+                  : "Result will be added after the test is completed"
+              }
+              disabled={!isEdit}
             />
-
           </div>
 
+          {/* Status */}
           <div className="form-group">
-
             <label>Status</label>
 
             <select
               name="status"
               value={labTest.status}
               onChange={handleChange}
+              disabled={!isEdit}
             >
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>
-
           </div>
 
+          {/* Buttons */}
           <div className="button-group">
-
-            <button
-              type="submit"
-              className="save-btn"
-            >
+            <button type="submit" className="save-btn">
               {buttonText}
             </button>
 
-            <button
-              type="button"
-              className="cancel-btn"
-              onClick={onCancel}
-            >
+            <button type="button" className="cancel-btn p-2 mt-4" onClick={onCancel}>
               Cancel
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </div>
   );
 }

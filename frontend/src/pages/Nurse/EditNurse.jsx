@@ -1,533 +1,386 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getNurseById, updateNurse } from "../../services/nurseService";
 import "./EditNurse.css";
 
 function EditNurse() {
+    const { id } = useParams();
+    const navigate = useNavigate();
 
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-
-  const [nurse, setNurse] = useState({
-
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    qualification: "",
-    experience: "",
-    department: "",
-    shift: "",
-    joiningDate: "",
-    availabilityStatus: ""
-
-  });
-
-
-
-  useEffect(() => {
-
-
-    // Replace with API call
-    // axios.get(`http://localhost:8080/api/nurses/${id}`)
-
-
-    const nurseData = {
-
-      name: "Priya Sharma",
-      email: "priya@gmail.com",
-      phone: "9876543210",
-      gender: "Female",
-      qualification: "B.Sc Nursing",
-      experience: 3,
-      department: "ICU",
-      shift: "Morning",
-      joiningDate: "2026-07-20",
-      availabilityStatus: "Available"
-
-    };
-
-
-    setNurse(nurseData);
-
-
-  }, [id]);
-
-
-
-
-  const handleChange = (e) => {
-
-
-    setNurse({
-
-      ...nurse,
-
-      [e.target.name]: e.target.value
-
+    const [nurse, setNurse] = useState({
+        nurseId: "",
+        name: "",
+        email: "",
+        phone: "",
+        gender: "",
+        qualification: "",
+        experience: "",
+        department: "",
+        shift: "",
+        joiningDate: "",
+        availabilityStatus: "",
     });
 
+    const [loading, setLoading] = useState(true);
 
-  };
+    useEffect(() => {
+        loadNurse();
+    }, [id]);
 
+    const loadNurse = async () => {
+        try {
+            const res = await getNurseById(id);
 
+            // If your service returns axios response
+            const data = res.data ? res.data : res;
 
+            setNurse({
+                nurseId: data.nurseId || "",
+                name: data.name || "",
+                email: data.email || "",
+                phone: data.phone || "",
+                gender: data.gender || "",
+                qualification: data.qualification || "",
+                experience: data.experience || "",
+                department: data.department || "",
+                shift: data.shift || "",
+                joiningDate: data.joiningDate
+                    ? data.joiningDate.substring(0, 10)
+                    : "",
+                availabilityStatus: data.availabilityStatus || "",
+            });
+        } catch (error) {
+            console.error("Error fetching nurse:", error);
+            alert("Failed to load nurse details.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-  const handleSubmit = (e) => {
+        setNurse((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    e.preventDefault();
+        try {
+            await updateNurse(id, nurse);
 
+            alert("Nurse Updated Successfully");
 
-    console.log("Updated Nurse :", nurse);
+            navigate("/nurses");
+        } catch (error) {
+            console.error(error);
+            alert("Failed to update nurse.");
+        }
+    };
 
+    if (loading) {
+        return (
+            <div className="container mt-5 text-center">
+                <h4>Loading Nurse Details...</h4>
+            </div>
+        );
+    }
 
-    // API PUT call
-    // axios.put(`http://localhost:8080/api/nurses/${id}`, nurse)
+    return (
+        <div className="container mt-4">
+            <div className="card shadow-lg border-0">
 
+                <div className="card-header bg-primary text-white">
+                    <h3 className="mb-0">
+                        Edit Nurse
+                    </h3>
+                </div>
 
-    alert("Nurse Updated Successfully");
+                <div className="card-body">
 
+                    <form onSubmit={handleSubmit}>
 
-    navigate("/nurses");
+                        <div className="row">
 
+                            {/* Nurse ID */}
 
-  };
+                            {/* <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Nurse ID
+                                </label>
 
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={nurse.nurseId}
+                                    disabled
+                                />
+                            </div> */}
 
+                            {/* Name */}
 
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Name
+                                </label>
 
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    value={nurse.name}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
-  return (
+                            {/* Email */}
 
-    <div className="edit-nurse-container">
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Email
+                                </label>
 
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name="email"
+                                    value={nurse.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
-      <div className="edit-form-card">
+                            {/* Phone */}
 
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Phone
+                                </label>
 
-        <h2>
-          ✏️ Edit Nurse
-        </h2>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="phone"
+                                    value={nurse.phone}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
+                            {/* Gender */}
 
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Gender
+                                </label>
 
-        <form onSubmit={handleSubmit}>
+                                <select
+                                    className="form-select"
+                                    name="gender"
+                                    value={nurse.gender}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">
+                                        Select Gender
+                                    </option>
 
+                                    <option value="Male">
+                                        Male
+                                    </option>
 
-          <div className="form-row">
+                                    <option value="Female">
+                                        Female
+                                    </option>
 
+                                    <option value="Other">
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
 
-            <div className="form-group">
+                            {/* Qualification */}
 
-              <label>Name</label>
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Qualification
+                                </label>
 
-              <input
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="qualification"
+                                    value={nurse.qualification}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
-                type="text"
+                            {/* Experience */}
 
-                name="name"
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Experience
+                                </label>
 
-                value={nurse.name}
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="experience"
+                                    value={nurse.experience}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
-                onChange={handleChange}
+                            {/* Department */}
 
-                required
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Department
+                                </label>
 
-              />
+                                <select
+                                    className="form-select"
+                                    name="department"
+                                    value={nurse.department}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">
+                                        Select Department
+                                    </option>
+
+                                    <option value="ICU">
+                                        ICU
+                                    </option>
+
+                                    <option value="Emergency">
+                                        Emergency
+                                    </option>
+
+                                    <option value="General Ward">
+                                        General Ward
+                                    </option>
+
+                                    <option value="Operation Theatre">
+                                        Operation Theatre
+                                    </option>
+                                </select>
+                            </div>
+
+                            {/* Shift */}
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Shift
+                                </label>
+
+                                <select
+                                    className="form-select"
+                                    name="shift"
+                                    value={nurse.shift}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">
+                                        Select Shift
+                                    </option>
+
+                                    <option value="Morning">
+                                        Morning
+                                    </option>
+
+                                    <option value="Evening">
+                                        Evening
+                                    </option>
+
+                                    <option value="Night">
+                                        Night
+                                    </option>
+                                </select>
+                            </div>
+
+                            {/* Joining Date */}
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Joining Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    name="joiningDate"
+                                    value={nurse.joiningDate}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            {/* Status */}
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Availability Status
+                                </label>
+
+                                <select
+                                    className="form-select"
+                                    name="availabilityStatus"
+                                    value={nurse.availabilityStatus}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">
+                                        Select Status
+                                    </option>
+
+                                    <option value="Available">
+                                        Available
+                                    </option>
+
+                                    <option value="Assigned">
+                                        Assigned
+                                    </option>
+
+                                    <option value="Leave">
+                                        Leave
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div className="text-end mt-4">
+
+                            <button
+                                type="button"
+                                className="btn btn-secondary me-2"
+                                onClick={() => navigate("/nurses")}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                            >
+                                Update Nurse
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
 
             </div>
-
-
-
-
-            <div className="form-group">
-
-              <label>Email</label>
-
-              <input
-
-                type="email"
-
-                name="email"
-
-                value={nurse.email}
-
-                onChange={handleChange}
-
-                required
-
-              />
-
-            </div>
-
-
-          </div>
-
-
-
-
-
-          <div className="form-row">
-
-
-            <div className="form-group">
-
-              <label>Phone</label>
-
-
-              <input
-
-                type="text"
-
-                name="phone"
-
-                value={nurse.phone}
-
-                onChange={handleChange}
-
-                required
-
-              />
-
-
-            </div>
-
-
-
-            <div className="form-group">
-
-
-              <label>Gender</label>
-
-
-              <select
-
-                name="gender"
-
-                value={nurse.gender}
-
-                onChange={handleChange}
-
-              >
-
-                <option>
-                  Male
-                </option>
-
-                <option>
-                  Female
-                </option>
-
-                <option>
-                  Other
-                </option>
-
-
-              </select>
-
-
-            </div>
-
-
-          </div>
-
-
-
-
-
-          <div className="form-row">
-
-
-            <div className="form-group">
-
-
-              <label>
-                Qualification
-              </label>
-
-
-              <input
-
-                type="text"
-
-                name="qualification"
-
-                value={nurse.qualification}
-
-                onChange={handleChange}
-
-                required
-
-              />
-
-
-            </div>
-
-
-
-
-
-            <div className="form-group">
-
-
-              <label>
-                Experience
-              </label>
-
-
-              <input
-
-                type="number"
-
-                name="experience"
-
-                value={nurse.experience}
-
-                onChange={handleChange}
-
-                required
-
-              />
-
-
-            </div>
-
-
-          </div>
-
-
-
-
-
-
-
-          <div className="form-row">
-
-
-            <div className="form-group">
-
-
-              <label>
-                Department
-              </label>
-
-
-              <select
-
-                name="department"
-
-                value={nurse.department}
-
-                onChange={handleChange}
-
-              >
-
-
-                <option>
-                  ICU
-                </option>
-
-
-                <option>
-                  Emergency
-                </option>
-
-
-                <option>
-                  General Ward
-                </option>
-
-
-                <option>
-                  Operation Theatre
-                </option>
-
-
-              </select>
-
-
-            </div>
-
-
-
-
-
-            <div className="form-group">
-
-
-              <label>
-                Shift
-              </label>
-
-
-              <select
-
-                name="shift"
-
-                value={nurse.shift}
-
-                onChange={handleChange}
-
-              >
-
-
-                <option>
-                  Morning
-                </option>
-
-
-                <option>
-                  Evening
-                </option>
-
-
-                <option>
-                  Night
-                </option>
-
-
-              </select>
-
-
-            </div>
-
-
-          </div>
-
-
-
-
-
-
-
-          <div className="form-row">
-
-
-            <div className="form-group">
-
-
-              <label>
-                Joining Date
-              </label>
-
-
-              <input
-
-                type="date"
-
-                name="joiningDate"
-
-                value={nurse.joiningDate}
-
-                onChange={handleChange}
-
-              />
-
-
-            </div>
-
-
-
-
-
-            <div className="form-group">
-
-
-              <label>
-                Status
-              </label>
-
-
-              <select
-
-                name="availabilityStatus"
-
-                value={nurse.availabilityStatus}
-
-                onChange={handleChange}
-
-              >
-
-
-                <option>
-                  Available
-                </option>
-
-
-                <option>
-                  Assigned
-                </option>
-
-
-                <option>
-                  Leave
-                </option>
-
-
-              </select>
-
-
-            </div>
-
-
-          </div>
-
-
-
-
-
-
-
-          <div className="button-section">
-
-
-            <button 
-              type="submit"
-              className="update-btn"
-            >
-
-              Update Nurse
-
-            </button>
-
-
-
-
-            <button
-
-              type="button"
-
-              className="back-btn"
-
-              onClick={() => navigate("/nurses")}
-
-            >
-
-              Cancel
-
-            </button>
-
-
-          </div>
-
-
-
-
-        </form>
-
-
-
-      </div>
-
-
-
-    </div>
-
-  );
-
+        </div>
+    );
 }
-
 
 export default EditNurse;

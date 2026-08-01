@@ -1,55 +1,62 @@
 package com.hospital.dto;
 
-
-
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-import java.math.BigDecimal;
-import java.util.List;
-
 public class RoomRequestDTO {
 
-    @NotBlank(message = "Room number is required")
     private String roomNumber;
-
-    @NotBlank(message = "Room type is required")
-    private String type;
-
-    @NotNull(message = "Price per night is required")
-//    @DecimalMax(value = "0.01", inclusive = true, message = "Price must be greater than 0")
-    private Double pricePerNight;
-
-    @NotNull(message = "Capacity is required")
-    @Min(value = 1, message = "Capacity must be at least 1 person")
+    private String roomType;
+    private Integer floor;
     private Integer capacity;
+    private Double dailyCharge;
+    private String status;
 
-    private Boolean isAvailable = true;
+    public RoomRequestDTO() {
+    }
 
-    private List<String> amenities;
+    public String getRoomNumber() {
+        return roomNumber;
+    }
 
-    // Getters and Setters
-    public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public String getRoomType() {
+        return roomType;
+    }
 
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
 
-    public Double getPricePerNight() {
-		return pricePerNight;
-	}
-	public void setPricePerNight(Double pricePerNight) {
-		this.pricePerNight = pricePerNight;
-	}
-	public Integer getCapacity() { return capacity; }
-    public void setCapacity(Integer capacity) { this.capacity = capacity; }
+    public Integer getFloor() {
+        return floor;
+    }
 
-    public Boolean getIsAvailable() { return isAvailable; }
-    public void setIsAvailable(Boolean isAvailable) { this.isAvailable = isAvailable; }
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
 
-    public List<String> getAmenities() { return amenities; }
-    public void setAmenities(List<String> amenities) { this.amenities = amenities; }
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Double getDailyCharge() {
+        return dailyCharge;
+    }
+
+    public void setDailyCharge(Double dailyCharge) {
+        this.dailyCharge = dailyCharge;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

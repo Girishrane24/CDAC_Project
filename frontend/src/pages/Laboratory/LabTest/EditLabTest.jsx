@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import "./EditLabTest.css";
+
 import LabTestForm from "../../../components/laboratory/labtest/LabTestForm";
+
+import {
+    getLabTestById,
+    updateLabTest,
+} from "../../../services/labTestService";
+
+import { getAppointments } from "../../../services/appointmentService";
+import { getPatients } from "../../../services/patientServices";
+import { getLabs } from "../../../services/labService";
+
+import labTests from "../../../data/labTests";
 
 function EditLabTest() {
 
@@ -9,96 +20,190 @@ function EditLabTest() {
     const { id } = useParams();
 
     const [labTest, setLabTest] = useState({
+
         labTestId: "",
+
         appointmentId: "",
+
         patientId: "",
+        patientName: "",
+
         labId: "",
+        labName: "",
+
         testName: "",
+
         sampleType: "",
+
         testDate: "",
+
         result: "",
-        status: ""
+
+        status: "",
+
+        price: ""
+
     });
 
-    // Replace with Spring Boot APIs
-
-    const appointments = [
-        { id: "APT101" },
-        { id: "APT102" },
-        { id: "APT103" }
-    ];
-
-    const patients = [
-        { id: "PAT101", name: "Rahul Sharma" },
-        { id: "PAT102", name: "Priya Patel" },
-        { id: "PAT103", name: "Amit Verma" }
-    ];
-
-    const labs = [
-        { id: "LAB001", name: "Central Pathology Lab" },
-        { id: "LAB002", name: "Radiology Lab" },
-        { id: "LAB003", name: "Blood Bank Lab" }
-    ];
+    const [appointments, setAppointments] = useState([]);
+    const [patients, setPatients] = useState([]);
+    const [labs, setLabs] = useState([]);
 
     useEffect(() => {
-        loadLabTest();
+
+        loadData();
+
     }, []);
 
-    const loadLabTest = () => {
+    const loadData = async () => {
 
-        // Dummy Data
-        const data = {
-            labTestId: id,
-            appointmentId: "APT101",
-            patientId: "PAT101",
-            labId: "LAB001",
-            testName: "Blood Sugar",
-            sampleType: "Blood",
-            testDate: "2026-07-22",
-            result: "110 mg/dL",
-            status: "Completed"
-        };
+        try {
 
-        setLabTest(data);
+            const [
+
+                labTestRes,
+                appointmentRes,
+                patientRes,
+                labRes
+
+            ] = await Promise.all([
+
+                getLabTestById(id),
+
+                getAppointments(),
+
+                getPatients(),
+
+                getLabs()
+
+            ]);
+
+            setLabTest(labTestRes.data);
+
+            setAppointments(appointmentRes.data);
+
+            setPatients(patientRes.data);
+
+            setLabs(labRes.data);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
 
     };
 
-    const handleChange = (e) => {
+const handleChange = (e) => {
+    const { name, value } = e.target;
 
-        const { name, value } = e.target;
+    if (name === "patientId") {
 
-        setLabTest({
-            ...labTest,
+        const patient = patients.find(
+            (p) => p.id === value
+        );
+
+        setLabTest((prev) => ({
+            ...prev,
+            patientId: value,
+            patientName: patient
+                ? `${patient.firstName} ${patient.lastName}`
+                : ""
+        }));
+
+    }
+
+    else if (name === "labId") {
+
+        const lab = labs.find(
+            (l) => l.labId === value
+        );
+
+        setLabTest((prev) => ({
+            ...prev,
+            labId: value,
+            labName: lab ? lab.labName : ""
+        }));
+
+    }
+
+    else if (name === "testName") {
+
+        const selected = labTests.find(
+            (test) => test.testName === value
+        );
+
+        setLabTest((prev) => ({
+            ...prev,
+            testName: value,
+            sampleType: selected?.sampleType || "",
+            price: selected?.price || ""
+        }));
+
+    }
+
+    else {
+
+        setLabTest((prev) => ({
+            ...prev,
             [name]: value
-        });
+        }));
 
-    };
+    }
+};
 
-    const handleSubmit = (e) => {
 
-        e.preventDefault();
+const handleSubmit = async (e) => {
 
-        console.log(labTest);
+    e.preventDefault();
+
+    try {
+
+        console.log("Updating:", labTest);
+
+        await updateLabTest(id, labTest);
 
         alert("Lab Test Updated Successfully");
 
         navigate("/laboratory/tests");
 
-    };
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to Update Lab Test");
+
+    }
+
+};
 
     return (
 
         <LabTestForm
-    labTest={labTest}
-    handleChange={handleChange}
-    handleSubmit={handleSubmit}
-    appointments={appointments}
-    patients={patients}
-    labs={labs}
-    buttonText="Update"
-    isEdit={true}
-    onCancel={() => navigate("/laboratory/tests")}
-/>
+
+            labTest={labTest}
+
+            handleChange={handleChange}
+
+            handleSubmit={handleSubmit}
+
+            appointments={appointments}
+
+            patients={patients}
+
+            labs={labs}
+
+            buttonText="Update"
+
+            isEdit={true}
+
+            onCancel={() =>
+                navigate("/laboratory/tests")
+            }
+
+        />
 
     );
 

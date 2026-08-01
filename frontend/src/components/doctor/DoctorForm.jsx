@@ -1,7 +1,12 @@
 import "./DoctorForm.css";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-function DoctorForm({ onSubmit, initialData = {}, buttonText = "Save Doctor" }) {
+function DoctorForm({
+    onSubmit,
+    initialData,
+    buttonText = "Save Doctor"
+}) {
  const [doctor, setDoctor] = useState({
     name: "",
     specialization: "",
@@ -16,25 +21,21 @@ function DoctorForm({ onSubmit, initialData = {}, buttonText = "Save Doctor" }) 
 });
 
 useEffect(() => {
+    if (!initialData?.id) return;
 
-    if (initialData) {
-
-        setDoctor({
-            name: initialData.name || "",
-            specialization: initialData.specialization || "",
-            qualification: initialData.qualification || "",
-            experience: initialData.experience || "",
-            gender: initialData.gender || "",
-            phone: initialData.phone || "",
-            email: initialData.email || "",
-            address: initialData.address || "",
-            consultationFee: initialData.consultationFee || "",
-            status: initialData.status || "Available",
-        });
-
-    }
-
-}, [initialData]);
+    setDoctor({
+        name: initialData.name || "",
+        specialization: initialData.specialization || "",
+        qualification: initialData.qualification || "",
+        experience: initialData.experience || "",
+        gender: initialData.gender || "",
+        phone: initialData.phone || "",
+        email: initialData.email || "",
+        address: initialData.address || "",
+        consultationFee: initialData.consultationFee || "",
+        status: initialData.status || "Available",
+    });
+}, [initialData?.id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -188,6 +189,14 @@ useEffect(() => {
           <button type="submit" className="save-btn">
             {buttonText}
           </button>
+          
+           <Link
+                            to="/doctors"
+                            className="btn btn-secondary   p-2 mr-9"
+                         
+                        >
+                            Back
+                        </Link>
         </div>
       </form>
     </div>

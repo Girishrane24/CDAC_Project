@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BookAppointment.css";
+import { addAppointment } from "../../services/appointmentService";
+import { getPatients } from "../../services/patientServices";
+import { getDoctors } from "../../services/doctorService";
 
 function BookAppointment() {
   const navigate = useNavigate();
@@ -14,64 +17,104 @@ function BookAppointment() {
     reason: "",
     status: "Pending",
   });
+  const [patients, setPatients] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    loadPatients();
+    loadDoctors();
+  }, []);
+
+  const loadPatients = async () => {
+    try {
+      const response = await getPatients();
+      setPatients(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadDoctors = async () => {
+    try {
+      const response = await getDoctors();
+      setDoctors(response.data);
+    } catch (error) {
+      console.error("Error loading doctors:", error);
+    }
+  };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "doctorName") {
+      const doctor = doctors.find((doc) => doc.name === value);
+
+      setAppointment({
+        ...appointment,
+        doctorName: value,
+        department: doctor ? doctor.specialization : "",
+      });
+
+      return;
+    }
+
     setAppointment({
       ...appointment,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    alert("Appointment Booked Successfully!");
+    try {
+      await addAppointment(appointment);
 
-    console.log(appointment);
+      alert("Appointment Booked Successfully!");
 
-    navigate("/appointments");
+      navigate("/appointments");
+    } catch (error) {
+      console.error(error);
+
+      alert(error.response?.data?.error || "Unable to book appointment");
+    }
   };
 
   return (
     <div className="appointment-form-container">
-
       <div className="card shadow">
-
         <div className="card-header bg-primary text-white">
-
           <h3>Book Appointment</h3>
-
         </div>
 
         <div className="card-body">
-
           <form onSubmit={handleSubmit}>
-
             <div className="row">
-
               <div className="col-md-6 mb-3">
+                <label className="form-label">Patient Name</label>
 
-                <label className="form-label">
-                  Patient Name
-                </label>
-
-                <input
-                  type="text"
-                  className="form-control"
+                <select
+                  className="form-select"
                   name="patientName"
                   value={appointment.patientName}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">Select Patient</option>
 
+                  {patients.map((patient) => (
+                    <option
+                      key={patient.id}
+                      value={`${patient.firstName} ${patient.lastName}`}
+                    >
+                      {patient.firstName} {patient.lastName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="col-md-6 mb-3">
-
-                <label className="form-label">
-                  Doctor Name
-                </label>
-
+                <label className="form-label">Doctor Name</label>
                 <select
                   className="form-select"
                   name="doctorName"
@@ -80,21 +123,21 @@ function BookAppointment() {
                   required
                 >
                   <option value="">Select Doctor</option>
-                  <option>Dr. Amit Patel</option>
-                  <option>Dr. Sneha Joshi</option>
-                  <option>Dr. Anil Kumar</option>
-                  <option>Dr. Pooja Mehta</option>
-                </select>
 
+                  {doctors
+                    .filter((doctor) => doctor.status === "Available")
+                    .map((doctor) => (
+                      <option key={doctor.id} value={doctor.name}>
+                        {doctor.name}
+                      </option>
+                    ))}
+                </select>
               </div>
 
               <div className="col-md-6 mb-3">
+                <label className="form-label">Department</label>
 
-                <label className="form-label">
-                  Department
-                </label>
-
-                <select
+                {/* <select
                   className="form-select"
                   name="department"
                   value={appointment.department}
@@ -107,15 +150,19 @@ function BookAppointment() {
                   <option>Orthopedics</option>
                   <option>Dermatology</option>
                   <option>Pediatrics</option>
-                </select>
+                </select> */}
 
+                <input
+                  type="text"
+                  className="form-control"
+                  name="department"
+                  value={appointment.department}
+                  readOnly
+                />
               </div>
 
               <div className="col-md-3 mb-3">
-
-                <label className="form-label">
-                  Appointment Date
-                </label>
+                <label className="form-label">Appointment Date</label>
 
                 <input
                   type="date"
@@ -125,14 +172,10 @@ function BookAppointment() {
                   onChange={handleChange}
                   required
                 />
-
               </div>
 
               <div className="col-md-3 mb-3">
-
-                <label className="form-label">
-                  Appointment Time
-                </label>
+                <label className="form-label">Appointment Time</label>
 
                 <input
                   type="time"
@@ -142,14 +185,10 @@ function BookAppointment() {
                   onChange={handleChange}
                   required
                 />
-
               </div>
 
               <div className="col-12 mb-3">
-
-                <label className="form-label">
-                  Reason for Visit
-                </label>
+                <label className="form-label">Reason for Visit</label>
 
                 <textarea
                   className="form-control"
@@ -158,14 +197,10 @@ function BookAppointment() {
                   value={appointment.reason}
                   onChange={handleChange}
                 ></textarea>
-
               </div>
 
               <div className="col-md-4 mb-3">
-
-                <label className="form-label">
-                  Status
-                </label>
+                <label className="form-label">Status</label>
 
                 <select
                   className="form-select"
@@ -178,13 +213,10 @@ function BookAppointment() {
                   <option>Completed</option>
                   <option>Cancelled</option>
                 </select>
-
               </div>
-
             </div>
 
             <div className="text-end">
-
               <button
                 type="button"
                 className="btn btn-secondary me-2"
@@ -193,21 +225,13 @@ function BookAppointment() {
                 Cancel
               </button>
 
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >
+              <button type="submit" className="btn btn-primary">
                 Book Appointment
               </button>
-
             </div>
-
           </form>
-
         </div>
-
       </div>
-
     </div>
   );
 }
