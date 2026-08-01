@@ -213,7 +213,7 @@ const revenue = billRes.data
         <div className="dashboard-actions">
           <button
             className="action-btn"
-            onClick={() => navigate("/dashboard/patients/add")}
+            onClick={() => navigate("/patients/add")}
           >
             <FaUserPlus className="action-icon" />
             <span>Add Patient</span>
@@ -221,7 +221,7 @@ const revenue = billRes.data
 
           <button
             className="action-btn"
-            onClick={() => navigate("/dashboard/appointments/book")}
+            onClick={() => navigate("/appointments/book")}
           >
             <FaCalendarPlus className="action-icon" />
             <span>Book Appointment</span>

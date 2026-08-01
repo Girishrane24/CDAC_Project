@@ -78,15 +78,15 @@ const handleDelete = async (id) => {
 
                 <td>
                   <NavLink to={`/nurses/${nurse.nurseId}`}>
-                    <button className="view-btn">View</button>
+                    <button className="view-btn p-2">View</button>
                   </NavLink>
 
                   <NavLink to={`/nurses/edit/${nurse.nurseId}`}>
-                    <button className="edit-btn">Edit</button>
+                    <button className="edit-btn p-2">Edit</button>
                   </NavLink>
 
    <button
-    className="btn btn-danger btn-sm"
+    className="delete-btn p-2"
     onClick={() => handleDelete(nurse.nurseId)}
 >
     Delete

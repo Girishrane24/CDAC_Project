@@ -89,7 +89,7 @@ function LabForm({
 
             <button
               type="button"
-              className="cancel-btn"
+              className="cancel-btn mr-2 mt-4"
               onClick={onCancel}
             >
               Cancel

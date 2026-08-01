@@ -29,7 +29,7 @@ function AddRoom() {
     try {
       await roomService.addRoom(room);
       alert("Room added successfully!");
-      navigate("/rooms");
+      // navigate("/rooms");
     } catch (error) {
       console.error(error);
       alert("Failed to add room.");

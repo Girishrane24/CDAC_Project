@@ -107,7 +107,7 @@ function EditNurse() {
 
                             {/* Nurse ID */}
 
-                            <div className="col-md-6 mb-3">
+                            {/* <div className="col-md-6 mb-3">
                                 <label className="form-label">
                                     Nurse ID
                                 </label>
@@ -118,7 +118,7 @@ function EditNurse() {
                                     value={nurse.nurseId}
                                     disabled
                                 />
-                            </div>
+                            </div> */}
 
                             {/* Name */}
 

@@ -145,7 +145,7 @@ function AssignNurse() {
 
 
                 <h2>
-                    👩‍⚕️ Assign Nurse To Patient
+                     Assign Nurse To Patient
                 </h2>
 
 

@@ -97,9 +97,9 @@ function BillDetails() {
 
                             <h4>Invoice</h4>
 
-                            <p className="mb-1">
+                            {/* <p className="mb-1">
                                 <strong>Bill ID :</strong> {bill.id}
-                            </p>
+                            </p> */}
 
                             <p className="mb-0">
                                 <strong>Date :</strong> {bill.generatedDate}

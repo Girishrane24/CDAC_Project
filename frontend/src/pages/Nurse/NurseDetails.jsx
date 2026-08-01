@@ -96,10 +96,10 @@ function NurseDetails() {
 
                                 <tbody>
 
-                                    <tr>
+                                    {/* <tr>
                                         <th width="40%">Nurse ID</th>
                                         <td>{nurse.nurseId}</td>
-                                    </tr>
+                                    </tr> */}
 
                                     <tr>
                                         <th>Name</th>

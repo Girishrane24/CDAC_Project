@@ -59,10 +59,10 @@ function DoctorDetails() {
 
                     <div className="details-grid">
 
-                        <div>
+                        {/* <div>
                             <strong>Doctor ID</strong>
                             <p>{doctor.id}</p>
-                        </div>
+                        </div> */}
 
                         <div>
                             <strong>Specialization</strong>

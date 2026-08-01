@@ -1,5 +1,5 @@
 package com.hospital.service;
-
+import com.hospital.model.Role;
 import com.hospital.dto.LoginRequest;
 import com.hospital.dto.LoginResponse;
 import com.hospital.model.User;
@@ -48,7 +48,7 @@ public class AuthService {
         // Generate JWT Token
         String token = jwtUtil.generateToken(
                 user.getEmail(),
-                user.getRole()
+                user.getRole().name()
         );
 
         // Return response
@@ -69,12 +69,11 @@ public class AuthService {
             throw new RuntimeException("Email already exists");
         }
 
-        user.setPassword(
-                passwordEncoder.encode(user.getPassword())
-        );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            user.setRole("ADMIN");
+        // Default role
+        if (user.getRole() == null) {
+            user.setRole(Role.ADMIN);
         }
 
         return userRepository.save(user);

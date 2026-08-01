@@ -89,7 +89,7 @@ function EditBill() {
 
                         <div className="row">
 
-                            <div className="col-md-6 mb-3">
+                            {/* <div className="col-md-6 mb-3">
                                 <label className="form-label">
                                     Bill ID
                                 </label>
@@ -100,7 +100,7 @@ function EditBill() {
                                     value={bill.id}
                                     disabled
                                 />
-                            </div>
+                            </div> */}
 
                             <div className="col-md-6 mb-3">
                                 <label className="form-label">
